@@ -1,0 +1,147 @@
+// ===== Base (1rem = 16px) =====
+html {
+  font-size: 16px;
+}
+
+// ===== Variáveis =====
+$cab-altura: 3.5rem;            // 56px
+$cab-fundo: #050b0e;
+$cab-linha: #0e1a1f;
+$cab-texto: #c9d1d6;
+$cab-texto-hover: #ffffff;
+$cab-azul: #1a7fe0;
+$cab-creme: #f1deb0;
+$cab-fonte: 'Inter', 'Segoe UI', Arial, sans-serif;
+$cab-distancia: 5rem;           // rolagem até a cor completa (80px)
+
+// ===== Animação ligada à rolagem =====
+@keyframes cab-ganha-cor {
+  from {
+    background-color: rgba($cab-fundo, 0);
+    border-bottom-color: transparent;
+    backdrop-filter: blur(0);
+    box-shadow: 0 0.25rem 1.125rem rgba(0, 0, 0, 0);
+  }
+  to {
+    background-color: rgba($cab-fundo, 0.95);
+    border-bottom-color: $cab-linha;
+    backdrop-filter: blur(0.5rem);
+    box-shadow: 0 0.25rem 1.125rem rgba(0, 0, 0, 0.35);
+  }
+}
+
+// ===== Container =====
+.comp-corpo {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+
+  width: 100%;
+  height: $cab-altura;
+  padding: 0 clamp(1.5rem, 6vw, 5.3125rem);
+  box-sizing: border-box;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  font-family: $cab-fonte;
+  font-size: 1rem;
+
+  // fallback (navegadores sem suporte): já fica com cor, sempre legível
+  background-color: rgba($cab-fundo, 0.95);
+  border-bottom: 1px solid $cab-linha;
+
+  // navegadores com suporte: transparente no topo e ganha cor ao rolar
+  @supports (animation-timeline: scroll()) {
+    background-color: transparent;
+    border-bottom-color: transparent;
+
+    animation: cab-ganha-cor linear both;
+    animation-timeline: scroll(root block);
+    animation-range: 0 $cab-distancia;
+  }
+
+  // ===== Logo =====
+  .comp-logo {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+    width: 7.5rem;
+
+    img {
+      height: 2.125rem;
+      width: auto;
+      object-fit: contain;
+      display: block;
+    }
+  }
+
+  // ===== Links =====
+  .comp-botoes {
+    display: flex;
+    align-items: center;
+    gap: 1.8125rem;
+    margin-right: auto;
+    margin-left: clamp(2.5rem, 9vw, 9.375rem);
+
+    .comp-link {
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: $cab-texto;
+      text-decoration: none;
+      white-space: nowrap;
+      transition: color 0.2s ease;
+
+      &:hover {
+        color: $cab-texto-hover;
+      }
+    }
+  }
+
+  // ===== Área do botão doe =====
+  .comp-doe-div {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+  }
+
+  // ===== Botão "Doe agora" =====
+  .comp-doe {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+
+    height: 2.375rem;
+    padding: 0 1.125rem;
+    box-sizing: border-box;
+
+    border: 1px solid $cab-azul;
+    border-radius: 999px;
+    background: transparent;
+    text-decoration: none;
+
+    transition: border-color 0.25s ease, box-shadow 0.25s ease;
+
+    .icone-coracao {
+      width: 0.875rem;
+      height: 0.875rem;
+      filter: brightness(0) saturate(100%) invert(38%) sepia(96%)
+              saturate(1900%) hue-rotate(196deg) brightness(95%);
+    }
+
+    span {
+      font-size: 0.8125rem;
+      font-weight: 700;
+      color: $cab-azul;
+    }
+
+    &:hover {
+      border-color: $cab-creme;
+      box-shadow: 0 0 0.625rem rgba($cab-creme, 0.35),
+                  inset 0 0 0 1px $cab-creme;
+    }
+  }
+}
