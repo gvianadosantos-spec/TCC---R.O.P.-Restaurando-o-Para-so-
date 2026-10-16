@@ -1,20 +1,28 @@
-// ===== Base (1rem = 16px) =====
+
 html {
   font-size: 16px;
 }
 
-// ===== Variáveis =====
-$cab-altura: 3.5rem;            // 56px
-$cab-fundo: #050b0e;
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+}
+
+
+$cab-altura: 3.5rem;           
+$cab-fundo: #0b1c24; 
 $cab-linha: #0e1a1f;
 $cab-texto: #c9d1d6;
 $cab-texto-hover: #ffffff;
 $cab-azul: #1a7fe0;
 $cab-creme: #f1deb0;
 $cab-fonte: 'Inter', 'Segoe UI', Arial, sans-serif;
-$cab-distancia: 5rem;           // rolagem até a cor completa (80px)
+$cab-distancia: 5rem;          
 
-// ===== Animação ligada à rolagem =====
+
 @keyframes cab-ganha-cor {
   from {
     background-color: rgba($cab-fundo, 0);
@@ -30,7 +38,7 @@ $cab-distancia: 5rem;           // rolagem até a cor completa (80px)
   }
 }
 
-// ===== Container =====
+
 .comp-corpo {
   position: fixed;
   top: 0;
@@ -49,11 +57,11 @@ $cab-distancia: 5rem;           // rolagem até a cor completa (80px)
   font-family: $cab-fonte;
   font-size: 1rem;
 
-  // fallback (navegadores sem suporte): já fica com cor, sempre legível
+
   background-color: rgba($cab-fundo, 0.95);
   border-bottom: 1px solid $cab-linha;
 
-  // navegadores com suporte: transparente no topo e ganha cor ao rolar
+
   @supports (animation-timeline: scroll()) {
     background-color: transparent;
     border-bottom-color: transparent;
@@ -63,7 +71,7 @@ $cab-distancia: 5rem;           // rolagem até a cor completa (80px)
     animation-range: 0 $cab-distancia;
   }
 
-  // ===== Logo =====
+
   .comp-logo {
     display: flex;
     align-items: center;
@@ -78,7 +86,7 @@ $cab-distancia: 5rem;           // rolagem até a cor completa (80px)
     }
   }
 
-  // ===== Links =====
+
   .comp-botoes {
     display: flex;
     align-items: center;
@@ -100,14 +108,14 @@ $cab-distancia: 5rem;           // rolagem até a cor completa (80px)
     }
   }
 
-  // ===== Área do botão doe =====
+
   .comp-doe-div {
     display: flex;
     align-items: center;
     flex-shrink: 0;
   }
 
-  // ===== Botão "Doe agora" =====
+ 
   .comp-doe {
     display: inline-flex;
     align-items: center;
