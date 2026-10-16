@@ -1,8 +1,12 @@
 import './inicio.scss'
+import Cabecalho from '../../componentes/cabecalho/cabecalho.jsx'
 
 function Inicio (){
     return(
         <div className='corpo'>
+
+               <Cabecalho/>
+
               <h1>
                 funcionando
             </h1>
