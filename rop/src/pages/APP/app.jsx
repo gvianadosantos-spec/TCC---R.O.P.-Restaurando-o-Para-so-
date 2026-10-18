@@ -15,11 +15,14 @@ function App (){
         <Link to={'/doe'} className='btn-link'>ir para doe</Link>
         
 
+
         </div>
+
         <div>
             <Rodape />
         </div>
      </>
+
     )
 }
 
