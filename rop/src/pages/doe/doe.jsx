@@ -3,7 +3,7 @@ import Cabecalho from '../../componentes/cabecalho/cabecalho.jsx'
 
 function Doe (){
     return(
-        <div className='corpo'>
+        <div className='doe-corpo'>
 
                <Cabecalho/>
 

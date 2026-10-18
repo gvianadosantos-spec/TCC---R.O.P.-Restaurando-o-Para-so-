@@ -2,7 +2,7 @@ import './registro.scss'
 
 function Resgistro (){
     return(
-        <div className='corpo'>
+        <div className='registro-corpo'>
               <h1>
                 funcionando
             </h1>

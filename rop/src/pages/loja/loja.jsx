@@ -3,7 +3,7 @@ import Cabecalho from '../../componentes/cabecalho/cabecalho.jsx'
 
 function Loja (){
     return(
-        <div className='corpo'>
+        <div className='loja-corpo'>
 
                <Cabecalho/>
 

@@ -3,7 +3,7 @@ import Cabecalho from '../../componentes/cabecalho/cabecalho.jsx'
 
 function Inicio (){
     return(
-        <div className='corpo'>
+        <div className='inicio-corpo'>
 
                <Cabecalho/>
 
