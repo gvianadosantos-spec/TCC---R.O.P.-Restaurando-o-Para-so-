@@ -1,8 +1,9 @@
 import './app.scss'
 import { Link } from 'react-router-dom';
-
+import Rodape from '../../componentes/rodape/rodape.jsx';
 function App (){
     return(
+        <>
         <div className='corpo'>
 
         <Link to={'/'} className='btn-link'>ir para login</Link>
@@ -12,8 +13,13 @@ function App (){
         <Link to={'/noticias'} className='btn-link'>ir para notícias</Link>
         <Link to={'/loja'} className='btn-link'>ir para loja</Link>
         <Link to={'/doe'} className='btn-link'>ir para doe</Link>
+        
 
         </div>
+        <div>
+            <Rodape />
+        </div>
+     </>
     )
 }
 
