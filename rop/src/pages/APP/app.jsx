@@ -13,7 +13,9 @@ function App (){
         <Link to={'/loja'} className='btn-link'>ir para loja</Link>
         <Link to={'/doe'} className='btn-link'>ir para doe</Link>
 
+
         </div>
+
     )
 }
 
