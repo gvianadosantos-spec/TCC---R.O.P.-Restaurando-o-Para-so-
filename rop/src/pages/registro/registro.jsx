@@ -9,10 +9,10 @@ function Resgistro() {
         email: '',
         usuario: '',
         senha: '',
-        confirmar: ''
+        confirmar: '' 
     })
     const [erro, setErro] = useState('')
-    const [sucesso, setSucesso] = useState('') // Novo estado para a mensagem de sucesso no site
+    const [sucesso, setSucesso] = useState('') 
 
     function handleChange(e) {
         const { name, value } = e.target
@@ -34,18 +34,18 @@ function Resgistro() {
             return
         }
 
-        // Aqui você envia os dados para o seu back-end
+       
         console.log('Cadastro válido:', {
             email: dados.email,
             usuario: dados.usuario
         })
 
-        // Define a mensagem de sucesso no site em vez de usar alert()
+        
         setSucesso('Conta criada com sucesso! A redirecionar para o login...')
 
-        // Redireciona após 2 segundos (2000 milissegundos) para o utilizador conseguir ler a mensagem
+        
         setTimeout(() => {
-            navigate('/') // Altera para o caminho exato da tua rota de login
+            navigate('/') 
         }, 2000)
     }
 

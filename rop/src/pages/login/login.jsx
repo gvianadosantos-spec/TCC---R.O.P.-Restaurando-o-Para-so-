@@ -13,9 +13,9 @@ const ROTA_ESQUECI_SENHA = '/esqueci-senha'
 const ROTA_CRIAR_CONTA = '/registro'
 const ROTA_INSTAGRAM = 'https://www.instagram.com/?hl=pt-br'   // pode ser página interna ou URL completa (https://...)
 const ROTA_FACEBOOK = 'https://www.facebook.com/'     // idem
-// ===========================================
 
-// Usa <Link> para páginas internas e <a> para URLs externas (https://...)
+
+
 function Atalho({ para, children, ...props }) {
     const externo = /^https?:\/\//.test(para)
     if (externo) {
