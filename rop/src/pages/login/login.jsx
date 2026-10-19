@@ -42,11 +42,11 @@ function Login() {
                 <section className='marca'>
                     <img className='logo' src={IMG_LOGO} alt='R.O.P – Restaurando o Paraíso' />
                     <div className='linha' />
-                    <p>
-                        Realizando ajuda até<br />
-                        Onde a vida<br />
-                        Pode prosperar.
-                    </p>
+<p className='slogan'>
+    <span>Realizando ajuda até</span>
+    <span>Onde a vida</span>
+    <span>Pode prosperar.</span>
+</p>
                 </section>
 
                 <section className='cartao'>
