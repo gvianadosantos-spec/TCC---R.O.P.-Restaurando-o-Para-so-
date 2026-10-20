@@ -1,4 +1,3 @@
-
 html {
   font-size: 16px;
 }
@@ -12,38 +11,104 @@ body {
 }
 
 
-$cab-altura: 3.5rem;           
-$cab-fundo: #0b1c24; 
+$cab-altura: 3.5rem;
+$cab-aviso-altura: 2.25rem;
+$cab-fundo: #0b1c24;
 $cab-linha: #0e1a1f;
 $cab-texto: #c9d1d6;
 $cab-texto-hover: #ffffff;
 $cab-azul: #1a7fe0;
 $cab-creme: #f1deb0;
 $cab-fonte: 'Inter', 'Segoe UI', Arial, sans-serif;
-$cab-distancia: 5rem;          
+
+$aviso-fundo: #2a1d05;
+$aviso-borda: #6b4a0a;
+$aviso-texto: #ffd98a;
+
+// quanto o menu fica transparente ao rolar (0 = invisível, 1 = sólido)
+$cab-opacidade-rolando: 0.55;
+
+// espaço que o cabeçalho reserva no fluxo da página.
+// Por padrão é só a altura da faixa, porque as suas páginas
+// já compensam os 3.5rem do menu. Se alguma página começar
+// escondida, aumente para $cab-altura + $cab-aviso-altura.
+$cab-espaco: $cab-aviso-altura;
 
 
-@keyframes cab-ganha-cor {
-  from {
-    background-color: rgba($cab-fundo, 0);
-    border-bottom-color: transparent;
-    backdrop-filter: blur(0);
-    box-shadow: 0 0.25rem 1.125rem rgba(0, 0, 0, 0);
+// altura total do cabeçalho no topo da página (menu + faixa)
+:root {
+  --cab-altura-total: #{$cab-altura + $cab-aviso-altura};
+}
+
+
+.comp-cabecalho {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  width: 100%;
+
+  // faixa de aviso: aparece só no topo
+  .comp-aviso {
+    height: $cab-aviso-altura;
+    padding: 0 1rem;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.375rem;
+
+    background: $aviso-fundo;
+    border-bottom: 1px solid $aviso-borda;
+    color: $aviso-texto;
+    font-family: $cab-fonte;
+    font-size: 0.8125rem;
+    line-height: 1;
+    white-space: nowrap;
+
+    transition: height 0.3s ease, opacity 0.2s ease, border-width 0.3s ease;
+
+    b {
+      color: #ffffff;
+    }
+
+    .comp-aviso-curto {
+      display: none;
+    }
+
+    @media (max-width: 43.75rem) {
+      font-size: 0.75rem;
+
+      .comp-aviso-longo {
+        display: none;
+      }
+
+      .comp-aviso-curto {
+        display: inline;
+      }
+    }
   }
-  to {
-    background-color: rgba($cab-fundo, 0.95);
-    border-bottom-color: $cab-linha;
-    backdrop-filter: blur(0.5rem);
-    box-shadow: 0 0.25rem 1.125rem rgba(0, 0, 0, 0.35);
+
+  // ao rolar: faixa some e menu fica translúcido
+  &.rolou {
+    .comp-aviso {
+      height: 0;
+      opacity: 0;
+      border-bottom-width: 0;
+    }
+
+    .comp-corpo {
+      background-color: rgba($cab-fundo, $cab-opacidade-rolando);
+      border-bottom-color: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(0.75rem);
+      box-shadow: 0 0.25rem 1.125rem rgba(0, 0, 0, 0.25);
+    }
   }
 }
 
 
 .comp-corpo {
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 1000;
+  position: relative;
 
   width: 100%;
   height: $cab-altura;
@@ -57,19 +122,13 @@ $cab-distancia: 5rem;
   font-family: $cab-fonte;
   font-size: 1rem;
 
-
   background-color: rgba($cab-fundo, 0.95);
   border-bottom: 1px solid $cab-linha;
 
-
-  @supports (animation-timeline: scroll()) {
-    background-color: transparent;
-    border-bottom-color: transparent;
-
-    animation: cab-ganha-cor linear both;
-    animation-timeline: scroll(root block);
-    animation-range: 0 $cab-distancia;
-  }
+  transition: background-color 0.3s ease,
+              border-color 0.3s ease,
+              box-shadow 0.3s ease,
+              backdrop-filter 0.3s ease;
 
 
   .comp-logo {
@@ -115,7 +174,7 @@ $cab-distancia: 5rem;
     flex-shrink: 0;
   }
 
- 
+
   .comp-doe {
     display: inline-flex;
     align-items: center;
@@ -151,5 +210,21 @@ $cab-distancia: 5rem;
       box-shadow: 0 0 0.625rem rgba($cab-creme, 0.35),
                   inset 0 0 0 1px $cab-creme;
     }
+  }
+}
+
+
+// espaço reservado no fluxo da página para a faixa de aviso.
+// Fica fixo, então a página não "pula" quando a faixa some ao rolar.
+.comp-espaco {
+  height: $cab-espaco;
+  flex-shrink: 0;
+}
+
+
+@media (prefers-reduced-motion: reduce) {
+  .comp-cabecalho .comp-aviso,
+  .comp-corpo {
+    transition: none;
   }
 }
