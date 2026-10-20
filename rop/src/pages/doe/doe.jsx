@@ -8,7 +8,7 @@ const CHAVE_PIX = 'bafecf50-5d98-4c11-a246-c0ea6bda7d76'
 const CODIGO_PIX =
   '00020126580014BR.GOV.BCB.PIX0136bafecf50-5d98-4c11-a246-c0ea6bda7d765204000053039865802BR5925Guilherme Andre Viana dos6009SAO PAULO62140510biK9LTV80e6304BA0B'
 
-const VALORES = [10, 25, 50, 100]
+const VALORES = [10, 25, 50, 100] 
 
 const DIVISAO = [
   { texto: 'Ferramentas e estudos da equipe', percentual: 60, cor: 'ambar' },
@@ -30,7 +30,7 @@ const PERGUNTAS = [
   },
   {
     pergunta: 'Posso receber o dinheiro de volta?',
-    resposta: 'Fale com o grupo pelo telefone ou WhatsApp (11) 93087-5221 e combinamos o estorno.',
+    resposta: 'Se o Pix foi feito por engano, o grupo devolve o valor sempre que for possível. Fale com a gente pelo telefone ou WhatsApp (11) 93087-5221 para combinar o estorno. Lembrando que a doação é voluntária.',
   },
 ]
 

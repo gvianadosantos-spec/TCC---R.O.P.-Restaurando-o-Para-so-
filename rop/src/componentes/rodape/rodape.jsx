@@ -92,7 +92,7 @@ export default function Rodape() {
               <div className="brand-header">
                 <img
                   className="brand-logo-img"
-                  src={`${process.env.PUBLIC_URL}/assets/componentes/cabecalho/logo.png`}
+                  src="/assets/cabecalho/logo.png"
                   alt="R.O.P. — Restaurando o Paraíso"
                 />
               </div>
