@@ -3,7 +3,7 @@ import Cabecalho from '../../componentes/cabecalho/cabecalho.jsx'
 
 function Especies (){
     return(
-        <div className='corpo'>
+        <div className='especies-corpo'>
 
            <Cabecalho/>
 

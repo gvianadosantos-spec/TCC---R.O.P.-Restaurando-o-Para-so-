@@ -4,7 +4,7 @@ import Rodape from '../../componentes/rodape/rodape.jsx';
 function App (){
     return(
         <>
-        <div className='corpo'>
+        <div className='app-corpo'>
 
         <Link to={'/'} className='btn-link'>ir para login</Link>
         <Link to={'/registro'} className='btn-link'>ir para registro</Link>

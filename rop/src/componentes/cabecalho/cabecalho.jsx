@@ -6,7 +6,7 @@ function Cabecalho() {
     const [rolou, setRolou] = useState(false);
 
     useEffect(() => {
-        const aoRolar = () => setRolou(window.scrollY > 10);
+        const aoRolar = () => setRolou(window.scrollY > 0);
 
         aoRolar();
         window.addEventListener('scroll', aoRolar, { passive: true });

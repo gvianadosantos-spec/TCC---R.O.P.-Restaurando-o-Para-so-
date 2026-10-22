@@ -3,7 +3,7 @@ import Cabecalho from '../../componentes/cabecalho/cabecalho.jsx'
 
 function Noticias (){
     return(
-        <div className='corpo'>
+        <div className='noticias-corpo'>
 
                <Cabecalho/>
 

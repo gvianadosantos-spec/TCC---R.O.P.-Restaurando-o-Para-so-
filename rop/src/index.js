@@ -10,6 +10,7 @@ import Login from './pages/login/login.jsx';
 import Loja from './pages/loja/loja.jsx';
 import Noticias from './pages/noticias/noticias.jsx';
 import Resgistro from './pages/registro/registro.jsx';
+import EsqueciSenha from './pages/esqueciSenha/esqueciSenha.jsx';
 
 
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
@@ -27,6 +28,7 @@ root.render(
           <Route  path='/noticias' element= {<Noticias/>}/>
           <Route  path='/loja' element= {<Loja/>}/>
           <Route  path='/doe' element= {<Doe/>}/>
+          <Route  path='/esqueci-senha' element= {<EsqueciSenha/>}/>
       </Routes>
     </BrowserRouter>
 );  
