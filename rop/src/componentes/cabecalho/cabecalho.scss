@@ -1,4 +1,3 @@
-
 html {
   font-size: 16px;
 }
@@ -12,27 +11,30 @@ body {
 }
 
 
-$cab-altura: 3.5rem;           
-$cab-fundo: #0b1c24; 
-$cab-linha: #0e1a1f;
+$cab-altura-topo: 5.5rem;      /* altura no topo da página (~88px) */
+$cab-altura: 4.1875rem;        /* altura depois de rolar (~67px) */
+$cab-fundo:  #07090b;
+$cab-linha-topo: #14262d;      /* cor da linha */
 $cab-texto: #c9d1d6;
 $cab-texto-hover: #ffffff;
 $cab-azul: #1a7fe0;
 $cab-creme: #f1deb0;
 $cab-fonte: 'Inter', 'Segoe UI', Arial, sans-serif;
-$cab-distancia: 5rem;          
+$cab-distancia: 5rem;          /* quanto de rolagem leva para completar a mudança */
 
 
-@keyframes cab-ganha-cor {
+/* A linha (border) NÃO está aqui de propósito: ela é controlada pela classe
+   comp-corpo--rolado, com a transição de cada estado. */
+@keyframes cab-rolagem {
   from {
+    height: $cab-altura-topo;
     background-color: rgba($cab-fundo, 0);
-    border-bottom-color: transparent;
     backdrop-filter: blur(0);
     box-shadow: 0 0.25rem 1.125rem rgba(0, 0, 0, 0);
   }
   to {
+    height: $cab-altura;
     background-color: rgba($cab-fundo, 0.95);
-    border-bottom-color: $cab-linha;
     backdrop-filter: blur(0.5rem);
     box-shadow: 0 0.25rem 1.125rem rgba(0, 0, 0, 0.35);
   }
@@ -46,7 +48,7 @@ $cab-distancia: 5rem;
   z-index: 1000;
 
   width: 100%;
-  height: $cab-altura;
+  height: $cab-altura-topo;
   padding: 0 clamp(1.5rem, 6vw, 5.3125rem);
   box-sizing: border-box;
 
@@ -57,18 +59,47 @@ $cab-distancia: 5rem;
   font-family: $cab-fonte;
   font-size: 1rem;
 
+  /* No topo: transparente e sem linha */
+  background-color: rgba($cab-fundo, 0);
+  border-bottom: 1px solid transparent;
+  backdrop-filter: blur(0);
+  box-shadow: 0 0.25rem 1.125rem rgba(0, 0, 0, 0);
 
-  background-color: rgba($cab-fundo, 0.95);
-  border-bottom: 1px solid $cab-linha;
+  /* Chegando ao topo: a linha espera 0,39s e some em 0,1s */
+  transition: height 0.3s ease,
+              background-color 0.3s ease,
+              box-shadow 0.3s ease,
+              backdrop-filter 0.3s ease,
+              border-color 0.1s ease 0.39s;
 
+  /* Depois de rolar: menor, com fundo, desfoque e a linha visível */
+  &.comp-corpo--rolado {
+    height: $cab-altura;
+    background-color: rgba($cab-fundo, 0.95);
+    border-bottom-color: $cab-linha-topo;
+    backdrop-filter: blur(0.5rem);
+    box-shadow: 0 0.25rem 1.125rem rgba(0, 0, 0, 0.35);
 
+    /* Descendo: a linha aparece na hora */
+    transition: height 0.3s ease,
+                background-color 0.3s ease,
+                box-shadow 0.3s ease,
+                backdrop-filter 0.3s ease,
+                border-color 0.3s ease 0s;
+  }
+
+  /* Chrome/Edge: altura, fundo e desfoque acompanham a rolagem, sem saltos.
+     A linha continua com a transição de cada estado. */
   @supports (animation-timeline: scroll()) {
-    background-color: transparent;
-    border-bottom-color: transparent;
-
-    animation: cab-ganha-cor linear both;
+    animation: cab-rolagem linear both;
     animation-timeline: scroll(root block);
     animation-range: 0 $cab-distancia;
+
+    transition: border-color 0.1s ease 0.39s;
+
+    &.comp-corpo--rolado {
+      transition: border-color 0.3s ease 0s;
+    }
   }
 
 
@@ -115,7 +146,7 @@ $cab-distancia: 5rem;
     flex-shrink: 0;
   }
 
- 
+
   .comp-doe {
     display: inline-flex;
     align-items: center;

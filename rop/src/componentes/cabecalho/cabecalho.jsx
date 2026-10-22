@@ -1,9 +1,21 @@
 import './cabecalho.scss'
+import { useEffect, useState } from 'react';
 import { HashLink as Link } from 'react-router-hash-link';
 
 function Cabecalho() {
+    const [rolou, setRolou] = useState(false);
+
+    useEffect(() => {
+        const aoRolar = () => setRolou(window.scrollY > 10);
+
+        aoRolar();
+        window.addEventListener('scroll', aoRolar, { passive: true });
+
+        return () => window.removeEventListener('scroll', aoRolar);
+    }, []);
+
     return (
-        <div className='comp-corpo'>
+        <div className={`comp-corpo${rolou ? ' comp-corpo--rolado' : ''}`}>
 
             <div className='comp-logo'>
                 <img src="/assets/componentes/cabecalho/logo.png" alt="R.O.P - Restaurando o Paraíso" />
