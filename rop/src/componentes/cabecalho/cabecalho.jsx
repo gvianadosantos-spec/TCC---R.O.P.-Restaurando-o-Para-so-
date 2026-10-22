@@ -18,7 +18,7 @@ function Cabecalho() {
         <div className={`comp-corpo${rolou ? ' comp-corpo--rolado' : ''}`}>
 
             <div className='comp-logo'>
-                <img src="/assets/componentes/cabecalho/logo.png" alt="R.O.P - Restaurando o Paraíso" />
+                <img src="/assets/cabecalho/logo.png" alt="R.O.P - Restaurando o Paraíso" /> />
             </div>
 
             <div className='comp-botoes'>
@@ -34,7 +34,7 @@ function Cabecalho() {
 
             <div className='comp-doe-div'>
                 <Link to={'../doe'} className='comp-doe'>
-                    <img src="/assets/componentes/cabecalho/coracao.png" alt="" className="icone-coracao" />
+                    <img src="/assets/cabecalho/coracao.png" alt="" className="icone-coracao" />
                     <span>Doe agora</span>
                 </Link>
             </div>
