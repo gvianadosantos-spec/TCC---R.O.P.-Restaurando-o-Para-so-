@@ -1,6 +1,6 @@
 import { useEffect } from "react";
-import Cabecalho from "../cabecalho/cabecalho";
-import Rodape from "../rodape/rodape";
+import Cabecalho from "../../componentes/cabecalho/cabecalho";
+import Rodape from "../../componentes/rodape/rodape";
 import "./loja.scss";
 
 const PASTA_IMAGENS = `${process.env.PUBLIC_URL}/assets/componentes/loja`;
