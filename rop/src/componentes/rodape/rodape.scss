@@ -64,23 +64,30 @@
     border-radius: 9999px;
     text-decoration: none;
     cursor: pointer;
-    transition: opacity 0.2s ease;
-
-    &:hover {
-      opacity: 0.9;
-    }
+    transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
   }
 
   .btn-primary {
-    background-color: #f59e0b;
+    background-color:  #e68e00;
     color: #000000;
-    border: 1px solid #f59e0b;
+    border: 1px solid  #e68e00;
+
+     &:hover {
+      background-color: #ff9d00;
+      border-color: #ff9d00;
+    }
   }
 
   .btn-secondary {
     background-color: transparent;
-    color: #f59e0b;
-    border: 1px solid #f59e0b;
+    color: #e68e00;
+    border: 1px solid  #e68e00;
+
+
+    &:hover {
+      background-color: #e68e00;
+      color: #000000;
+    }
   }
 
   /* Footer Navigation */
@@ -164,8 +171,8 @@
       gap: 0.35rem;
       transition: color 0.15s ease;
 
-      &:hover {
-        color: #ffffff;
+        &:hover {
+        color: #f59e0b;
       }
     }
   }

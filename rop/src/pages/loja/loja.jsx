@@ -3,46 +3,46 @@ import Cabecalho from "../../componentes/cabecalho/cabecalho";
 import Rodape from "../../componentes/rodape/rodape";
 import "./loja.scss";
 
-const PASTA_IMAGENS = `${process.env.PUBLIC_URL}/assets/componentes/loja`;
+const PASTA_IMAGENS = `${process.env.PUBLIC_URL}/assets/loja`;
 
 const PRODUTOS = [
   {
     titulo: "Camiseta Fauna Brasileira",
     descricao: "Algodão orgânico com estampa de espécies em extinção.",
     preco: "R$ 89,90",
-    imagem: "camiseta.png",
+    imagem: "CAMISA.webp",
   },
   {
     titulo: "EcoBag Restaure o Paraíso",
     descricao: "Bolsa reutilizável de fibra natural, impressão à base d'água.",
     preco: "R$ 49,90",
-    imagem: "ecobag.png",
+    imagem: "ECOBAG.webp",
   },
   {
     titulo: "Caneca Éden das Asas",
     descricao: "Cerâmica em edição limitada com a arte do nosso mantenedor.",
     preco: "R$ 39,90",
-    imagem: "caneca.png",
+    imagem: "CANECA.webp",
   },
   {
     titulo: "Kit Adesivos Biodiversidade",
     descricao: "Conjunto de adesivos com a fauna silvestre brasileira.",
     preco: "R$ 24,90",
-    imagem: "adesivos.png",
+    imagem: "ADESIVOS.webp",
   },
   {
     titulo: "Agenda Santuário Éden das Asas",
     descricao:
       "Caderno A5 com a arte do nosso santuário de aves, para organizar seus dias pela fauna.",
     preco: "R$ 59,90",
-    imagem: "agenda.png",
+    imagem: "AGENDA.webp",
   },
   {
     titulo: "Broche Éden das Asas",
     descricao:
       "Broche metálico esmaltado com a arte da ave em voo da R.O.P. Um acessório de impacto para apoiar a fauna.",
     preco: "R$ 19,90",
-    imagem: "broche.png",
+    imagem: "BROCHE.webp",
   },
 ];
 
