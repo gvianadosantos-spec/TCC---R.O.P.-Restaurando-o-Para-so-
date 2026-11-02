@@ -1,0 +1,103 @@
+    
+.graficos-especies {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 22px;
+    width: 100%;
+    margin-top: 45px;
+
+    .grafico-card {
+        background-color: #062128;
+        border: 1px solid #1c3b43;
+        border-radius: 24px;
+        padding: 22px 16px;
+        height: 355px;
+        min-width: 0;
+        box-sizing: border-box;
+        overflow: hidden;
+
+        h3 {
+            margin: 0 0 15px 4px;
+            color: #ffffff;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 14px;
+            font-weight: 700;
+            line-height: 1.4;
+        }
+
+        .grafico-conteudo {
+            width: 100%;
+            height: 270px;
+        }
+    }
+
+    .grafico-rosca {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        .rosca-area {
+            width: 100%;
+            height: 230px;
+            min-height: 0;
+        }
+
+        .grafico-legenda {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 7px;
+
+            .legenda-item {
+                display: flex;
+                align-items: center;
+                gap: 5px;
+                font-size: 12px;
+                font-family: 'Montserrat', sans-serif;
+
+                span:first-child {
+                    width: 13px;
+                    height: 10px;
+                    display: inline-block;
+                }
+            }
+        }
+    }
+
+    .grafico-vazio {
+        color: #92aaaa;
+        font-size: 13px;
+        text-align: center;
+        padding: 60px 15px;
+        font-family: 'Montserrat', sans-serif;
+    }
+}
+
+.grafico-aviso {
+    color: #92aaaa;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 13px;
+    margin-top: 18px;
+}
+
+// Tablets
+@media (max-width: 1100px) {
+    .graficos-especies {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+// Celulares
+@media (max-width: 750px) {
+    .graficos-especies {
+        grid-template-columns: 1fr;
+        gap: 18px;
+
+        .grafico-card {
+            height: 365px;
+        }
+    }
+}
