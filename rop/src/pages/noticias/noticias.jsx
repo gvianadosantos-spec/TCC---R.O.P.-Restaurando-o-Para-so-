@@ -1,15 +1,22 @@
 import './noticias.scss'
-import Cabecalho from '../../componentes/cabecalho/cabecalho.jsx'
+import Cabecalho from '../../componentes/cabecalho/cabecalho.jsx';
+import rodape from '../../componentes/rodape/rodape.jsx'
 
 function Noticias (){
     return(
         <div className='noticias-corpo'>
 
-               <Cabecalho/>
+        <Cabecalho/>
 
-              <h1>
-                funcionando
-            </h1>
+        
+            <div>
+
+                 
+
+            </div>
+
+
+        <rodape/>
         </div>
     )
 }
