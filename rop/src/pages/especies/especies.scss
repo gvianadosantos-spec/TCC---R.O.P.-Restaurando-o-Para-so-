@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap');
+$fonte-titulo: "Georgia", "Times New Roman", serif;
 
 .especies-corpo {
     margin: 0;
@@ -34,10 +35,11 @@
     
 
     h1 {
+        font-family: $fonte-titulo;
         margin: 5px 0 0 0;
         padding: 0;
         color: white;
-        font-size: 60px;
+        font-size: 57px;
         line-height: 1.1;
     }
 
@@ -50,4 +52,40 @@
         max-width: 680px;
         margin-top: 15px;
     }
+
+    .card-pesquisa {
+        
+        margin-top: 4rem;
+        background-color: #062128;
+        border: 1px solid #1c3b43;
+        border-radius: 24px;
+        padding: 22px 16px;
+        height: 120px;
+        min-width: 0;
+        box-sizing: border-box;
+        overflow: hidden;
+
+    }
+
+   .opt {
+    display: flex;
+    align-items: center;
+    gap: 5px; 
+    
+    }
+
+    .flt {
+      color: #92aaaa;
+     font-family: 'Montserrat', sans-serif;
+     font-size: 13px;  
+     line-height: 1.8;
+    }
+
+
+    .opt p {
+    margin: 0;
+    }
+
+
+
 }

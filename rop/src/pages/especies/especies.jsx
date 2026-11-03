@@ -15,12 +15,30 @@ function Especies() {
                     <h1>
                         Animais do Brasil
                     </h1>
-                    
-                    <p className='subtitle'>Um panorama dos animais ameaçados e extintos do Brasil. Explore por grupo, pesquise 
+
+                    <p className='subtitle'>Um panorama dos animais ameaçados e extintos do Brasil. Explore por grupo, pesquise
                         pelo nome comum ou científico e conheça as estatísticas e as causas por trás de cada espécie.</p>
 
 
-<GraficosEspecies />
+                    <GraficosEspecies />
+
+                    <div className='card-pesquisa'>
+                        <div className='opt'>
+                        <img src="./assets/pages/especies/filtro.svg" alt="" width={20}/>
+                        <p className='flt'>FILTROS</p>
+                        </div>
+
+                        <div className='pesq-filt'>
+                            <div className='bot'>
+
+                            </div>
+
+                        </div>
+        
+
+                    </div>
+
+
 
                 </div>
             </div>
