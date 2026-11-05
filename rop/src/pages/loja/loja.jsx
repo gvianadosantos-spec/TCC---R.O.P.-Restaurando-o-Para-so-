@@ -3,7 +3,7 @@ import Cabecalho from "../../componentes/cabecalho/cabecalho";
 import Rodape from "../../componentes/rodape/rodape";
 import "./loja.scss";
 
-const PASTA_IMAGENS = `${process.env.PUBLIC_URL}/assets/loja`;
+const PASTA_IMAGENS = `${process.env.PUBLIC_URL}/assets/img/pages/loja`;
 
 const PRODUTOS = [
   {
