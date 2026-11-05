@@ -7,7 +7,7 @@ import Rodape from '../../componentes/rodape/rodape.jsx'
 
 const slides = [
   {
-    image: "/images/slide-1.jpg",
+    image: "./assets/pages/inicio/image.png",
     eyebrow: "Fauna brasileira",
     title: "Proteger a fauna começa por conhecer quem vive ao nosso lado.",
     button: "Ver espécies",

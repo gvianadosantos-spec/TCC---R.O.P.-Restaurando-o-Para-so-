@@ -38,7 +38,7 @@ function Cabecalho() {
 
                     <div className='comp-doe-div'>
                         <Link to={'../doe'} className='comp-doe'>
-                            <img src="/assets/componentes/cabecalho/coracao.png" alt="" className="icone-coracao" />
+                            <img src="./assets/img/componentes/cabecalho/coracao.png" alt="" className="icone-coracao" />
                             <span>Doe agora</span>
                         </Link>
                     </div>
