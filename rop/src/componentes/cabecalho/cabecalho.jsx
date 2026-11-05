@@ -22,7 +22,7 @@ function Cabecalho() {
                 <div className='comp-corpo'>
 
                     <div className='comp-logo'>
-                        <img src="/assets/cabecalho/logo.png" alt="R.O.P - Restaurando o Paraíso" />
+                        <img src="/assets/img/componentes/cabecalho/logo.png" alt="R.O.P - Restaurando o Paraíso" />
                     </div>
 
                     <div className='comp-botoes'>
