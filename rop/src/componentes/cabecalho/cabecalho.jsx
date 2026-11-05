@@ -29,7 +29,7 @@ function Cabecalho() {
                         <Link to={'../inicio'} className='comp-link'>Início</Link>
                         <Link to={'../especies'} className='comp-link'>Espécies</Link>
                         <Link to={'../noticias'} className='comp-link'>Notícias</Link>
-                        <Link to={'../inicio'} className='comp-link'>Impactos</Link>
+                        <Link to={'../inicio#impactos'} className='comp-link'>Impactos</Link>
                         <Link to={'../inicio'} className='comp-link'>Projetos</Link>
                         <Link to={'../inicio'} className='comp-link'>Publicações</Link>
                         <Link to={'../inicio'} className='comp-link'>Apadrinhe</Link>

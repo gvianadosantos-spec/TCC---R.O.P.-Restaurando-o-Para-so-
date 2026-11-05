@@ -1,137 +1,312 @@
-import './inicio.scss'
 
-import { useEffect, useState, useCallback } from "react";
+import "./inicio.scss";
+import { useEffect, useRef, useState } from "react";
+import Cabecalho from "../../componentes/cabecalho/cabecalho.jsx";
 
-import Cabecalho from '../../componentes/cabecalho/cabecalho.jsx'
-import Rodape from '../../componentes/rodape/rodape.jsx'
-
+// SLIDES
 const slides = [
   {
-    image: "./assets/pages/inicio/image.png",
-    eyebrow: "Fauna brasileira",
-    title: "Proteger a fauna começa por conhecer quem vive ao nosso lado.",
+    image: "/assets/img/pages/inicio/image.png",
+    eyebrow: "FAUNA BRASILEIRA",
+    title:
+      "Proteger a fauna começa por conhecer quem vive ao nosso lado.",
     button: "Ver espécies",
-    href: "#especies",
+    href: "/especies",
   },
   {
-    image: "/images/slide-2.jpg",
-    eyebrow: "Projetos em campo",
-    title: "Pesquisa, monitoramento e cuidado com os animais na natureza.",
+    image: "/assets/img/pages/inicio/image copy.png",
+    eyebrow: "PROJETOS EM CAMPO",
+    title:
+      "Pesquisa, monitoramento e cuidado com os animais na natureza.",
     button: "Ver projetos",
-    href: "#projetos",
+    href: "/projetos",
   },
   {
-    image: "/images/slide-3.jpg",
-    eyebrow: "Em busca da conexão com a biodiversidade ao nosso redor",
-    title: "Vamos juntos construir uma relação harmônica e valorizar a fauna livre?",
+    image: "/assets/img/pages/inicio/image copy 2.png",
+    eyebrow:
+      "EM BUSCA DA CONEXÃO COM A BIODIVERSIDADE AO NOSSO REDOR",
+    title:
+      "Vamos juntos construir uma relação harmônica e valorizar a fauna livre?",
     button: "Visitar",
-    href: "#visitar",
+    href: "/projetos",
   },
   {
-    image: "/images/slide-4.jpg",
-    eyebrow: "Conhece a Ampara Store?",
+    image: "/assets/img/pages/inicio/image copy 3.png",
+    eyebrow: "CONHECE A AMPARA STORE?",
     title:
       "Produtos com propósito! Toda a renda é revertida para os nossos projetos. Compre e ajude a fauna brasileira.",
     button: "Conhecer a loja",
-    href: "#loja",
+    href: "/loja",
   },
 ];
- 
-const INTERVAL = 6000;
 
-function Inicio (){
-  const [current, setCurrent] = useState(0);
-  const [paused, setPaused] = useState(false);
- 
-  const next = useCallback(
-    () => setCurrent((i) => (i + 1) % slides.length),
-    []
-  );
-  const prev = useCallback(
-    () => setCurrent((i) => (i - 1 + slides.length) % slides.length),
-    []
-  );
- 
-  // Troca automática. Reinicia o tempo sempre que `current` muda
-  // (inclusive quando a pessoa clica numa seta ou bolinha).
+// DADOS DOS IMPACTOS
+const impactos = [
+  {
+    numero: "+1.400",
+    descricao: "animais silvestres diretamente impactados",
+  },
+  {
+    numero: "4M",
+    descricao:
+      "de pessoas tocadas por campanhas de conscientização em 2023",
+  },
+  {
+    numero: "+50 mil",
+    descricao:
+      "pessoas diretamente impactadas com ações de educação",
+  },
+  {
+    numero: "8",
+    descricao:
+      "ODS da ONU contempladas em nossas ações",
+  },
+];
+
+const TEMPO_SLIDE = 6000;
+
+function Inicio() {
+  // CARROSSEL
+  const [atual, setAtual] = useState(0);
+  const [pausado, setPausado] = useState(false);
+  const [progresso, setProgresso] = useState(0);
+
+  const tempoDecorrido = useRef(0);
+
+  // ANIMAÇÃO DOS IMPACTOS
+  const impactosRef = useRef(null);
+  const [impactosVisiveis, setImpactosVisiveis] =
+    useState(false);
+
+  function irPara(indice) {
+    tempoDecorrido.current = 0;
+    setProgresso(0);
+    setAtual((indice + slides.length) % slides.length);
+  }
+
+  function proximo() {
+    irPara(atual + 1);
+  }
+
+  function anterior() {
+    irPara(atual - 1);
+  }
+
+  // TROCA AUTOMÁTICA DOS SLIDES
   useEffect(() => {
-    if (paused) return;
-    const id = setTimeout(next, INTERVAL);
-    return () => clearTimeout(id);
-  }, [current, paused, next]);
- 
+    if (pausado) return;
+
+    let ultimaAtualizacao = Date.now();
+
+    const intervalo = setInterval(() => {
+      const agora = Date.now();
+
+      tempoDecorrido.current += agora - ultimaAtualizacao;
+      ultimaAtualizacao = agora;
+
+      if (tempoDecorrido.current >= TEMPO_SLIDE) {
+        tempoDecorrido.current = 0;
+        setProgresso(0);
+        setAtual((i) => (i + 1) % slides.length);
+        return;
+      }
+
+      setProgresso(
+        (tempoDecorrido.current / TEMPO_SLIDE) * 100
+      );
+    }, 50);
+
+    return () => clearInterval(intervalo);
+  }, [pausado]);
+
+  // ANIMAÇÃO AO ROLAR A PÁGINA
+  useEffect(() => {
+    const elemento = impactosRef.current;
+    if (!elemento) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setImpactosVisiveis(true);
+          observer.unobserve(entry.target);
+        }
+      },
+      {
+        threshold: 0.2,
+      }
+    );
+
+    observer.observe(elemento);
+
+    return () => observer.disconnect();
+  }, []);
+
   return (
-    <div className='corpo-inicio'>
-        <Cabecalho/>
-        <div className='topo'>
-    <section
-      className="inicio"
-      aria-roledescription="carrossel"
-      aria-label="Destaques"
-      onMouseEnter={() => setPaused(true)}
-      onMouseLeave={() => setPaused(false)}
-      onFocus={() => setPaused(true)}
-      onBlur={() => setPaused(false)}
-    >
- 
-      {slides.map((slide, i) => (
-        <div
-          key={slide.title}
-          className={`inicio__slide ${i === current ? "is-active" : ""}`}
-          aria-hidden={i !== current}
-          role="group"
-          aria-roledescription="slide"
-          aria-label={`${i + 1} de ${slides.length}`}
+    <div className="corpo-inicio">
+      <Cabecalho />
+
+      <main className="topo">
+
+        {/* CARROSSEL */}
+        <section
+          className="inicio"
+          aria-label="Destaques do R.O.P."
+          aria-roledescription="carrossel"
+          onMouseEnter={() => setPausado(true)}
+          onMouseLeave={() => setPausado(false)}
+          onFocusCapture={() => setPausado(true)}
+          onBlurCapture={(event) => {
+            if (
+              !event.currentTarget.contains(
+                event.relatedTarget
+              )
+            ) {
+              setPausado(false);
+            }
+          }}
         >
-          <img className="inicio__image" src={slide.image} alt="" />
-          <div className="inicio__shade" />
- 
-          <div className="inicio__content">
-            <p className="inicio__eyebrow">{slide.eyebrow}</p>
-            <h1 className="inicio__title">{slide.title}</h1>
-            <a
-              className="inicio__button"
-              href={slide.href}
-              tabIndex={i === current ? 0 : -1}
+          {slides.map((slide, indice) => (
+            <div
+              key={indice}
+              className={`inicio__slide ${
+                indice === atual ? "is-active" : ""
+              }`}
+              aria-hidden={indice !== atual}
+              role="group"
+              aria-roledescription="slide"
+              aria-label={`${indice + 1} de ${slides.length}`}
             >
-              {slide.button} <span aria-hidden="true">→</span>
-            </a>
+              <img
+                src={slide.image}
+                alt=""
+                className="inicio__image-bg"
+                aria-hidden="true"
+              />
+
+              <img
+                src={slide.image}
+                alt=""
+                className="inicio__image"
+                draggable="false"
+              />
+
+              <div className="inicio__shade" />
+
+              <div className="inicio__content">
+                <p className="inicio__eyebrow">
+                  {slide.eyebrow}
+                </p>
+
+                <h1 className="inicio__title">
+                  {slide.title}
+                </h1>
+
+                <a
+                  href={slide.href}
+                  className="inicio__button"
+                  tabIndex={indice === atual ? 0 : -1}
+                >
+                  {slide.button}
+                  <span aria-hidden="true">→</span>
+                </a>
+              </div>
+            </div>
+          ))}
+
+          {/* CONTROLES */}
+          <div className="inicio__controls">
+            <div className="inicio__dots">
+              {slides.map((slide, indice) => (
+                <button
+                  key={indice}
+                  type="button"
+                  className={`inicio__dot ${
+                    indice === atual ? "is-active" : ""
+                  }`}
+                  aria-label={`Ir para slide ${indice + 1}`}
+                  aria-current={
+                    indice === atual ? "true" : undefined
+                  }
+                  onClick={() => irPara(indice)}
+                >
+                  {indice === atual && (
+                    <span
+                      className="inicio__progress"
+                      style={{ width: `${progresso}%` }}
+                    />
+                  )}
+                </button>
+              ))}
+            </div>
+
+            <div className="inicio__arrows">
+              <button
+                type="button"
+                onClick={anterior}
+                aria-label="Slide anterior"
+              >
+                ‹
+              </button>
+
+              <button
+                type="button"
+                onClick={proximo}
+                aria-label="Próximo slide"
+              >
+                ›
+              </button>
+            </div>
+          </div>
+        </section>
+
+        {/* =========================
+            NOSSOS IMPACTOS
+        ========================= */}
+
+        <div
+          className={`impactos ${
+            impactosVisiveis ? "visivel" : ""
+          }`}
+          id="impactos"
+          ref={impactosRef}
+        >
+          <div className="impactos__container">
+
+            <div className="impactos__cabecalho">
+              <p className="impactos__subtitulo">
+                NOSSOS IMPACTOS
+              </p>
+
+              <h2 className="impactos__titulo">
+                Cada número é uma vida, uma
+                consciência desperta.
+              </h2>
+            </div>
+
+            <div className="impactos__painel">
+              {impactos.map((item, index) => (
+                <div
+                  className="impactos__item"
+                  key={index}
+                  style={{
+                    "--delay": `${index * 0.15}s`,
+                  }}
+                >
+                  <strong className="impactos__numero">
+                    {item.numero}
+                  </strong>
+
+                  <p className="impactos__descricao">
+                    {item.descricao}
+                  </p>
+                </div>
+              ))}
+            </div>
+
           </div>
         </div>
-      ))}
- 
-      <div className="inicio__controls">
-        <div className="inicio__dots">
-          {slides.map((slide, i) => (
-            <button
-              key={slide.title}
-              className={`inicio__dot ${i === current ? "is-active" : ""}`}
-              onClick={() => setCurrent(i)}
-              aria-label={`Ir para o slide ${i + 1}`}
-              aria-current={i === current}
-            >
-              {/* a barra enche durante o tempo do slide */}
-              {i === current && (
-                <span
-                  key={current}
-                  className="inicio__progress"
-                  style={{
-                    animationDuration: `${INTERVAL}ms`,
-                    animationPlayState: paused ? "paused" : "running",
-                  }}
-                />
-              )}
-            </button>
-          ))}
-        </div>
- 
-        <div className="inicio__arrows">
-          <button onClick={prev} aria-label="Slide anterior">‹</button>
-          <button onClick={next} aria-label="Próximo slide">›</button>
-        </div>
-      </div>
-    </section>
-        </div>
+
+      </main>
     </div>
   );
 }
