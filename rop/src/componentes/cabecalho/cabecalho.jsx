@@ -22,14 +22,14 @@ function Cabecalho() {
                 <div className='comp-corpo'>
 
                     <div className='comp-logo'>
-                        <img src="/assets/cabecalho/logo.png" alt="R.O.P - Restaurando o Paraíso" />
+                        <img src="/assets/img/componentes/cabecalho/logo.png" alt="R.O.P - Restaurando o Paraíso" />
                     </div>
 
                     <div className='comp-botoes'>
                         <Link to={'../inicio'} className='comp-link'>Início</Link>
                         <Link to={'../especies'} className='comp-link'>Espécies</Link>
                         <Link to={'../noticias'} className='comp-link'>Notícias</Link>
-                        <Link to={'../inicio'} className='comp-link'>Impactos</Link>
+                        <Link to={'../inicio#impactos'} className='comp-link'>Impactos</Link>
                         <Link to={'../inicio'} className='comp-link'>Projetos</Link>
                         <Link to={'../inicio'} className='comp-link'>Publicações</Link>
                         <Link to={'../inicio'} className='comp-link'>Apadrinhe</Link>
