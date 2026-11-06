@@ -1,65 +1,158 @@
-import { useEffect, useState } from 'react'
-import './cabecalho.scss'
-import { HashLink as Link } from 'react-router-hash-link';
+
+import { useEffect, useState } from "react";
+import "./cabecalho.scss";
+
+import { HashLink as Link } from "react-router-hash-link";
 
 function Cabecalho() {
-    const [rolou, setRolou] = useState(false)
+  const [rolou, setRolou] = useState(false);
 
-    useEffect(() => {
-        function aoRolar() {
-            setRolou(window.scrollY > 10)
-        }
+  // DETECTAR ROLAGEM DA PÁGINA
+  useEffect(() => {
+    function aoRolar() {
+      setRolou(window.scrollY > 10);
+    }
 
-        aoRolar()
-        window.addEventListener('scroll', aoRolar, { passive: true })
-        return () => window.removeEventListener('scroll', aoRolar)
-    }, [])
+    aoRolar();
 
-    return (
-        <>
-            <header className={`comp-cabecalho ${rolou ? 'rolou' : ''}`}>
+    window.addEventListener("scroll", aoRolar, {
+      passive: true,
+    });
 
-                <div className='comp-corpo'>
+    return () => {
+      window.removeEventListener("scroll", aoRolar);
+    };
+  }, []);
 
-                    <div className='comp-logo'>
-                        <img src="/assets/img/componentes/cabecalho/logo.png" alt="R.O.P - Restaurando o Paraíso" />
-                    </div>
+  return (
+    <>
+      <header
+        className={`comp-cabecalho ${
+          rolou ? "rolou" : ""
+        }`}
+      >
+        <div className="comp-corpo">
 
-                    <div className='comp-botoes'>
-                        <Link to={'../inicio'} className='comp-link'>Início</Link>
-                        <Link to={'../especies'} className='comp-link'>Espécies</Link>
-                        <Link to={'../noticias'} className='comp-link'>Notícias</Link>
-                        <Link to={'../inicio#impactos'} className='comp-link'>Impactos</Link>
-                        <Link to={'../inicio'} className='comp-link'>Projetos</Link>
-                        <Link to={'../inicio'} className='comp-link'>Publicações</Link>
-                        <Link to={'../inicio'} className='comp-link'>Apadrinhe</Link>
-                        <Link to={'../loja'} className='comp-link'>Loja</Link>
-                    </div>
+          {/* LOGO */}
+          <div className="comp-logo">
+            <img
+              src="/assets/img/componentes/cabecalho/logo.png"
+              alt="R.O.P - Restaurando o Paraíso"
+            />
+          </div>
 
-                    <div className='comp-doe-div'>
-                        <Link to={'../doe'} className='comp-doe'>
-                            <img src="./assets/img/componentes/cabecalho/coracao.png" alt="" className="icone-coracao" />
-                            <span>Doe agora</span>
-                        </Link>
-                    </div>
+          {/* MENU DE NAVEGAÇÃO */}
+          <div className="comp-botoes">
 
-                </div>
+            <Link
+              to="/inicio"
+              className="comp-link"
+            >
+              Início
+            </Link>
 
-                <div className='comp-aviso' role='note' aria-hidden={rolou}>
-                    <b>Projeto fictício.</b>
-                    <span className='comp-aviso-longo'>
-                        A R.O.P. não existe de verdade. Este site foi criado para um TCC.
-                    </span>
-                    <span className='comp-aviso-curto'>
-                        Site criado para um TCC.
-                    </span>
-                </div>
+            <Link
+              to="/especies"
+              className="comp-link"
+            >
+              Espécies
+            </Link>
 
-            </header>
+            <Link
+              to="/noticias"
+              className="comp-link"
+            >
+              Notícias
+            </Link>
 
-            <div className='comp-espaco' aria-hidden='true' />
-        </>
-    )
+            {/* IMPACTOS */}
+            <Link
+              smooth
+              to="/inicio#impactos"
+              className="comp-link"
+            >
+              Impactos
+            </Link>
+
+            {/* PROJETOS */}
+            <Link
+              smooth
+              to="/inicio#projetos"
+              className="comp-link"
+            >
+              Projetos
+            </Link>
+
+            {/* PUBLICAÇÕES */}
+            <Link
+              smooth
+              to="/inicio#publicacoes"
+              className="comp-link"
+            >
+              Publicações
+            </Link>
+
+            {/* APADRINHE */}
+            <Link
+              smooth
+              to="/inicio#apadrinhe"
+              className="comp-link"
+            >
+              Apadrinhe
+            </Link>
+
+            <Link
+              to="/loja"
+              className="comp-link"
+            >
+              Loja
+            </Link>
+
+          </div>
+
+          {/* BOTÃO DE DOAÇÃO */}
+          <div className="comp-doe-div">
+            <Link
+              to="/doe"
+              className="comp-doe"
+            >
+              <img
+                src="/assets/img/componentes/cabecalho/coracao.png"
+                alt=""
+                className="icone-coracao"
+              />
+
+              <span>Doe agora</span>
+            </Link>
+          </div>
+
+        </div>
+
+        {/* AVISO DO TCC */}
+        <div
+          className="comp-aviso"
+          role="note"
+          aria-hidden={rolou}
+        >
+          <b>Projeto fictício.</b>
+
+          <span className="comp-aviso-longo">
+            A R.O.P. não existe de verdade.
+            Este site foi criado para um TCC.
+          </span>
+
+          <span className="comp-aviso-curto">
+            Site criado para um TCC.
+          </span>
+        </div>
+      </header>
+
+      <div
+        className="comp-espaco"
+        aria-hidden="true"
+      />
+    </>
+  );
 }
 
 export default Cabecalho;

@@ -660,3 +660,272 @@
     }
   }
 }
+
+
+.corpo-inicio {
+  #impactos,
+  #projetos,
+  #publicacoes,
+  #apadrinhe {
+    scroll-margin-top: 90px;
+  }
+}
+
+// ===========================================
+// APRESENTAÇÃO DO R.O.P. (na página Início)
+// ===========================================
+.corpo-inicio .apresentacao {
+  width: 100%;
+  padding: 115px 32px 125px;
+  background: #062229;
+  color: #fff;
+  font-family: "Inter", sans-serif;
+  overflow: hidden;
+  scroll-margin-top: 90px;
+
+  .apresentacao__container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    align-items: center;
+    gap: clamp(36px, 5vw, 80px);
+  }
+
+  // Fotografia à esquerda
+  .apresentacao__visual {
+    position: relative;
+    min-width: 0;
+    padding-bottom: 24px;
+    opacity: 0;
+    transform: translate(-45px, 30px);
+    transition: opacity 0.95s ease, transform 0.95s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+
+  .apresentacao__imagem {
+    width: 100%;
+    height: 650px;
+    overflow: hidden;
+    border-radius: 30px;
+    background: #153b35;
+
+    img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      transition: transform 0.65s ease;
+    }
+
+    &:hover img {
+      transform: scale(1.025);
+    }
+  }
+
+  // Emblema sobreposto
+  .apresentacao__selo {
+    position: absolute;
+    right: 24px;
+    bottom: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    min-width: 185px;
+    min-height: 90px;
+    padding: 17px 24px;
+    border-radius: 18px;
+    background: #ee9700;
+    color: #0b1512;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+
+    strong {
+      font-family: "Fraunces", Georgia, serif;
+      font-size: 2rem;
+      line-height: 1.1;
+    }
+
+    span {
+      font-size: 0.62rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+    }
+  }
+
+  .apresentacao__conteudo {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    min-width: 0;
+  }
+
+  .apresentacao__cabecalho,
+  .apresentacao__textos,
+  .apresentacao__cards,
+  .apresentacao__botao {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.85s ease, transform 0.85s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+
+  .apresentacao__cabecalho { transition-delay: 0.12s; margin-bottom: 30px; }
+  .apresentacao__textos { transition-delay: 0.25s; }
+  .apresentacao__cards { transition-delay: 0.38s; }
+  .apresentacao__botao { transition-delay: 0.55s; }
+
+  .apresentacao__subtitulo {
+    margin: 0 0 16px;
+    color: #f5a000;
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 0.24em;
+  }
+
+  .apresentacao__titulo {
+    margin: 0;
+    font-family: "Fraunces", Georgia, serif;
+    font-size: clamp(2.2rem, 3.4vw, 3.25rem);
+    font-weight: 700;
+    line-height: 1.08;
+    letter-spacing: -0.025em;
+  }
+
+  .apresentacao__textos {
+    p {
+      margin: 0 0 21px;
+      color: #8baeb5;
+      font-size: 0.98rem;
+      line-height: 1.7;
+    }
+    strong { color: #fff; font-weight: 700; }
+  }
+
+  .apresentacao__cards {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 12px;
+    width: 100%;
+    margin-top: 12px;
+  }
+
+  .apresentacao__card {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+    min-width: 0;
+    min-height: 116px;
+    padding: 16px 14px;
+    background: #040d10;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 17px;
+    transition: transform 0.3s ease, border-color 0.3s ease;
+
+    svg {
+      width: 22px;
+      height: 22px;
+      color: #ee9700;
+      margin-bottom: 4px;
+      flex-shrink: 0;
+    }
+
+    span {
+      color: #87b4be;
+      font-size: 0.65rem;
+      font-weight: 500;
+      letter-spacing: 0.035em;
+    }
+
+    strong {
+      color: #fff;
+      font-size: 0.82rem;
+      line-height: 1.4;
+      overflow-wrap: anywhere;
+    }
+
+    &:hover {
+      transform: translateY(-5px);
+      border-color: rgba(238, 151, 0, 0.4);
+    }
+  }
+
+  .apresentacao__botao {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    min-height: 48px;
+    margin-top: 38px;
+    padding: 14px 28px;
+    border: 1px solid #ee9700;
+    border-radius: 999px;
+    background: transparent;
+    color: #ee9700;
+    font-size: 0.88rem;
+    font-weight: 600;
+    text-decoration: none;
+
+    &:hover {
+      background: #ee9700;
+      color: #061c22;
+    }
+    &:focus-visible { outline: 2px solid #ee9700; outline-offset: 4px; }
+  }
+
+  // Dispara junto com o IntersectionObserver
+  &.visivel {
+    .apresentacao__visual,
+    .apresentacao__cabecalho,
+    .apresentacao__textos,
+    .apresentacao__cards,
+    .apresentacao__botao {
+      opacity: 1;
+      transform: translate(0, 0);
+    }
+  }
+
+  @media (max-width: 1150px) {
+    padding: 95px 28px;
+    .apresentacao__container { gap: 35px; }
+    .apresentacao__imagem { height: 600px; }
+    .apresentacao__cards { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+
+  @media (max-width: 768px) {
+    padding: 75px 20px;
+    .apresentacao__container { grid-template-columns: 1fr; gap: 52px; }
+    .apresentacao__imagem { height: 410px; border-radius: 22px; }
+    .apresentacao__selo {
+      right: 16px;
+      min-width: 160px;
+      min-height: 76px;
+      padding: 14px 18px;
+      strong { font-size: 1.7rem; }
+    }
+    .apresentacao__titulo { font-size: clamp(2rem, 7vw, 2.8rem); }
+    .apresentacao__textos p { font-size: 0.93rem; }
+    .apresentacao__cards { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+
+  @media (max-width: 380px) {
+    .apresentacao__imagem { height: 340px; }
+    .apresentacao__card { padding: 15px 11px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .apresentacao__visual,
+    .apresentacao__cabecalho,
+    .apresentacao__textos,
+    .apresentacao__cards,
+    .apresentacao__botao {
+      opacity: 1;
+      transform: none;
+      transition: none;
+    }
+    .apresentacao__imagem img { transition: none; }
+  }
+}
+
+// Âncora reservada para a última seção que será criada.
+.corpo-inicio #ultima-area { scroll-margin-top: 90px; }
