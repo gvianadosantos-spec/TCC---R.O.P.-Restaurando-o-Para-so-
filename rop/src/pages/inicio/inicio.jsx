@@ -2,32 +2,32 @@ import "./inicio.scss";
 import { useEffect, useRef, useState } from "react";
 import Cabecalho from "../../componentes/cabecalho/cabecalho.jsx";
 import { HashLink } from "react-router-hash-link";
+import { Link } from "react-router-dom";
 
-// Os arquivos estão dentro de public/assets/img/pages/inicio.
 const slides = [
   {
-    image: "/assets/img/pages/inicio/image.png",
+    image: "/assets/img/pages/inicio/carrosel/imagem1.png",
     eyebrow: "FAUNA BRASILEIRA",
     title: "Proteger a fauna começa por conhecer quem vive ao nosso lado.",
     button: "Ver espécies",
     href: "/especies",
   },
   {
-    image: "/assets/img/pages/inicio/image copy.png",
+    image: "/assets/img/pages/inicio/carrosel/imagem2.png",
     eyebrow: "PROJETOS EM CAMPO",
     title: "Pesquisa, monitoramento e cuidado com os animais na natureza.",
     button: "Ver projetos",
-    href: "/projetos",
+    href: "/inicio#projetos",
   },
   {
-    image: "/assets/img/pages/inicio/image copy 2.png",
+    image: "/assets/img/pages/inicio/carrosel/imagem3.png",
     eyebrow: "EM BUSCA DA CONEXÃO COM A BIODIVERSIDADE AO NOSSO REDOR",
     title: "Vamos juntos construir uma relação harmônica e valorizar a fauna livre?",
     button: "Visitar",
-    href: "/projetos",
+    href: "/inicio#projetos",
   },
   {
-    image: "/assets/img/pages/inicio/image copy 3.png",
+    image: "/assets/img/pages/inicio/carrosel/imagem4.png",
     eyebrow: "CONHECE A AMPARA STORE?",
     title: "Produtos com propósito! Toda a renda é revertida para os nossos projetos. Compre e ajude a fauna brasileira.",
     button: "Conhecer a loja",
@@ -42,47 +42,200 @@ const impactos = [
   { numero: "8", descricao: "ODS da ONU contempladas em nossas ações" },
 ];
 
+const projetos = [
+  {
+    imagem: "/assets/img/pages/inicio/projetos/image1.png",
+    categoria: "EDUCAÇÃO",
+    titulo: "Binóculos da Liberdade",
+    descricao: "O projeto busca a educação e sensibilização, para que valorizemos os animais em seu habitat natural, respeitando seus comportamentos característicos e desempenhando seus papéis ecológicos.",
+    alt: "Arara verde sobre um galho na floresta",
+  },
+  {
+    imagem: "/assets/img/pages/inicio/projetos/image2.png",
+    categoria: "BEM-ESTAR",
+    titulo: "Mantenedor da Fauna",
+    descricao: "Abrigamos animais silvestres que não podem retornar à natureza: onças, araras, tucanos, corujas e papagaios resgatados do tráfico e de acidentes. Este projeto visa promover o bem-estar dos animais que dependem totalmente dos nossos cuidados.",
+    alt: "Onça-pintada cercada por vegetação",
+  },
+  {
+    imagem: "/assets/img/pages/inicio/projetos/image3.png",
+    categoria: "RESGATE",
+    titulo: "Base de Atendimento Ampara Pantanal (BAAP)",
+    descricao: "Criada para amparar a fauna no Pantanal Norte após os grandes incêndios de 2020. Esta área de 100 ha de vegetação nativa conta com recintos para reabilitação e soltura de animais silvestres e toda a estrutura para atendimento emergencial veterinário.",
+    alt: "Vista aérea de uma área de conservação no Pantanal",
+  },
+  {
+    imagem: "/assets/img/pages/inicio/projetos/image4.png",
+    categoria: "CONSERVAÇÃO",
+    titulo: "Coexistência humano-fauna",
+    descricao: "O projeto busca soluções para a proteção de espécies como onças, tamanduás, gaviões e corujas, que sofrem com ameaças como choque em redes elétricas, atropelamentos, conflitos e tráfico.",
+    alt: "Tamanduá-bandeira caminhando em campo aberto",
+  },
+  {
+    imagem: "/assets/img/pages/inicio/projetos/image5.png",
+    categoria: "SOLTURA",
+    titulo: "De volta para casa",
+    descricao: "O Projeto De Volta para a Casa visa o retorno de animais silvestres para a natureza! Sejam oriundos do tráfico, resgatados ou de cativeiro, como mutuns, araras, bugios e tamanduás.",
+    alt: "Arara voando sobre a floresta",
+  },
+  {
+    imagem: "/assets/img/pages/inicio/projetos/image6.png",
+    categoria: "CONSERVAÇÃO",
+    titulo: "Life print — Fauna",
+    descricao: "O projeto visa captar recursos para investir no bem-estar de animais que estão em reabilitação e também em ações de conservação com o objetivo de reintrodução à vida livre.",
+    alt: "Pássaro sobre um galho com uma cidade ao fundo",
+  },
+];
+
+const animaisApadrinhamento = [
+  {
+    id: 1,
+    nome: "Guarani",
+    especie: "ONÇA-PINTADA",
+    descricao: "Guarani é um filhote curioso que, nesta história fictícia, foi acolhido após perder o contato com sua mãe. Ele recebe cuidados especializados e oportunidades de explorar um espaço seguro enquanto sua recuperação é acompanhada.",
+    imagem: "/assets/img/pages/inicio/animais/animal01.webp",
+    posicao: "52% 50%",
+  },
+  {
+    id: 2,
+    nome: "Rubi",
+    especie: "LOBO-GUARÁ",
+    descricao: "Rubi chegou ao centro de cuidados depois de ser encontrado próximo a uma rodovia. Com rotina tranquila, acompanhamento e alimentação adequada, ele recupera a confiança aos poucos. Sua história faz parte da simulação do R.O.P.",
+    imagem: "/assets/img/pages/inicio/animais/animal02.webp",
+    posicao: "53% 45%",
+  },
+  {
+    id: 3,
+    nome: "Tito",
+    especie: "TAMANDUÁ-BANDEIRA",
+    descricao: "Tito é um tamanduá-bandeira que, na narrativa fictícia do projeto, foi resgatado de uma área afetada por queimadas. Hoje recebe atenção veterinária e permanece em um ambiente pensado para seus hábitos naturais.",
+    imagem: "/assets/img/pages/inicio/animais/animal03.webp",
+    posicao: "50% 45%",
+  },
+  {
+    id: 4,
+    nome: "Nina",
+    especie: "ANTA",
+    descricao: "Nina é uma anta tranquila que foi encontrada desorientada após mudanças no ambiente onde vivia. Na história do TCC, ela passa por avaliações e cuidados diários enquanto a equipe planeja as próximas etapas do acolhimento.",
+    imagem: "/assets/img/pages/inicio/animais/animal04.webp",
+    posicao: "52% 48%",
+  },
+  {
+    id: 5,
+    nome: "Bento",
+    especie: "TATU-BOLA",
+    descricao: "Bento gosta de explorar discretamente os cantos do seu espaço. Nesta história ilustrativa, ele chegou depois de ser encontrado em uma região de passagem de veículos e agora vive sob observação e cuidados.",
+    imagem: "/assets/img/pages/inicio/animais/animal05.webp",
+    posicao: "50% 52%",
+  },
+  {
+    id: 6,
+    nome: "Sol",
+    especie: "MICO-LEÃO-DOURADO",
+    descricao: "Sol é um mico-leão-dourado cheio de energia. Na narrativa fictícia do R.O.P., ele recebe enriquecimento ambiental e acompanhamento para estimular comportamentos naturais e garantir seu bem-estar.",
+    imagem: "/assets/img/pages/inicio/animais/animal06.webp",
+    posicao: "48% 50%",
+  },
+  {
+    id: 7,
+    nome: "Mel",
+    especie: "BICHO-PREGUIÇA",
+    descricao: "Mel foi acolhida após a queda de uma árvore próxima a uma área urbana, segundo a história criada para o TCC. Em um local calmo, ela descansa, se alimenta e é acompanhada até recuperar sua rotina.",
+    imagem: "/assets/img/pages/inicio/animais/animal07.webp",
+    posicao: "48% 45%",
+  },
+  {
+    id: 8,
+    nome: "Amora",
+    especie: "QUATI",
+    descricao: "Amora é uma filhote curiosa e observadora. Em sua história fictícia, foi levada para avaliação depois de ser encontrada sozinha e agora recebe cuidados em um ambiente apropriado para um animal silvestre jovem.",
+    imagem: "/assets/img/pages/inicio/animais/animal08.webp",
+    posicao: "49% 45%",
+  },
+  {
+    id: 9,
+    nome: "Jaci",
+    especie: "JAGUATIRICA",
+    descricao: "Jaci é uma jaguatirica atenta ao que acontece ao redor. No cenário fictício do projeto, chegou após ser encontrada em uma área de risco e permanece em acompanhamento especializado para assegurar seu bem-estar.",
+    imagem: "/assets/img/pages/inicio/animais/animal09.webp",
+    posicao: "53% 49%",
+  },
+  {
+    id: 10,
+    nome: "Flor",
+    especie: "JABUTI-PIRANGA",
+    descricao: "Flor é uma jabuti-piranga que adora ficar entre plantas e pequenas áreas ensolaradas. Na história ilustrativa do R.O.P., ela recebe cuidados depois de ser entregue ao centro por moradores da região.",
+    imagem: "/assets/img/pages/inicio/animais/animal10.webp",
+    posicao: "50% 45%",
+  },
+  {
+    id: 11,
+    nome: "Vento",
+    especie: "EMA",
+    descricao: "Vento é uma ema de passos rápidos que, nesta simulação, foi acolhida após um acidente em uma cerca. Ela recebe atenção veterinária e permanece em uma área ampla para recuperar seus movimentos com segurança.",
+    imagem: "/assets/img/pages/inicio/animais/animal11.webp",
+    posicao: "47% 52%",
+  },
+  {
+    id: 12,
+    nome: "Serena",
+    especie: "SERIEMA",
+    descricao: "Serena é uma seriema que costuma observar tudo ao seu redor. Na história fictícia, ela passou por um período de reabilitação e agora vive em um espaço tranquilo, com estímulos adequados à espécie.",
+    imagem: "/assets/img/pages/inicio/animais/animal12.webp",
+    posicao: "49% 50%",
+  },
+];
+
 const TEMPO_SLIDE = 6000;
 
 function Inicio() {
-  // Carrossel existente
   const [atual, setAtual] = useState(0);
   const [pausado, setPausado] = useState(false);
   const [progresso, setProgresso] = useState(0);
   const tempoDecorrido = useRef(0);
-
-  // Animação existente: Impactos
   const impactosRef = useRef(null);
   const [impactosVisiveis, setImpactosVisiveis] = useState(false);
-
-  // Nova animação: Apresentação
   const apresentacaoRef = useRef(null);
   const [apresentacaoVisivel, setApresentacaoVisivel] = useState(false);
+  const projetosRef = useRef(null);
+  const [projetosVisiveis, setProjetosVisiveis] = useState(false);
+  const apadrinheRef = useRef(null);
+  const [apadrinheVisivel, setApadrinheVisivel] = useState(false);
+  const animaisRef = useRef(null);
+  const [animaisVisiveis, setAnimaisVisiveis] = useState(false);
+  const [animalSelecionado, setAnimalSelecionado] = useState(null);
+  const botaoFecharRef = useRef(null);
+  const focoAnteriorRef = useRef(null);
+
+  function abrirAnimal(animal) {
+    focoAnteriorRef.current = document.activeElement;
+    setAnimalSelecionado(animal);
+  }
+
+  function fecharAnimal() {
+    setAnimalSelecionado(null);
+    window.requestAnimationFrame(() => focoAnteriorRef.current?.focus?.());
+  }
 
   function irPara(indice) {
     tempoDecorrido.current = 0;
     setProgresso(0);
     setAtual((indice + slides.length) % slides.length);
   }
-
   function proximo() {
     irPara(atual + 1);
   }
-
   function anterior() {
     irPara(atual - 1);
   }
 
-  // Troca automática dos slides, respeitando a pausa.
   useEffect(() => {
     if (pausado) return;
-
     let ultimaAtualizacao = Date.now();
     const intervalo = setInterval(() => {
       const agora = Date.now();
       tempoDecorrido.current += agora - ultimaAtualizacao;
       ultimaAtualizacao = agora;
-
       if (tempoDecorrido.current >= TEMPO_SLIDE) {
         tempoDecorrido.current = 0;
         setProgresso(0);
@@ -91,11 +244,9 @@ function Inicio() {
       }
       setProgresso((tempoDecorrido.current / TEMPO_SLIDE) * 100);
     }, 50);
-
     return () => clearInterval(intervalo);
   }, [pausado]);
 
-  // Animação de entrada dos Impactos
   useEffect(() => {
     const elemento = impactosRef.current;
     if (!elemento) return;
@@ -103,7 +254,6 @@ function Inicio() {
       setImpactosVisiveis(true);
       return;
     }
-
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
@@ -113,12 +263,10 @@ function Inicio() {
       },
       { threshold: 0.2 }
     );
-
     observer.observe(elemento);
     return () => observer.disconnect();
   }, []);
 
-  // Animação de entrada da Apresentação
   useEffect(() => {
     const elemento = apresentacaoRef.current;
     if (!elemento) return;
@@ -126,7 +274,6 @@ function Inicio() {
       setApresentacaoVisivel(true);
       return;
     }
-
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
@@ -136,17 +283,113 @@ function Inicio() {
       },
       { threshold: 0.15, rootMargin: "0px 0px -45px 0px" }
     );
+    observer.observe(elemento);
+    return () => observer.disconnect();
+  }, []);
+  useEffect(() => {
+    const elemento = projetosRef.current;
+    if (!elemento) return;
+    if (!("IntersectionObserver" in window)) {
+      setProjetosVisiveis(true);
+      return;
+    }
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setProjetosVisiveis(true);
+          observer.unobserve(entry.target);
+        }
+      },
+      { threshold: 0.1, rootMargin: "0px 0px -45px 0px" }
+    );
+    observer.observe(elemento);
 
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    const elemento = apadrinheRef.current;
+    if (!elemento) return;
+    if (!("IntersectionObserver" in window)) {
+      setApadrinheVisivel(true);
+      return;
+    }
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setApadrinheVisivel(true);
+          observer.unobserve(entry.target);
+        }
+      },
+      { threshold: 0.15, rootMargin: "0px 0px -40px 0px" }
+    );
     observer.observe(elemento);
     return () => observer.disconnect();
   }, []);
 
+  useEffect(() => {
+    const elemento = animaisRef.current;
+    if (!elemento) return;
+    if (!("IntersectionObserver" in window)) {
+      setAnimaisVisiveis(true);
+      return;
+    }
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setAnimaisVisiveis(true);
+          observer.unobserve(entry.target);
+        }
+      },
+      { threshold: 0.08, rootMargin: "0px 0px -45px 0px" }
+    );
+    observer.observe(elemento);
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    if (!animalSelecionado) return;
+    const overflowAnterior = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    const frame = window.requestAnimationFrame(() => botaoFecharRef.current?.focus());
+
+    function aoPressionarTecla(event) {
+      if (event.key === "Escape") {
+        fecharAnimal();
+        return;
+      }
+      if (event.key === "Tab") {
+        const painel = document.querySelector(".animais__modal");
+        if (!painel) return;
+        const focaveis = Array.from(
+          painel.querySelectorAll('button:not([disabled]), a[href], [tabindex]:not([tabindex="-1"])')
+        );
+        if (!focaveis.length) return;
+        const primeiro = focaveis[0];
+        const ultimo = focaveis[focaveis.length - 1];
+        if (event.shiftKey && document.activeElement === primeiro) {
+          event.preventDefault();
+          ultimo.focus();
+        } else if (!event.shiftKey && document.activeElement === ultimo) {
+          event.preventDefault();
+          primeiro.focus();
+        }
+      }
+    }
+
+    document.addEventListener("keydown", aoPressionarTecla);
+    return () => {
+      document.body.style.overflow = overflowAnterior;
+      window.cancelAnimationFrame(frame);
+      document.removeEventListener("keydown", aoPressionarTecla);
+    };
+  }, [animalSelecionado]);
+
+
   return (
     <div className="corpo-inicio">
       <Cabecalho />
-
       <main className="topo">
-        {/* CARROSSEL */}
         <section
           className="inicio"
           aria-label="Destaques do R.O.P."
@@ -195,7 +438,6 @@ function Inicio() {
               </div>
             </div>
           ))}
-
           <div className="inicio__controls">
             <div className="inicio__dots">
               {slides.map((slide, indice) => (
@@ -222,8 +464,6 @@ function Inicio() {
             </div>
           </div>
         </section>
-
-        {/* NOSSOS IMPACTOS */}
         <div
           id="impactos"
           ref={impactosRef}
@@ -250,8 +490,6 @@ function Inicio() {
             </div>
           </div>
         </div>
-
-        {/* APRESENTAÇÃO — dentro da página Início */}
         <div
           id="apresentacao"
           ref={apresentacaoRef}
@@ -271,7 +509,6 @@ function Inicio() {
                 <span>RESTAURANDO O PARAÍSO</span>
               </div>
             </div>
-
             <div className="apresentacao__conteudo">
               <div className="apresentacao__cabecalho">
                 <p className="apresentacao__subtitulo">APRESENTAÇÃO</p>
@@ -279,7 +516,6 @@ function Inicio() {
                   Cuidamos da fauna que perdeu seu lar — e devolvemos o paraíso.
                 </h2>
               </div>
-
               <div className="apresentacao__textos">
                 <p>
                   Nossa proposta é cuidar de animais silvestres necessitados que
@@ -303,7 +539,6 @@ function Inicio() {
                   para ensinar aos alunos a cuidar da fauna brasileira que tanto amamos.
                 </p>
               </div>
-
               <div className="apresentacao__cards">
                 <div className="apresentacao__card">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
@@ -341,18 +576,178 @@ function Inicio() {
                   <strong>Brasil / Sul-Americana</strong>
                 </div>
               </div>
-
-              {/* A última seção ainda será criada: adicionar id="ultima-area" nela. */}
-              <HashLink smooth to="/inicio#ultima-area" className="apresentacao__botao">
+              <HashLink smooth to="/inicio#apadrinhe" className="apresentacao__botao">
                 Conheça mais
                 <span aria-hidden="true">→</span>
               </HashLink>
             </div>
           </div>
         </div>
+        <div
+          id="projetos"
+          ref={projetosRef}
+          className={`projetos ${projetosVisiveis ? "visivel" : ""}`}
+        >
+          <div className="projetos__container">
+            <div className="projetos__cabecalho">
+              <div className="projetos__chamada">
+                <p className="projetos__subtitulo">NOSSA ATUAÇÃO</p>
+                <h2 className="projetos__titulo">Projetos</h2>
+              </div>
+              <p className="projetos__aviso">
+                Os projetos apresentados são fictícios e foram criados exclusivamente
+                para ilustrar as propostas do R.O.P. neste Trabalho de Conclusão de
+                Curso (TCC). Não representam iniciativas reais.
+              </p>
+            </div>
+            <div className="projetos__grade">
+              {projetos.map((projeto, index) => (
+                <article
+                  className="projetos__card"
+                  key={projeto.titulo}
+                  style={{ "--delay": `${index * 0.1}s` }}
+                >
+                  <div className="projetos__imagem">
+                    <img src={projeto.imagem} alt={projeto.alt} loading="lazy" />
+                    <span className="projetos__categoria">{projeto.categoria}</span>
+                  </div>
+                  <div className="projetos__informacoes">
+                    <h3>{projeto.titulo}</h3>
+                    <p>{projeto.descricao}</p>
+                  </div>
+                </article>
+              ))}
+            </div>
+          </div>
+        </div>
+        <div
+          id="apadrinhe"
+          ref={apadrinheRef}
+          className={`apadrinhe ${apadrinheVisivel ? "visivel" : ""}`}
+        >
+          <div className="apadrinhe__container">
+            <div className="apadrinhe__visual">
+              <img
+                src="/assets/img/pages/inicio/apadrinhe/onca.png"
+                alt="Filhote de onça-pintada entre a vegetação"
+                loading="lazy"
+              />
+            </div>
+            <div className="apadrinhe__conteudo">
+              <p className="apadrinhe__subtitulo">APADRINHAMENTO</p>
+              <h2 className="apadrinhe__titulo">Por que ser um padrinho?</h2>
+              <div className="apadrinhe__textos">
+                <p>
+                  Os animais sob os nossos cuidados são <strong>vítimas da interferência humana</strong> e
+                  não poderão retornar para a natureza. Trabalhamos diariamente para oferecer uma vida digna,
+                  o mais próximo da realidade natural desses animais!
+                </p>
+                <p>
+                  Ao apadrinhar, você estará auxiliando nos <strong>cuidados e qualidade de vida</strong> destes animais,
+                  e nos ajudando a proporcionar as melhores condições para uma vida digna,
+                  o mais próximo da natureza!
+                </p>
+              </div>
+              <HashLink smooth to="/inicio#animais" className="apadrinhe__botao">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                  <path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8Z" />
+                </svg>
+                Apadrinhar
+                <span aria-hidden="true">→</span>
+              </HashLink>
+            </div>
+          </div>
+        </div>
+        <section
+          id="animais"
+          ref={animaisRef}
+          className={`animais ${animaisVisiveis ? "visivel" : ""}`}
+          aria-labelledby="animais-titulo"
+        >
+          <div className="animais__container">
+            <div className="animais__cabecalho">
+              <p className="animais__subtitulo">CONHEÇA NOSSOS ANIMAIS</p>
+              <h2 id="animais-titulo" className="animais__titulo">Apadrinhe um Animal</h2>
+              <p className="animais__descricao">
+                Cada um tem uma história de superação. Conheça os animais e descubra
+                como o cuidado com a fauna pode transformar vidas.
+              </p>
+              <p className="animais__nota">
+                Personagens, histórias e apadrinhamentos fictícios, apresentados para fins de TCC.
+              </p>
+            </div>
+            <div className="animais__grade">
+              {animaisApadrinhamento.map((animal, indice) => (
+                <button
+                  key={animal.id}
+                  type="button"
+                  className="animais__card"
+                  style={{ "--atraso": `${indice * 0.07}s` }}
+                  onClick={() => abrirAnimal(animal)}
+                  aria-label={`Conhecer ${animal.nome}, ${animal.especie.toLowerCase()}`}
+                >
+                  <img
+                    src={animal.imagem}
+                    alt={animal.especie.toLowerCase()}
+                    loading="lazy"
+                    style={{ objectPosition: animal.posicao }}
+                  />
+                  <span className="animais__sombra" aria-hidden="true" />
+                  <span className="animais__seta" aria-hidden="true">↗</span>
+                  <span className="animais__info">
+                    <span className="animais__especie">{animal.especie}</span>
+                    <span className="animais__nome">{animal.nome}</span>
+                  </span>
+                </button>
+              ))}
+            </div>
+          </div>
+        </section>
       </main>
+      {animalSelecionado && (
+        <div
+          className="animais__modal-fundo"
+          onMouseDown={(event) => {
+            if (event.currentTarget === event.target) fecharAnimal();
+          }}
+        >
+          <div
+            className="animais__modal"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby={`animal-titulo-${animalSelecionado.id}`}
+            aria-describedby={`animal-descricao-${animalSelecionado.id}`}
+          >
+            <div className="animais__modal-imagem">
+              <img src={animalSelecionado.imagem} alt={animalSelecionado.especie.toLowerCase()} />
+            </div>
+            <div className="animais__modal-conteudo">
+              <button
+                type="button"
+                className="animais__modal-fechar"
+                onClick={fecharAnimal}
+                ref={botaoFecharRef}
+                aria-label="Fechar detalhes do animal"
+              >
+                ×
+              </button>
+              <p className="animais__modal-especie">{animalSelecionado.especie}</p>
+              <h2 id={`animal-titulo-${animalSelecionado.id}`} className="animais__modal-titulo">
+                {animalSelecionado.nome}
+              </h2>
+              <p id={`animal-descricao-${animalSelecionado.id}`} className="animais__modal-texto">
+                {animalSelecionado.descricao}
+              </p>
+              <p className="animais__modal-nota">História ilustrativa do projeto fictício R.O.P.</p>
+              <Link to="/doe" className="animais__modal-botao">
+                Apadrinhar {animalSelecionado.nome}
+                <span aria-hidden="true">↗</span>
+              </Link>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
-
 export default Inicio;
