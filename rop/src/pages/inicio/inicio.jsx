@@ -1,6 +1,7 @@
 import "./inicio.scss";
 import { useEffect, useRef, useState } from "react";
 import Cabecalho from "../../componentes/cabecalho/cabecalho.jsx";
+import Rodape from "../../componentes/rodape/rodape.jsx"
 import { HashLink } from "react-router-hash-link";
 import { Link } from "react-router-dom";
 
@@ -186,6 +187,109 @@ const animaisApadrinhamento = [
   },
 ];
 
+const santuarios = [
+  {
+    id: "eden-das-asas",
+    nome: "Éden das Asas",
+    grupo: "AVES",
+    descricao: "Reabilitação e soltura de aves silvestres.",
+    detalhe: "Neste santuário fictício, aves que necessitam de acolhimento passariam por avaliação veterinária, cuidados específicos e reabilitação. Quando possível e seguro, a proposta prevê o retorno à natureza.",
+    logo: "/assets/img/pages/inicio/santuarios/logo1.png",
+  },
+  {
+    id: "refugio-da-selva",
+    nome: "Refúgio da Selva",
+    grupo: "MAMÍFEROS",
+    descricao: "Cuidado de felinos, antas e primatas silvestres.",
+    detalhe: "O Refúgio da Selva representa, no TCC, um espaço para o acolhimento de mamíferos silvestres. A proposta inclui cuidados veterinários, enriquecimento ambiental e acompanhamento individualizado.",
+    logo: "/assets/img/pages/inicio/santuarios/logo2.png",
+  },
+  {
+    id: "oasis-das-escamas",
+    nome: "Oásis das Escamas",
+    grupo: "RÉPTEIS",
+    descricao: "Reabilitação de jacarés, cobras e lagartos.",
+    detalhe: "Nesta unidade ilustrativa, répteis resgatados receberiam cuidados em recintos apropriados, com atenção à temperatura, à alimentação e à recuperação de comportamentos naturais.",
+    logo: "/assets/img/pages/inicio/santuarios/logo3.png",
+  },
+  {
+    id: "charco-umido",
+    nome: "Charco Úmido",
+    grupo: "ANFÍBIOS",
+    descricao: "Conservação de sapos e pererecas.",
+    detalhe: "O Charco Úmido é um santuário fictício dedicado a anfíbios, com ambientes que representam as condições de umidade e abrigo necessárias ao cuidado e à preservação desses animais.",
+    logo: "/assets/img/pages/inicio/santuarios/logo4.png",
+  },
+  {
+    id: "fonte-das-aguas",
+    nome: "Fonte das Águas",
+    grupo: "PEIXES",
+    descricao: "Recuperação de peixes e quelônios.",
+    detalhe: "A Fonte das Águas ilustra um espaço de cuidado de animais aquáticos, com monitoramento da qualidade da água e condições adequadas de recuperação e bem-estar.",
+    logo: "/assets/img/pages/inicio/santuarios/logo5.png",
+  },
+  {
+    id: "jardim-das-cores",
+    nome: "Jardim das Cores",
+    grupo: "INVERTEBRADOS",
+    descricao: "Conservação de borboletas, abelhas e moluscos.",
+    detalhe: "O Jardim das Cores representa ações educativas e de conservação de invertebrados, ressaltando a importância da polinização, da biodiversidade e da proteção de seus habitats.",
+    logo: "/assets/img/pages/inicio/santuarios/logo6.png",
+  },
+];
+
+const parceiros = [
+  {
+    id: "cetas",
+    nome: "CETAS",
+    categoria: "IBAMA",
+    descricao: "Centros de Triagem de Animais Silvestres do IBAMA: recebem animais resgatados, apreendidos ou entregues voluntariamente, realizam triagem, tratamento, recuperação e reabilitação e, quando possível, a soltura na natureza.",
+    logo: "/assets/img/pages/inicio/parceiros/cetas.webp",
+  },
+  {
+    id: "gremar",
+    nome: "Instituto Gremar",
+    categoria: "RESGATE & MARINHOS",
+    descricao: "ONG que atua com resgate, atendimento veterinário e reabilitação de animais silvestres e marinhos, além de monitoramento e educação ambiental.",
+    logo: "/assets/img/pages/inicio/parceiros/gremar.webp",
+  },
+  {
+    id: "pet-terapia",
+    nome: "Pet Terapia da UFPel",
+    categoria: "TERAPIA ASSISTIDA",
+    descricao: "Projeto universitário que desenvolve intervenções assistidas por animais em instituições de saúde e educação, envolvendo profissionais de diferentes áreas.",
+    logo: "/assets/img/pages/inicio/parceiros/pet-terapia.webp",
+  },
+  {
+    id: "inataa",
+    nome: "INATAA",
+    categoria: "TERAPIA POR ANIMAIS",
+    descricao: "Instituto Nacional de Ações e Terapia Assistida por Animais: realiza atividades e terapias com animais, principalmente cães, buscando benefícios físicos, emocionais e sociais.",
+    logo: "/assets/img/pages/inicio/parceiros/inataa.webp",
+  },
+  {
+    id: "escola-verde",
+    nome: "Projeto Escola Verde",
+    categoria: "EDUCAÇÃO AMBIENTAL",
+    descricao: "Leva educação ambiental para escolas por meio do plantio de árvores nativas, atividades educativas e participação dos alunos no cuidado com a biodiversidade.",
+    logo: "/assets/img/pages/inicio/parceiros/escola-verde.webp",
+  },
+  {
+    id: "cidadao-legal",
+    nome: "Projeto Cidadão Legal",
+    categoria: "PRAIA GRANDE",
+    descricao: "Ensina crianças sobre cuidado com animais, descarte correto de resíduos, reciclagem, respeito à natureza e hábitos sustentáveis.",
+    logo: "/assets/img/pages/inicio/parceiros/cidadao-legal.webp",
+  },
+  {
+    id: "com-vida",
+    nome: "Com-Vida",
+    categoria: "ESCOLAS BRASILEIRAS",
+    descricao: "Iniciativa presente em escolas brasileiras que estimula estudantes a participar de ações sobre clima, biodiversidade, riscos ambientais e qualidade de vida.",
+    logo: "/assets/img/pages/inicio/parceiros/com-vida.webp",
+  },
+];
+
 const TEMPO_SLIDE = 6000;
 
 function Inicio() {
@@ -206,6 +310,13 @@ function Inicio() {
   const [animalSelecionado, setAnimalSelecionado] = useState(null);
   const botaoFecharRef = useRef(null);
   const focoAnteriorRef = useRef(null);
+  const santuariosRef = useRef(null);
+  const [santuariosVisiveis, setSantuariosVisiveis] = useState(false);
+  const [santuarioSelecionado, setSantuarioSelecionado] = useState(null);
+  const botaoFecharSantuarioRef = useRef(null);
+  const focoAnteriorSantuarioRef = useRef(null);
+  const parceirosRef = useRef(null);
+  const [parceirosVisiveis, setParceirosVisiveis] = useState(false);
 
   function abrirAnimal(animal) {
     focoAnteriorRef.current = document.activeElement;
@@ -215,6 +326,16 @@ function Inicio() {
   function fecharAnimal() {
     setAnimalSelecionado(null);
     window.requestAnimationFrame(() => focoAnteriorRef.current?.focus?.());
+  }
+
+  function abrirSantuario(santuario) {
+    focoAnteriorSantuarioRef.current = document.activeElement;
+    setSantuarioSelecionado(santuario);
+  }
+
+  function fecharSantuario() {
+    setSantuarioSelecionado(null);
+    window.requestAnimationFrame(() => focoAnteriorSantuarioRef.current?.focus?.());
   }
 
   function irPara(indice) {
@@ -385,6 +506,83 @@ function Inicio() {
     };
   }, [animalSelecionado]);
 
+
+  useEffect(() => {
+    const elemento = santuariosRef.current;
+    if (!elemento) return;
+    if (!("IntersectionObserver" in window)) {
+      setSantuariosVisiveis(true);
+      return;
+    }
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setSantuariosVisiveis(true);
+          observer.unobserve(entry.target);
+        }
+      },
+      { threshold: 0.1, rootMargin: "0px 0px -45px 0px" }
+    );
+    observer.observe(elemento);
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    if (!santuarioSelecionado) return;
+    const overflowAnterior = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    const frame = window.requestAnimationFrame(() => botaoFecharSantuarioRef.current?.focus());
+
+    function aoPressionarTecla(event) {
+      if (event.key === "Escape") {
+        fecharSantuario();
+        return;
+      }
+      if (event.key !== "Tab") return;
+      const painel = document.querySelector(".santuarios__modal");
+      if (!painel) return;
+      const focaveis = Array.from(
+        painel.querySelectorAll('button:not([disabled]), a[href], [tabindex]:not([tabindex="-1"])')
+      );
+      if (!focaveis.length) return;
+      const primeiro = focaveis[0];
+      const ultimo = focaveis[focaveis.length - 1];
+      if (event.shiftKey && document.activeElement === primeiro) {
+        event.preventDefault();
+        ultimo.focus();
+      } else if (!event.shiftKey && document.activeElement === ultimo) {
+        event.preventDefault();
+        primeiro.focus();
+      }
+    }
+
+    document.addEventListener("keydown", aoPressionarTecla);
+    return () => {
+      document.body.style.overflow = overflowAnterior;
+      window.cancelAnimationFrame(frame);
+      document.removeEventListener("keydown", aoPressionarTecla);
+    };
+  }, [santuarioSelecionado]);
+
+  useEffect(() => {
+    const elemento = parceirosRef.current;
+    if (!elemento) return;
+    if (!("IntersectionObserver" in window)) {
+      setParceirosVisiveis(true);
+      return;
+    }
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setParceirosVisiveis(true);
+          observer.unobserve(entry.target);
+        }
+      },
+      { threshold: 0.08, rootMargin: "0px 0px -45px 0px" }
+    );
+    observer.observe(elemento);
+    return () => observer.disconnect();
+  }, []);
 
   return (
     <div className="corpo-inicio">
@@ -576,8 +774,8 @@ function Inicio() {
                   <strong>Brasil / Sul-Americana</strong>
                 </div>
               </div>
-              <HashLink smooth to="/inicio#apadrinhe" className="apresentacao__botao">
-                Conheça mais
+              <HashLink smooth to="/inicio#parceiros" className="apresentacao__botao">
+                Conheça nossos parceiros
                 <span aria-hidden="true">→</span>
               </HashLink>
             </div>
@@ -703,6 +901,85 @@ function Inicio() {
             </div>
           </div>
         </section>
+        <section
+          id="santuarios"
+          ref={santuariosRef}
+          className={`santuarios ${santuariosVisiveis ? "visivel" : ""}`}
+          aria-labelledby="santuarios-titulo"
+        >
+          <div className="santuarios__container">
+            <div className="santuarios__cabecalho">
+              <p className="santuarios__subtitulo">SANTUÁRIOS</p>
+              <h2 id="santuarios-titulo" className="santuarios__titulo">Uma casa para cada espécie</h2>
+              <p className="santuarios__descricao">
+                Conheça os santuários dedicados ao cuidado de cada grupo de animais silvestres.
+                As unidades e os exemplos de atendimento são fictícios, criados para este TCC.
+              </p>
+            </div>
+            <div className="santuarios__grade">
+              {santuarios.map((santuario, indice) => (
+                <article
+                  key={santuario.id}
+                  className="santuarios__card"
+                  style={{ "--atraso": `${indice * 0.09}s` }}
+                >
+                  <div className="santuarios__logo">
+                    <img src={santuario.logo} alt={`Santuário ${santuario.nome}`} loading="lazy" />
+                  </div>
+                  <div className="santuarios__corpo">
+                    <p className="santuarios__grupo">{santuario.grupo}</p>
+                    <p className="santuarios__texto">{santuario.descricao}</p>
+                    <button
+                      type="button"
+                      className="santuarios__link"
+                      onClick={() => abrirSantuario(santuario)}
+                      aria-label={`Ver informações sobre resgates de ${santuario.grupo.toLowerCase()}`}
+                    >
+                      Ver resgates <span aria-hidden="true">↗</span>
+                    </button>
+                  </div>
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
+        <section
+          id="parceiros"
+          ref={parceirosRef}
+          className={`parceiros ${parceirosVisiveis ? "visivel" : ""}`}
+          aria-labelledby="parceiros-titulo"
+        >
+          <div className="parceiros__container">
+            <div className="parceiros__cabecalho">
+              <p className="parceiros__subtitulo">PARCEIROS</p>
+              <h2 id="parceiros-titulo" className="parceiros__titulo">Juntos pelo paraíso da fauna</h2>
+              <p className="parceiros__descricao">
+                Estas organizações e iniciativas são apresentadas como referências educativas para o TCC.
+                O R.O.P. é um projeto fictício e não possui parcerias oficiais com elas.
+              </p>
+            </div>
+            <div className="parceiros__grade">
+              {parceiros.map((parceiro, indice) => (
+                <article
+                  className="parceiros__card"
+                  key={parceiro.id}
+                  style={{ "--atraso": `${indice * 0.1}s` }}
+                >
+                  <div className="parceiros__identidade">
+                    <div className="parceiros__emblema">
+                      <img src={parceiro.logo} alt={`Logotipo de ${parceiro.nome}`} loading="lazy" />
+                    </div>
+                    <div className="parceiros__nome-bloco">
+                      <h3 className="parceiros__nome">{parceiro.nome}</h3>
+                      <p className="parceiros__categoria">{parceiro.categoria}</p>
+                    </div>
+                  </div>
+                  <p className="parceiros__texto">{parceiro.descricao}</p>
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
       </main>
       {animalSelecionado && (
         <div
@@ -747,6 +1024,48 @@ function Inicio() {
           </div>
         </div>
       )}
+      {santuarioSelecionado && (
+        <div
+          className="santuarios__modal-fundo"
+          onMouseDown={(event) => {
+            if (event.currentTarget === event.target) fecharSantuario();
+          }}
+        >
+          <div
+            className="santuarios__modal"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="santuario-modal-titulo"
+            aria-describedby="santuario-modal-descricao"
+          >
+            <button
+              type="button"
+              ref={botaoFecharSantuarioRef}
+              className="santuarios__modal-fechar"
+              onClick={fecharSantuario}
+              aria-label="Fechar informações do santuário"
+            >
+              ×
+            </button>
+            <img
+              src={santuarioSelecionado.logo}
+              className="santuarios__modal-logo"
+              alt={`Logo do Santuário ${santuarioSelecionado.nome}`}
+            />
+            <p className="santuarios__modal-grupo">{santuarioSelecionado.grupo}</p>
+            <h2 id="santuario-modal-titulo">{santuarioSelecionado.nome}</h2>
+            <p id="santuario-modal-descricao">{santuarioSelecionado.detalhe}</p>
+            <p className="santuarios__modal-aviso">
+              Conteúdo demonstrativo: os santuários e os atendimentos apresentados são fictícios.
+            </p>
+            <button type="button" onClick={fecharSantuario} className="santuarios__modal-voltar">
+              Voltar aos santuários
+            </button>
+          </div>
+        </div>
+      )}
+      <Rodape/>
+
     </div>
   );
 }

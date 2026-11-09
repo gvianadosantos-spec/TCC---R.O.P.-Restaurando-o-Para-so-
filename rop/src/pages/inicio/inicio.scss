@@ -1584,3 +1584,495 @@
 @media (prefers-reduced-motion: reduce) {
   .animais__modal-botao { transition: none; }
 }
+
+.corpo-inicio .santuarios {
+  width: 100%;
+  padding: 110px 32px 135px;
+  background: #062229;
+  color: #fff;
+  font-family: "Inter", sans-serif;
+  scroll-margin-top: 90px;
+
+  &__container {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  &__cabecalho {
+    margin-bottom: 56px;
+    opacity: 0;
+    transform: translateY(36px);
+    transition: opacity 0.8s ease, transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+
+  &__subtitulo {
+    margin: 0 0 16px;
+    color: #ef9700;
+    font-size: 0.83rem;
+    font-weight: 700;
+    letter-spacing: 0.26em;
+  }
+
+  &__titulo {
+    margin: 0 0 21px;
+    font-family: "Fraunces", Georgia, serif;
+    font-size: clamp(2.3rem, 4vw, 3.3rem);
+    line-height: 1.08;
+    letter-spacing: -0.025em;
+  }
+
+  &__descricao {
+    max-width: 690px;
+    margin: 0;
+    color: #87b4be;
+    font-size: 1rem;
+    line-height: 1.7;
+  }
+
+  &__grade {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 24px;
+  }
+
+  &__card {
+    min-width: 0;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 18px;
+    overflow: hidden;
+    background: #030c0e;
+    opacity: 0;
+    transform: translateY(45px);
+    transition: opacity 0.8s ease, transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1), border-color 0.25s ease;
+    transition-delay: var(--atraso);
+
+    &:hover,
+    &:focus-within {
+      border-color: rgba(239, 151, 0, 0.45);
+    }
+  }
+
+  &__logo {
+    height: 144px;
+    width: 100%;
+    background: #000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+
+    img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+  }
+
+  &__corpo {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    min-height: 126px;
+    padding: 22px 24px 24px;
+  }
+
+  &__grupo {
+    margin: 0;
+    color: #ef9700;
+    font-size: 0.73rem;
+    font-weight: 700;
+    line-height: 1.2;
+  }
+
+  &__texto {
+    margin: 0;
+    color: #8db9c2;
+    font-size: 0.9rem;
+    line-height: 1.5;
+  }
+
+  &__link {
+    margin-top: auto;
+    padding: 6px 0 0;
+    background: none;
+    border: 0;
+    color: #fff;
+    font-family: inherit;
+    font-size: 0.83rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: color 0.2s ease;
+
+    span {
+      display: inline-block;
+      transition: transform 0.2s ease;
+    }
+
+    &:hover {
+      color: #ef9700;
+
+      span {
+        transform: translate(3px, -3px);
+      }
+    }
+
+    &:focus-visible {
+      outline: 2px solid #ef9700;
+      outline-offset: 5px;
+      border-radius: 2px;
+    }
+  }
+
+  &.visivel {
+    .santuarios__cabecalho,
+    .santuarios__card {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @media (max-width: 970px) {
+    padding: 90px 24px 110px;
+
+    &__grade {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+    }
+  }
+
+  @media (max-width: 600px) {
+    padding: 75px 20px 90px;
+
+    &__cabecalho {
+      margin-bottom: 36px;
+    }
+
+    &__grade {
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+
+    &__logo {
+      height: 135px;
+    }
+
+    &__corpo {
+      min-height: 118px;
+      padding: 20px 22px;
+    }
+
+    &__descricao {
+      font-size: 0.92rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .santuarios__cabecalho,
+    .santuarios__card {
+      opacity: 1;
+      transform: none;
+      transition: none;
+    }
+
+    .santuarios__link,
+    .santuarios__link span {
+      transition: none;
+    }
+  }
+}
+
+.santuarios__modal-fundo {
+  position: fixed;
+  inset: 0;
+  z-index: 5001;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: rgba(0, 0, 0, 0.78);
+  backdrop-filter: blur(8px);
+}
+
+.santuarios__modal {
+  position: relative;
+  width: min(100%, 640px);
+  max-height: 90vh;
+  overflow-y: auto;
+  background: #061519;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 22px;
+  box-shadow: 0 20px 70px rgba(0, 0, 0, 0.45);
+  padding: 30px 34px 34px;
+  color: #fff;
+  font-family: "Inter", sans-serif;
+
+  &-fechar {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    width: 40px;
+    height: 40px;
+    border: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.12);
+    color: #fff;
+    font-size: 1.55rem;
+    cursor: pointer;
+
+    &:hover { background: rgba(255, 255, 255, 0.22); }
+    &:focus-visible { outline: 2px solid #ef9700; outline-offset: 4px; }
+  }
+
+  &-logo {
+    display: block;
+    width: 100%;
+    height: 160px;
+    object-fit: contain;
+    background: #000;
+    border-radius: 12px;
+    margin-bottom: 24px;
+  }
+
+  &-grupo {
+    margin: 0 0 8px;
+    color: #ef9700;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+  }
+
+  h2 {
+    font-family: "Fraunces", Georgia, serif;
+    font-size: clamp(1.8rem, 4vw, 2.6rem);
+    line-height: 1.1;
+    margin: 0 0 20px;
+  }
+
+  p:not(.santuarios__modal-grupo) {
+    color: #9cbec5;
+    font-size: 0.96rem;
+    line-height: 1.7;
+    margin: 0 0 16px;
+  }
+
+  .santuarios__modal-aviso {
+    font-size: 0.82rem;
+    color: #789fa7;
+  }
+
+  &-voltar {
+    width: 100%;
+    min-height: 44px;
+    margin-top: 6px;
+    border: 0;
+    border-radius: 999px;
+    background: #ef9700;
+    color: #091214;
+    font-family: inherit;
+    font-size: 0.9rem;
+    font-weight: 700;
+    cursor: pointer;
+
+    &:hover { background: #ffae19; }
+    &:focus-visible { outline: 2px solid #ef9700; outline-offset: 4px; }
+  }
+
+  @media (max-width: 600px) {
+    padding: 22px;
+    border-radius: 16px;
+    &-logo { height: 124px; }
+  }
+}
+
+.corpo-inicio .parceiros {
+  width: 100%;
+  padding: 92px 32px 116px;
+  background: #050d0f;
+  color: #fff;
+  font-family: "Inter", sans-serif;
+  scroll-margin-top: 90px;
+  overflow: hidden;
+
+  &__container {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  &__cabecalho {
+    max-width: 730px;
+    margin-bottom: 58px;
+    opacity: 0;
+    transform: translateY(36px);
+    transition: opacity 0.85s ease, transform 0.85s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+
+  &__subtitulo {
+    margin: 0 0 14px;
+    color: #ee9700;
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 0.25em;
+  }
+
+  &__titulo {
+    margin: 0 0 18px;
+    color: #fbf8f2;
+    font-family: "Fraunces", Georgia, serif;
+    font-size: clamp(2.3rem, 3.8vw, 3.25rem);
+    font-weight: 700;
+    line-height: 1.1;
+    letter-spacing: -0.025em;
+  }
+
+  &__descricao {
+    margin: 0;
+    max-width: 720px;
+    color: #91abb0;
+    font-size: 1rem;
+    line-height: 1.7;
+  }
+
+  &__grade {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 20px;
+  }
+
+  &__card {
+    min-width: 0;
+    min-height: 228px;
+    padding: 24px;
+    background: #062229;
+    border: 1px solid rgba(158, 207, 216, 0.16);
+    border-radius: 17px;
+    opacity: 0;
+    transform: translateY(42px);
+    transition: opacity 0.8s ease, transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1), border-color 0.25s ease;
+    transition-delay: var(--atraso);
+
+    &:hover {
+      border-color: rgba(238, 151, 0, 0.45);
+      transform: translateY(-4px);
+    }
+  }
+
+  &__identidade {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 18px;
+    min-height: 69px;
+  }
+
+  &__emblema {
+    flex: 0 0 72px;
+    width: 72px;
+    height: 72px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    background: #fff;
+    border-radius: 13px;
+    padding: 5px;
+
+    img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+  }
+
+  &__nome-bloco {
+    min-width: 0;
+  }
+
+  &__nome {
+    margin: 0 0 5px;
+    font-family: "Fraunces", Georgia, serif;
+    font-weight: 700;
+    font-size: clamp(1.08rem, 1.4vw, 1.26rem);
+    line-height: 1.25;
+    overflow-wrap: anywhere;
+  }
+
+  &__categoria {
+    margin: 0;
+    color: #ee9700;
+    font-size: 0.69rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    line-height: 1.4;
+  }
+
+  &__texto {
+    margin: 0;
+    color: #9ab5ba;
+    font-size: 0.91rem;
+    line-height: 1.65;
+  }
+
+  &.visivel {
+    .parceiros__cabecalho,
+    .parceiros__card {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .parceiros__card:hover {
+      transform: translateY(-4px);
+    }
+  }
+
+  @media (max-width: 1000px) {
+    padding: 85px 24px 100px;
+
+    &__grade {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 650px) {
+    padding: 70px 20px 85px;
+
+    &__cabecalho {
+      margin-bottom: 36px;
+    }
+
+    &__titulo {
+      font-size: clamp(2rem, 7vw, 2.7rem);
+    }
+
+    &__descricao {
+      font-size: 0.92rem;
+    }
+
+    &__grade {
+      grid-template-columns: 1fr;
+      gap: 15px;
+    }
+
+    &__card {
+      min-height: 0;
+      padding: 20px;
+    }
+
+    &__emblema {
+      flex-basis: 65px;
+      width: 65px;
+      height: 65px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .parceiros__cabecalho,
+    .parceiros__card {
+      opacity: 1;
+      transform: none;
+      transition: none;
+    }
+  }
+}
