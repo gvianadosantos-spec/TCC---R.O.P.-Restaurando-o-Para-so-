@@ -1,172 +1,187 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
 html {
   font-size: 16px;
-}
-
-*, *::before, *::after {
-  box-sizing: border-box;
 }
 
 body {
   margin: 0;
 }
 
-
-$cab-altura: 3.5rem;
-$cab-aviso-altura: 2.25rem;
-$cab-fundo: #0b1c24;
-$cab-linha: #0e1a1f;
-$cab-texto: #c9d1d6;
-$cab-texto-hover: #ffffff;
-$cab-azul: #1a7fe0;
-$cab-creme: #f1deb0;
-$cab-fonte: 'Inter', 'Segoe UI', Arial, sans-serif;
-
-$aviso-fundo: #2a1d05;
-$aviso-borda: #6b4a0a;
-$aviso-texto: #ffd98a;
-
-// quanto o menu fica transparente ao rolar (0 = invisível, 1 = sólido)
-$cab-opacidade-rolando: 0.55;
-
-// espaço que o cabeçalho reserva no fluxo da página.
-// Por padrão é só a altura da faixa, porque as suas páginas
-// já compensam os 3.5rem do menu. Se alguma página começar
-// escondida, aumente para $cab-altura + $cab-aviso-altura.
-$cab-espaco: $cab-aviso-altura;
-
-
-// altura total do cabeçalho no topo da página (menu + faixa)
 :root {
-  --cab-altura-total: #{$cab-altura + $cab-aviso-altura};
+  --cab-altura-total: 92px;
 }
-
 
 .comp-cabecalho {
   position: fixed;
   top: 0;
   left: 0;
   z-index: 1000;
-  width: 100%;
 
-  // faixa de aviso: aparece só no topo
-  .comp-aviso {
-    height: $cab-aviso-altura;
-    padding: 0 1rem;
-    overflow: hidden;
+  width: 100%;
+  color: #e7eef0;
+  font-family: 'Inter', 'Segoe UI', sans-serif;
+
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  a {
+    text-decoration: none;
+  }
+
+  a:focus-visible {
+    outline: 2px solid #ef9700;
+    outline-offset: 3px;
+  }
+
+  // Estrutura principal
+  .comp-corpo {
     display: flex;
     align-items: center;
-    justify-content: center;
-    gap: 0.375rem;
+    justify-content: space-between;
+    gap: 24px;
 
-    background: $aviso-fundo;
-    border-bottom: 1px solid $aviso-borda;
-    color: $aviso-texto;
-    font-family: $cab-fonte;
-    font-size: 0.8125rem;
-    line-height: 1;
-    white-space: nowrap;
+    width: 100%;
+    height: 56px;
+    padding: 0 clamp(20px, 3vw, 60px);
 
-    transition: height 0.3s ease, opacity 0.2s ease, border-width 0.3s ease;
+    background: rgba(11, 28, 36, 0.97);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 
-    b {
-      color: #ffffff;
-    }
-
-    .comp-aviso-curto {
-      display: none;
-    }
-
-    @media (max-width: 43.75rem) {
-      font-size: 0.75rem;
-
-      .comp-aviso-longo {
-        display: none;
-      }
-
-      .comp-aviso-curto {
-        display: inline;
-      }
-    }
+    transition:
+      background 0.3s ease,
+      box-shadow 0.3s ease;
   }
 
-  // ao rolar: faixa some e menu fica translúcido
-  &.rolou {
-    .comp-aviso {
-      height: 0;
-      opacity: 0;
-      border-bottom-width: 0;
-    }
-
-    .comp-corpo {
-      background-color: rgba($cab-fundo, $cab-opacidade-rolando);
-      border-bottom-color: rgba(255, 255, 255, 0.08);
-      backdrop-filter: blur(0.75rem);
-      box-shadow: 0 0.25rem 1.125rem rgba(0, 0, 0, 0.25);
-    }
-  }
-}
-
-
-.comp-corpo {
-  position: relative;
-
-  width: 100%;
-  height: $cab-altura;
-  padding: 0 clamp(1.5rem, 6vw, 5.3125rem);
-  box-sizing: border-box;
-
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-
-  font-family: $cab-fonte;
-  font-size: 1rem;
-
-  background-color: rgba($cab-fundo, 0.95);
-  border-bottom: 1px solid $cab-linha;
-
-  transition: background-color 0.3s ease,
-              border-color 0.3s ease,
-              box-shadow 0.3s ease,
-              backdrop-filter 0.3s ease;
-
-
+  // Logo com tamanho controlado
   .comp-logo {
     display: flex;
     align-items: center;
-    flex-shrink: 0;
-    width: 7.5rem;
+    justify-content: flex-start;
+
+    flex: 0 0 108px;
+    width: 108px;
+    min-width: 0;
 
     img {
-      height: 2.125rem;
-      width: auto;
-      object-fit: contain;
       display: block;
+      width: 108px;
+      height: 44px;
+      object-fit: contain;
     }
   }
 
-
+  // Navegação
   .comp-botoes {
     display: flex;
     align-items: center;
-    gap: 1.8125rem;
-    margin-right: auto;
-    margin-left: clamp(2.5rem, 9vw, 9.375rem);
+    justify-content: center;
+    gap: clamp(14px, 1.6vw, 26px);
 
-    .comp-link {
-      font-size: 0.875rem;
-      font-weight: 600;
-      color: $cab-texto;
-      text-decoration: none;
-      white-space: nowrap;
-      transition: color 0.2s ease;
+    flex: 1;
+    min-width: 0;
+    margin: 0;
+    padding: 0;
+  }
 
-      &:hover {
-        color: $cab-texto-hover;
+  .comp-link {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+
+    flex-shrink: 0;
+    min-height: 40px;
+
+    color: #c9d1d6;
+    font-size: 0.82rem;
+    font-weight: 500;
+    white-space: nowrap;
+
+    transition: color 0.2s ease;
+
+    &::after {
+      content: '';
+      position: absolute;
+      right: 0;
+      bottom: 3px;
+      left: 0;
+
+      height: 2px;
+      border-radius: 999px;
+      background: #ef9700;
+
+      transform: scaleX(0);
+      transform-origin: center;
+      transition: transform 0.2s ease;
+    }
+
+    &:hover {
+      color: #fff;
+
+      &::after {
+        transform: scaleX(1);
       }
     }
   }
 
+  // Login e doação
+  .comp-acoes {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 10px;
+
+    flex-shrink: 0;
+  }
+
+  .comp-login,
+  .comp-doe {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+
+    flex-shrink: 0;
+    height: 38px;
+    padding: 0 16px;
+
+    border: 1px solid transparent;
+    border-radius: 999px;
+
+    font-size: 0.78rem;
+    font-weight: 600;
+    line-height: 1;
+    white-space: nowrap;
+
+    transition:
+      color 0.2s ease,
+      background 0.2s ease,
+      border-color 0.2s ease,
+      box-shadow 0.2s ease;
+  }
+
+  .comp-login {
+    border-color: rgba(239, 151, 0, 0.5);
+    background: rgba(239, 151, 0, 0.06);
+    color: #f5bb64;
+
+    svg {
+      display: block;
+      flex: 0 0 17px;
+      width: 17px;
+      height: 17px;
+    }
+
+    &:hover {
+      border-color: #ef9700;
+      background: #ef9700;
+      color: #101e23;
+      box-shadow: 0 4px 18px rgba(239, 151, 0, 0.15);
+    }
+  }
 
   .comp-doe-div {
     display: flex;
@@ -174,57 +189,211 @@ $cab-espaco: $cab-aviso-altura;
     flex-shrink: 0;
   }
 
-
   .comp-doe {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
-
-    height: 2.375rem;
-    padding: 0 1.125rem;
-    box-sizing: border-box;
-
-    border: 1px solid $cab-azul;
-    border-radius: 999px;
-    background: transparent;
-    text-decoration: none;
-
-    transition: border-color 0.25s ease, box-shadow 0.25s ease;
+    border-color: rgba(75, 166, 255, 0.65);
+    background: rgba(26, 127, 224, 0.05);
+    color: #74bbff;
 
     .icone-coracao {
-      width: 0.875rem;
-      height: 0.875rem;
-      filter: brightness(0) saturate(100%) invert(38%) sepia(96%)
-              saturate(1900%) hue-rotate(196deg) brightness(95%);
+      display: block;
+      flex: 0 0 15px;
+
+      width: 15px;
+      height: 15px;
+      object-fit: contain;
+
+      filter: brightness(0) saturate(100%)
+        invert(65%) sepia(73%) saturate(1085%)
+        hue-rotate(179deg) brightness(103%) contrast(102%);
     }
 
     span {
-      font-size: 0.8125rem;
-      font-weight: 700;
-      color: $cab-azul;
+      color: inherit;
+      font-size: inherit;
+      font-weight: inherit;
     }
 
     &:hover {
-      border-color: $cab-creme;
-      box-shadow: 0 0 0.625rem rgba($cab-creme, 0.35),
-                  inset 0 0 0 1px $cab-creme;
+      border-color: #74bbff;
+      background: rgba(26, 127, 224, 0.15);
+      color: #a4d3ff;
+      box-shadow: 0 4px 18px rgba(26, 127, 224, 0.12);
+    }
+  }
+
+  // Faixa de aviso
+  .comp-aviso {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+
+    height: 36px;
+    padding: 0 12px;
+    overflow: hidden;
+
+    border-bottom: 1px solid #6b4a0a;
+    background: #2a1d05;
+    color: #ffd98a;
+
+    font-size: 0.75rem;
+    line-height: 1.3;
+    white-space: nowrap;
+
+    transition:
+      height 0.3s ease,
+      opacity 0.2s ease,
+      border-width 0.3s ease;
+
+    b {
+      color: #fff;
+      font-weight: 600;
+    }
+  }
+
+  .comp-aviso-curto {
+    display: none;
+  }
+
+  // Aparência ao rolar
+  &.rolou {
+    .comp-corpo {
+      background: rgba(11, 28, 36, 0.82);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      box-shadow: 0 6px 24px rgba(0, 0, 0, 0.2);
+    }
+
+    .comp-aviso {
+      height: 0;
+      opacity: 0;
+      border-bottom-width: 0;
     }
   }
 }
 
-
-// espaço reservado no fluxo da página para a faixa de aviso.
-// Fica fixo, então a página não "pula" quando a faixa some ao rolar.
+// Mantém a compensação usada pelas páginas atuais.
 .comp-espaco {
-  height: $cab-espaco;
+  height: 36px;
   flex-shrink: 0;
 }
 
+// Tablet e celular: links em uma segunda linha.
+@media (max-width: 1100px) {
+  :root {
+    --cab-altura-total: 136px;
+  }
+
+  .comp-cabecalho {
+    .comp-corpo {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr);
+      grid-template-rows: 56px 44px;
+      column-gap: 16px;
+      row-gap: 0;
+
+      height: 100px;
+      padding: 0 20px;
+    }
+
+    .comp-logo {
+      grid-column: 1;
+      grid-row: 1;
+    }
+
+    .comp-acoes {
+      grid-column: 2;
+      grid-row: 1;
+      justify-self: end;
+    }
+
+    .comp-botoes {
+      grid-column: 1 / -1;
+      grid-row: 2;
+
+      justify-content: flex-start;
+      gap: 24px;
+
+      width: 100%;
+      height: 44px;
+      padding: 0 3px;
+
+      overflow-x: auto;
+      overflow-y: hidden;
+      scrollbar-width: none;
+      -webkit-overflow-scrolling: touch;
+
+      &::-webkit-scrollbar {
+        display: none;
+      }
+    }
+
+    .comp-link {
+      min-height: 36px;
+      font-size: 0.8rem;
+    }
+  }
+
+  // Compensa os 44px extras da segunda linha.
+  .comp-espaco {
+    height: 80px;
+  }
+}
+
+@media (max-width: 600px) {
+  .comp-cabecalho {
+    .comp-corpo {
+      padding-inline: 14px;
+      column-gap: 10px;
+    }
+
+    .comp-logo {
+      flex-basis: 94px;
+      width: 94px;
+
+      img {
+        width: 94px;
+        height: 40px;
+      }
+    }
+
+    .comp-acoes {
+      gap: 7px;
+    }
+
+    .comp-login,
+    .comp-doe {
+      gap: 6px;
+      height: 36px;
+      padding-inline: 11px;
+      font-size: 0.73rem;
+    }
+
+    .comp-botoes {
+      gap: 22px;
+    }
+
+    .comp-aviso {
+      gap: 5px;
+      font-size: 0.67rem;
+    }
+
+    .comp-aviso-longo {
+      display: none;
+    }
+
+    .comp-aviso-curto {
+      display: inline;
+    }
+  }
+}
 
 @media (prefers-reduced-motion: reduce) {
-  .comp-cabecalho .comp-aviso,
-  .comp-corpo {
-    transition: none;
+  .comp-cabecalho {
+    *,
+    *::before,
+    *::after {
+      transition: none !important;
+    }
   }
 }

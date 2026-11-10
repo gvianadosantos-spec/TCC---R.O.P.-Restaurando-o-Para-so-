@@ -1,13 +1,12 @@
-
 import { useEffect, useState } from "react";
-import "./cabecalho.scss";
+import { Link } from "react-router-dom";
+import { HashLink } from "react-router-hash-link";
 
-import { HashLink as Link } from "react-router-hash-link";
+import "./cabecalho.scss";
 
 function Cabecalho() {
   const [rolou, setRolou] = useState(false);
 
-  // DETECTAR ROLAGEM DA PÁGINA
   useEffect(() => {
     function aoRolar() {
       setRolou(window.scrollY > 10);
@@ -27,108 +26,97 @@ function Cabecalho() {
   return (
     <>
       <header
-        className={`comp-cabecalho ${
-          rolou ? "rolou" : ""
-        }`}
+        className={`comp-cabecalho ${rolou ? "rolou" : ""}`}
       >
         <div className="comp-corpo">
-
-          {/* LOGO */}
-          <div className="comp-logo">
+          <Link
+            to="/inicio"
+            className="comp-logo"
+            aria-label="R.O.P. — Ir para o início"
+          >
             <img
               src="/assets/img/componentes/cabecalho/logo.png"
-              alt="R.O.P - Restaurando o Paraíso"
+              alt="R.O.P. — Restaurando o Paraíso"
             />
-          </div>
+          </Link>
 
-          {/* MENU DE NAVEGAÇÃO */}
-          <div className="comp-botoes">
-
-            <Link
-              to="/inicio"
-              className="comp-link"
-            >
+          <nav
+            className="comp-botoes"
+            aria-label="Navegação principal"
+          >
+            <Link to="/inicio" className="comp-link">
               Início
             </Link>
 
-            <Link
-              to="/especies"
-              className="comp-link"
-            >
+            <Link to="/especies" className="comp-link">
               Espécies
             </Link>
 
-            <Link
-              to="/noticias"
-              className="comp-link"
-            >
+            <Link to="/noticias" className="comp-link">
               Notícias
             </Link>
 
-            {/* IMPACTOS */}
-            <Link
+            <HashLink
               smooth
               to="/inicio#impactos"
               className="comp-link"
             >
               Impactos
-            </Link>
+            </HashLink>
 
-            {/* PROJETOS */}
-            <Link
+            <HashLink
               smooth
               to="/inicio#projetos"
               className="comp-link"
             >
               Projetos
-            </Link>
+            </HashLink>
 
-            {/* PUBLICAÇÕES */}
-            <Link
-              smooth
-              to="/inicio#publicacoes"
-              className="comp-link"
-            >
-              Publicações
-            </Link>
-
-            {/* APADRINHE */}
-            <Link
+            <HashLink
               smooth
               to="/inicio#apadrinhe"
               className="comp-link"
             >
               Apadrinhe
-            </Link>
+            </HashLink>
 
-            <Link
-              to="/loja"
-              className="comp-link"
-            >
+            <Link to="/loja" className="comp-link">
               Loja
             </Link>
+          </nav>
 
-          </div>
+          <div className="comp-acoes">
+            <Link to="/" className="comp-login">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.7"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                aria-hidden="true"
+              >
+                <circle cx="12" cy="8" r="4" />
+                <path d="M5 21v-2a7 7 0 0 1 14 0v2" />
+              </svg>
 
-          {/* BOTÃO DE DOAÇÃO */}
-          <div className="comp-doe-div">
-            <Link
-              to="/doe"
-              className="comp-doe"
-            >
-              <img
-                src="/assets/img/componentes/cabecalho/coracao.png"
-                alt=""
-                className="icone-coracao"
-              />
-
-              <span>Doe agora</span>
+              <span>Login</span>
             </Link>
-          </div>
 
+            <div className="comp-doe-div">
+              <Link to="/doe" className="comp-doe">
+                <img
+                  src="/assets/img/componentes/cabecalho/coracao.png"
+                  alt=""
+                  className="icone-coracao"
+                />
+
+                <span>Doe agora</span>
+              </Link>
+            </div>
+          </div>
         </div>
 
-        {/* AVISO DO TCC */}
         <div
           className="comp-aviso"
           role="note"
@@ -147,10 +135,7 @@ function Cabecalho() {
         </div>
       </header>
 
-      <div
-        className="comp-espaco"
-        aria-hidden="true"
-      />
+      <div className="comp-espaco" aria-hidden="true" />
     </>
   );
 }

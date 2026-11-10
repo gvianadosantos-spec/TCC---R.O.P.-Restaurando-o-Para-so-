@@ -1,125 +1,196 @@
-$laranja: #e8903a;
-$areia: #d4a97c;
-$petroleo: #135a63;
-$petroleo-hover: #1a717c;
-$vidro: rgba(20, 20, 18, 0.55);
-$texto: #f2e8da;
-$erro: #ffb4a2;
+// Reaproveita o visual do login.
+// Mantenha o login.scss atualizado na pasta ../login.
+@use '../login/login.scss';
 
-.registro-corpo {
-    min-height: 100vh;
-    display: grid;
-    place-items: center;
-    padding: 24px;
-    box-sizing: border-box;
-    font-family: 'Bree Serif', Georgia, serif;
-    color: $texto;
-
-    // ===== IMAGEM DE FUNDO =====
-    // Troque o caminho abaixo pelo da sua imagem.
-    // Ex.: url('./assets/onca.jpg') ou url('/imagens/onca.jpg') se estiver em public/
-    
-    background-color: #1d2a1c; // cor de reserva enquanto a imagem carrega
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    background-attachment: fixed;
-
-    *,
-    *::before,
-    *::after {
-        box-sizing: border-box;
+.rop-registro {
+    .rop-login__visual {
+        min-height: 980px;
     }
 
-    .card {
-        width: 100%;
-        max-width: 400px;
-        padding: 32px 36px 36px;
-        background: $vidro;
-        backdrop-filter: blur(6px);
-        -webkit-backdrop-filter: blur(6px);
-        border: 1px solid rgba(255, 255, 255, 0.12);
-        border-radius: 6px;
-        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.45);
+    .rop-login__painel {
+        padding-top: 32px;
+        padding-bottom: 25px;
+    }
 
-        h1 {
-            margin: 0 0 20px;
-            text-align: center;
-            font-family: 'Alfa Slab One', Georgia, serif;
-            font-weight: 400;
-            font-size: 1.7rem;
-            letter-spacing: 0.04em;
-            color: $laranja;
-            text-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+    .rop-login__formulario {
+        max-width: 410px;
+        padding: 30px 0;
+    }
+
+    .rop-login__simbolo {
+        width: 44px;
+        height: 44px;
+        margin-bottom: 20px;
+    }
+
+    .rop-login__sobretitulo {
+        margin-bottom: 12px;
+    }
+
+    h2 {
+        font-size: clamp(1.9rem, 2.6vw, 2.5rem);
+        line-height: 1.13;
+    }
+
+    .rop-login__introducao {
+        max-width: 360px;
+        margin: 15px 0 27px;
+    }
+
+    &__grupo {
+        margin-bottom: 19px;
+
+        > label {
+            display: block;
+            color: var(--texto);
+            font-size: 0.76rem;
+            font-weight: 500;
         }
 
-        form {
-            display: flex;
-            flex-direction: column;
-        }
-
-        label {
-            margin-bottom: 4px;
-            font-size: 0.95rem;
-            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
-        }
-
-        input {
-            width: 100%;
-            height: 40px;
-            margin-bottom: 14px;
-            padding: 0 12px;
-            font-family: inherit;
-            font-size: 1rem;
-            color: #2a1d10;
-            background: $areia;
-            border: 2px solid transparent;
-            border-radius: 3px;
-            outline: none;
-            transition: border-color 0.15s, background 0.15s;
-
-            &:focus {
-                background: #e0b88c;
-                border-color: $laranja;
-            }
-        }
-
-        .erro {
-            min-height: 1.2em;
-            margin: 0 0 10px;
-            font-size: 0.85rem;
-            color: $erro;
-        }
-
-        button {
-            height: 44px;
-            font-family: inherit;
-            font-size: 1rem;
-            color: $texto;
-            background: $petroleo;
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            border-radius: 3px;
-            cursor: pointer;
-            transition: background 0.15s, transform 0.1s;
-
-            &:hover {
-                background: $petroleo-hover;
-            }
-
-            &:active {
-                transform: scale(0.98);
-            }
-
-            &:focus-visible {
-                outline: 2px solid $laranja;
-                outline-offset: 2px;
-            }
+        &:last-of-type {
+            margin-bottom: 0;
         }
     }
 
-    @media (max-width: 440px) {
-        .card {
-            padding: 26px 22px 28px;
+    &__dica {
+        margin: 8px 0 0;
+        color: #a4bbc0;
+        font-size: 0.67rem;
+        line-height: 1.5;
+    }
+
+    &__pilares {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 28px;
+
+        span {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+
+            padding: 9px 15px;
+
+            border: 1px solid rgba(245, 200, 132, 0.28);
+            border-radius: 999px;
+            background: rgba(6, 24, 29, 0.45);
+
+            color: #f5d4a4;
+            font-size: 0.7rem;
+            font-weight: 500;
+            letter-spacing: 0.03em;
+
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+        }
+    }
+
+    &__sucesso {
+        display: flex;
+        align-items: flex-start;
+        gap: 11px;
+
+        margin-top: 18px;
+        padding: 14px;
+
+        border: 1px solid rgba(126, 211, 159, 0.3);
+        border-radius: 10px;
+        background: rgba(91, 178, 125, 0.08);
+
+        color: #bfe5ce;
+
+        > svg {
+            width: 21px;
+            height: 21px;
+            margin-top: 1px;
+            color: #8bd6aa;
+        }
+
+        p {
+            margin: 0;
+            font-size: 0.75rem;
+            line-height: 1.6;
+        }
+
+        strong {
+            display: block;
+            margin-bottom: 3px;
+            color: #d3f2df;
+        }
+    }
+
+    .rop-login__entrar {
+        margin-top: 23px;
+    }
+
+    .rop-login__cadastro {
+        margin-top: 23px;
+        padding-top: 21px;
+    }
+
+    .rop-login__explorar {
+        margin-top: 8px;
+    }
+
+    @media (min-width: 1500px) {
+        .rop-login__visual {
+            min-height: max(980px, 100svh);
+        }
+    }
+
+    @media (max-width: 1000px) {
+        .rop-login__mensagem h1 {
+            font-size: 2.45rem;
+        }
+
+        h2 {
+            font-size: 2rem;
+        }
+    }
+
+    @media (max-width: 760px) {
+        .rop-login__visual {
+            min-height: 420px;
+        }
+
+        .rop-login__mensagem {
+            padding-top: 55px;
+
+            h1 {
+                font-size: clamp(2rem, 6.7vw, 2.8rem);
+            }
+
+            > p {
+                max-width: 350px;
+            }
+        }
+
+        &__pilares {
+            gap: 8px;
+            margin-top: 20px;
+
+            span {
+                padding: 7px 12px;
+                font-size: 0.65rem;
+            }
+        }
+
+        .rop-login__painel {
+            padding: 25px 24px;
+        }
+
+        .rop-login__formulario {
+            max-width: 430px;
+            padding: 30px 0;
+        }
+
+        h2 {
+            font-size: clamp(1.85rem, 7vw, 2.25rem);
+        }
+
+        .rop-login__introducao {
+            margin-bottom: 27px;
         }
     }
 }
