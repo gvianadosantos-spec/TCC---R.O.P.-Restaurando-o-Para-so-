@@ -1,0 +1,35 @@
+#root {
+  min-height: 100svh;
+  background: #06181d;
+}
+
+.pagina-transicao {
+  min-height: 100svh;
+  opacity: 1;
+
+  animation: pagina-aparecer 420ms ease-out;
+  transition: opacity 180ms ease-in;
+
+  // Mantém cabeçalho e modais fixos funcionando normalmente.
+  &.is-saindo {
+    opacity: 0;
+    pointer-events: none;
+  }
+}
+
+@keyframes pagina-aparecer {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pagina-transicao {
+    animation: none;
+    transition: none;
+  }
+}

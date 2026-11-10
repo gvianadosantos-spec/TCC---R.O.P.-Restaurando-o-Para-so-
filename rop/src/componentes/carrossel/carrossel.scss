@@ -1,0 +1,393 @@
+.rop-carrossel {
+  position: relative;
+  isolation: isolate;
+
+  width: 100%;
+  height: calc(100svh - 36px);
+  min-height: 620px;
+  overflow: hidden;
+
+  background: #050b0a;
+  color: #fbf8f2;
+  font-family: 'Inter', sans-serif;
+
+  touch-action: pan-y pinch-zoom;
+
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  &__slide {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+
+    transition:
+      opacity 850ms ease,
+      visibility 0s linear 850ms;
+
+    &.is-active {
+      z-index: 1;
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+
+      transition-delay: 0s;
+    }
+  }
+
+  &__imagem {
+    position: absolute;
+    inset: 0;
+
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+    object-position: center;
+
+    transform: scale(1.025);
+    transition: transform 7s linear;
+  }
+
+  &__slide.is-active &__imagem {
+    transform: scale(1);
+  }
+
+  &__sombra {
+    position: absolute;
+    inset: 0;
+
+    background:
+      linear-gradient(
+        0deg,
+        #020807f5,
+        #02080759 58%,
+        #02080726
+      ),
+      linear-gradient(
+        90deg,
+        #02080799,
+        transparent 85%
+      );
+  }
+
+  &__conteudo {
+    position: absolute;
+    left: clamp(24px, 4vw, 68px);
+    bottom: 17%;
+
+    width: calc(100% - 48px);
+    max-width: 720px;
+  }
+
+  &__subtitulo {
+    margin: 0 0 20px;
+
+    color: #ef9700;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    line-height: 1.6;
+  }
+
+  &__titulo {
+    margin: 0 0 30px;
+
+    color: #fff;
+    font-family: 'Fraunces', Georgia, serif;
+    font-size: clamp(2.5rem, 4.5vw, 3.8rem);
+    font-weight: 700;
+    line-height: 1.08;
+    letter-spacing: -0.025em;
+
+    text-wrap: balance;
+  }
+
+  &__botao {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+
+    min-height: 49px;
+    padding: 14px 27px;
+    border-radius: 999px;
+
+    background: #ef9700;
+    color: #171100;
+
+    text-decoration: none;
+    font-size: 0.87rem;
+    font-weight: 600;
+
+    transition:
+      background 0.2s,
+      transform 0.2s,
+      box-shadow 0.2s;
+
+    span {
+      transition: transform 0.2s;
+    }
+
+    &:hover {
+      background: #ffae19;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px #ef970030;
+    }
+
+    &:hover span {
+      transform: translateX(4px);
+    }
+  }
+
+  &__slide.is-active &__conteudo > * {
+    animation: carrossel-texto
+      750ms cubic-bezier(0.2, 0.7, 0.2, 1)
+      backwards;
+  }
+
+  &__slide.is-active &__subtitulo {
+    animation-delay: 100ms;
+  }
+
+  &__slide.is-active &__titulo {
+    animation-delay: 210ms;
+  }
+
+  &__slide.is-active &__botao {
+    animation-delay: 320ms;
+  }
+
+  &__controles {
+    position: absolute;
+    z-index: 3;
+
+    right: 32px;
+    bottom: 25px;
+    left: 32px;
+
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    gap: 16px;
+  }
+
+  &__contador {
+    font-size: 0.83rem;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+
+    small {
+      color: #a3b8b6;
+      font-size: 0.7rem;
+    }
+  }
+
+  &__indicadores {
+    display: flex;
+    gap: 2px;
+  }
+
+  &__indicador {
+    display: grid;
+    place-items: center;
+
+    width: 44px;
+    height: 44px;
+    padding: 0;
+
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+  }
+
+  &__trilho {
+    position: relative;
+    display: block;
+
+    width: 7px;
+    height: 7px;
+    border-radius: 999px;
+    overflow: hidden;
+
+    background: #ffffff66;
+
+    transition:
+      width 0.3s,
+      background 0.3s;
+  }
+
+  &__indicador.is-active &__trilho {
+    width: 36px;
+    background: #ef97004d;
+  }
+
+  &__progresso {
+    position: absolute;
+    inset: 0;
+
+    border-radius: inherit;
+    background: #ef9700;
+
+    transform: scaleX(0);
+    transform-origin: left;
+
+    animation: carrossel-progresso
+      var(--duracao) linear forwards;
+  }
+
+  &__setas {
+    display: flex;
+    justify-content: flex-end;
+    gap: 9px;
+
+    button {
+      display: grid;
+      place-items: center;
+
+      width: 44px;
+      height: 44px;
+      padding: 0;
+
+      border: 1px solid #ffffff40;
+      border-radius: 50%;
+
+      background: #14202080;
+      color: #fff;
+
+      font: 1.6rem Arial, sans-serif;
+      cursor: pointer;
+
+      transition:
+        background 0.2s,
+        border-color 0.2s;
+
+      &:first-child {
+        font-size: 0.9rem;
+      }
+
+      &:hover {
+        background: #ffffff26;
+        border-color: #ef9700;
+      }
+    }
+  }
+
+  button:focus-visible,
+  a:focus-visible {
+    outline: 2px solid #ef9700;
+    outline-offset: 3px;
+  }
+
+  &__sr {
+    position: absolute;
+
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  @media (max-width: 1100px) {
+    height: calc(100svh - 80px);
+  }
+
+  @media (max-width: 650px) {
+    min-height: 600px;
+
+    &__conteudo {
+      left: 22px;
+      bottom: 125px;
+      width: calc(100% - 44px);
+    }
+
+    &__subtitulo {
+      margin-bottom: 14px;
+      font-size: 0.65rem;
+      letter-spacing: 0.13em;
+    }
+
+    &__titulo {
+      margin-bottom: 24px;
+      font-size: clamp(1.7rem, 7vw, 2.7rem);
+      line-height: 1.12;
+    }
+
+    &__botao {
+      padding: 13px 22px;
+      font-size: 0.8rem;
+    }
+
+    &__controles {
+      left: 18px;
+      right: 18px;
+      bottom: 20px;
+
+      grid-template-columns: 1fr auto;
+      gap: 8px;
+    }
+
+    &__contador {
+      display: none;
+    }
+
+    &__indicador {
+      width: 36px;
+    }
+
+    &__setas {
+      gap: 6px;
+
+      button {
+        width: 40px;
+        height: 40px;
+      }
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation: none !important;
+      transition: none !important;
+    }
+
+    &__imagem {
+      transform: none !important;
+    }
+
+    &__progresso {
+      transform: scaleX(1);
+    }
+  }
+}
+
+@keyframes carrossel-texto {
+  from {
+    opacity: 0;
+    transform: translateY(22px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes carrossel-progresso {
+  to {
+    transform: scaleX(1);
+  }
+}
