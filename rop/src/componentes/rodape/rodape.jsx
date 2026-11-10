@@ -1,14 +1,14 @@
 import { useEffect } from "react";
-import { Link } from "react-router-dom";
+import { HashLink as Link } from "react-router-hash-link";
 import "./rodape.scss";
 
 /* Páginas internas: precisam existir nas suas <Route>. */
 const ROTAS = {
-  inicio: "/",
-  impactos: "/impactos",
-  projetos: "/projetos",
-  publicacoes: "/publicacoes",
-  apadrinhe: "/apadrinhe",
+  inicio: "/inicio",
+  impactos: "/inicio#impactos",
+  projetos: "/inicio#projetos",
+  publicacoes: "/noticias",
+  apadrinhe: "/inicio#apadrinhe",
   doe: "/doe",
   loja: "/loja",
 };

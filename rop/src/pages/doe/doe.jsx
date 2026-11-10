@@ -1,245 +1,730 @@
-import { useState } from 'react'
-import { QRCodeSVG } from 'qrcode.react'
-import './doe.scss'
-import Cabecalho from '../../componentes/cabecalho/cabecalho.jsx'
-import Rodape from '../../componentes/rodape/rodape.jsx'
+import { useEffect, useRef, useState } from "react";
+import { QRCodeSVG } from "qrcode.react";
+import { Link } from "react-router-dom";
 
-const CHAVE_PIX = 'bafecf50-5d98-4c11-a246-c0ea6bda7d76'
+import Cabecalho from "../../componentes/cabecalho/cabecalho.jsx";
+import Rodape from "../../componentes/rodape/rodape.jsx";
+
+import "./doe.scss";
+
+const CHAVE_PIX = "bafecf50-5d98-4c11-a246-c0ea6bda7d76";
+
 const CODIGO_PIX =
-  '00020126580014BR.GOV.BCB.PIX0136bafecf50-5d98-4c11-a246-c0ea6bda7d765204000053039865802BR5925Guilherme Andre Viana dos6009SAO PAULO62140510biK9LTV80e6304BA0B'
+  "00020126580014BR.GOV.BCB.PIX0136bafecf50-5d98-4c11-a246-c0ea6bda7d765204000053039865802BR5925Guilherme Andre Viana dos6009SAO PAULO62140510biK9LTV80e6304BA0B";
 
-const VALORES = [10, 25, 50, 100] 
+const VALORES = [10, 25, 50, 100];
 
 const DIVISAO = [
-  { texto: 'Ferramentas e estudos da equipe', percentual: 60, cor: 'ambar' },
-  { texto: 'Divisão entre os integrantes do grupo', percentual: 40, cor: 'azul' },
-]
+  {
+    titulo: "Ferramentas e estudos",
+    descricao: "Recursos e aprendizado para desenvolver o projeto.",
+    percentual: 60,
+    classe: "estudos",
+  },
+  {
+    titulo: "Integrantes da equipe",
+    descricao: "Divisão entre os estudantes responsáveis pelo trabalho.",
+    percentual: 40,
+    classe: "equipe",
+  },
+];
 
 const PERGUNTAS = [
   {
-    pergunta: 'A R.O.P. existe?',
-    resposta: 'Não. Nome, projetos, textos e números fazem parte de um trabalho acadêmico.',
+    pergunta: "A R.O.P. é uma organização real?",
+    resposta:
+      "Não. A R.O.P. é um projeto fictício desenvolvido para um Trabalho de Conclusão de Curso. A organização, os projetos e os números apresentados fazem parte desse cenário acadêmico.",
   },
   {
-    pergunta: 'Para quem vai minha doação?',
-    resposta: 'Para o grupo de estudantes que desenvolveu o site. Você escolhe se quer ajudar.',
+    pergunta: "Para quem vai a minha contribuição?",
+    resposta:
+      "O dinheiro é recebido pelo grupo de estudantes que desenvolveu o site. Nenhum valor é repassado a animais, santuários ou organizações ambientais.",
   },
   {
-    pergunta: 'Preciso doar para usar o site?',
-    resposta: 'Não. Toda a navegação é livre e a doação é totalmente opcional.',
+    pergunta: "Preciso contribuir para acessar o site?",
+    resposta:
+      "Não. A contribuição é totalmente opcional. Você pode conhecer as páginas e explorar o projeto sem realizar qualquer pagamento.",
   },
   {
-    pergunta: 'Posso receber o dinheiro de volta?',
-    resposta: 'Se o Pix foi feito por engano, o grupo devolve o valor sempre que for possível. Fale com a gente pelo telefone ou WhatsApp (11) 93087-5221 para combinar o estorno. Lembrando que a doação é voluntária.',
+    pergunta: "O valor escolhido já está no QR Code?",
+    resposta:
+      "Não. O QR Code e o código Pix desta página não incluem um valor. Depois de abrir o pagamento no aplicativo do banco, preencha o valor escolhido e confira os dados antes de confirmar.",
   },
-]
+  {
+    pergunta: "A página confirma quando o Pix é pago?",
+    resposta:
+      "Não. O site apenas apresenta o QR Code e os dados para pagamento. A confirmação da transferência deve ser consultada no aplicativo do seu banco.",
+  },
+  {
+    pergunta: "E se eu fizer um Pix por engano?",
+    resposta:
+      "Entre em contato com o grupo pelo telefone ou WhatsApp (11) 93087-5221 para conversar sobre a devolução. Esse atendimento é feito diretamente com a equipe.",
+  },
+];
+
+const moeda = new Intl.NumberFormat("pt-BR", {
+  style: "currency",
+  currency: "BRL",
+});
+
+function formatarValor(centavos) {
+  return moeda.format(centavos / 100);
+}
+
+function converterParaCentavos(texto) {
+  const entrada = texto.trim();
+
+  if (!/^\d+(?:[.,]\d{1,2})?$/.test(entrada)) {
+    return null;
+  }
+
+  const [inteiros, decimais = ""] = entrada.replace(",", ".").split(".");
+
+  const centavos =
+    Number(inteiros) * 100 + Number(decimais.padEnd(2, "0"));
+
+  if (!Number.isSafeInteger(centavos)) {
+    return null;
+  }
+
+  return centavos;
+}
+
+function Icone({ tipo, className = "" }) {
+  const caminhos = {
+    coracao:
+      "M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8Z",
+    seta: "M5 12h14m-6-6 6 6-6 6",
+    copiar: "M9 9h11v11H9zM15 9V4H4v11h5",
+    check: "m5 12 4 4L19 6",
+    folha:
+      "M20 4C10 2 3 7 5 15c2 8 15 6 15-11ZM5 20 16 9",
+  };
+
+  return (
+    <svg
+      className={className}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.8"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <path d={caminhos[tipo] || caminhos.coracao} />
+    </svg>
+  );
+}
 
 function Doe() {
-  const [valorFixo, setValorFixo] = useState(25)
-  const [outroValor, setOutroValor] = useState('')
-  const [entendeu, setEntendeu] = useState(false)
-  const [erro, setErro] = useState('')
-  const [mostrarPix, setMostrarPix] = useState(false)
-  const [copiado, setCopiado] = useState(null)
+  const [valorFixo, setValorFixo] = useState(25);
+  const [outroValor, setOutroValor] = useState("");
+  const [entendeu, setEntendeu] = useState(false);
+  const [erro, setErro] = useState("");
+  const [mostrarPix, setMostrarPix] = useState(false);
+  const [copiado, setCopiado] = useState("");
+  const [mensagemCopia, setMensagemCopia] = useState("");
 
-  const valor = outroValor ? Number(outroValor) : valorFixo
+  const painelPixRef = useRef(null);
+  const campoOutroRef = useRef(null);
+  const confirmacaoRef = useRef(null);
+  const tempoCopiaRef = useRef(null);
 
-  function escolherValor(v) {
-    setValorFixo(v)
-    setOutroValor('')
+  const centavos =
+    valorFixo !== null
+      ? valorFixo * 100
+      : converterParaCentavos(outroValor);
+
+  const valorValido = centavos !== null && centavos >= 100;
+
+  const valorFormatado = valorValido
+    ? formatarValor(centavos)
+    : "um valor";
+
+  const valorEstudos = valorValido
+    ? Math.round(centavos * 0.6)
+    : null;
+
+  const valorEquipe = valorValido
+    ? centavos - valorEstudos
+    : null;
+
+  useEffect(() => {
+    return () => {
+      window.clearTimeout(tempoCopiaRef.current);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!mostrarPix) return;
+
+    const frame = window.requestAnimationFrame(() => {
+      const painel = painelPixRef.current;
+
+      if (!painel) return;
+
+      painel.focus({ preventScroll: true });
+
+      const reduzirMovimento = window.matchMedia(
+        "(prefers-reduced-motion: reduce)"
+      ).matches;
+
+      painel.scrollIntoView({
+        behavior: reduzirMovimento ? "auto" : "smooth",
+        block: "start",
+      });
+    });
+
+    return () => window.cancelAnimationFrame(frame);
+  }, [mostrarPix]);
+
+  function limparPagamento() {
+    setMostrarPix(false);
+    setErro("");
+    setCopiado("");
+    setMensagemCopia("");
+    window.clearTimeout(tempoCopiaRef.current);
   }
 
-  function digitarOutroValor(e) {
-    setOutroValor(e.target.value)
-    setValorFixo(null)
+  function escolherValor(valor) {
+    limparPagamento();
+    setValorFixo(valor);
+    setOutroValor("");
   }
 
-  function doar() {
-    if (!valor || valor < 1) {
-      setErro('Informe um valor de pelo menos R$ 1.')
-      setMostrarPix(false)
-      return
+  function alterarOutroValor(event) {
+    limparPagamento();
+    setValorFixo(null);
+    setOutroValor(event.target.value);
+  }
+
+  function alterarConfirmacao(event) {
+    limparPagamento();
+    setEntendeu(event.target.checked);
+  }
+
+  function continuar(event) {
+    event.preventDefault();
+
+    if (!valorValido) {
+      setErro(
+        "Informe pelo menos R$ 1,00. Use até duas casas decimais, como 12,50."
+      );
+      campoOutroRef.current?.focus();
+      return;
     }
+
     if (!entendeu) {
-      setErro('Marque a caixa acima para confirmar que entendeu o aviso.')
-      setMostrarPix(false)
-      return
+      setErro(
+        "Confirme que entendeu para quem será destinada a contribuição."
+      );
+      confirmacaoRef.current?.focus();
+      return;
     }
-    setErro('')
-    setMostrarPix(true)
+
+    setErro("");
+    setMensagemCopia("");
+    setMostrarPix(true);
   }
 
-  async function copiar(id, texto) {
+  async function copiar(tipo, texto) {
+    window.clearTimeout(tempoCopiaRef.current);
+    setCopiado("");
+    setMensagemCopia("");
+
     try {
-      await navigator.clipboard.writeText(texto)
+      if (!navigator.clipboard?.writeText) {
+        throw new Error("Cópia automática indisponível");
+      }
+
+      await navigator.clipboard.writeText(texto);
+
+      setCopiado(tipo);
+      setMensagemCopia(
+        tipo === "codigo"
+          ? "Código Pix copiado."
+          : "Chave Pix copiada."
+      );
+
+      tempoCopiaRef.current = window.setTimeout(() => {
+        setCopiado("");
+        setMensagemCopia("");
+      }, 2500);
     } catch {
-      const campo = document.createElement('textarea')
-      campo.value = texto
-      campo.style.position = 'fixed'
-      campo.style.opacity = '0'
-      document.body.appendChild(campo)
-      campo.select()
-      document.execCommand('copy')
-      document.body.removeChild(campo)
+      setMensagemCopia(
+        "Não foi possível copiar automaticamente. Selecione e copie o texto no campo abaixo."
+      );
     }
-    setCopiado(id)
-    setTimeout(() => setCopiado(null), 1800)
   }
 
   return (
-    <div className='doe-corpo'>
+    <div className="doe-corpo">
       <Cabecalho />
 
-      <header className='doe-topo'>
-        <div className='doe-largura'>
-          <h1>Salve vidas. Restaure o paraíso.</h1>
-          <p>
-            Na história da R.O.P., sua doação cuidaria de animais silvestres que perderam seu
-            habitat. Na vida real, ela apoia o grupo de estudantes que desenvolveu este site.
-          </p>
-        </div>
-      </header>
+      <main className="doe-main">
+        <section className="doe-hero" aria-labelledby="doe-titulo">
+          <div className="doe-container doe-hero__grade">
+            <div className="doe-hero__conteudo">
+              <Link className="doe-voltar" to="/inicio">
+                <span aria-hidden="true">←</span>
+                Voltar para o início
+              </Link>
 
-      <main className='doe-largura'>
-        <div className='doe-grade'>
-          <section className='doe-cartao' aria-labelledby='doe-titulo-form'>
-            <h2 id='doe-titulo-form'>Faça sua doação</h2>
-            <p className='doe-sub'>Doação voluntária e única. Qualquer valor ajuda o grupo.</p>
+              <p className="doe-eyebrow">
+                APOIE QUEM CONSTRÓI ESSA IDEIA
+              </p>
 
-            <div className='doe-valores' role='group' aria-label='Valor'>
-              {VALORES.map((v) => (
-                <button
-                  key={v}
-                  type='button'
-                  aria-pressed={valorFixo === v}
-                  onClick={() => escolherValor(v)}
-                >
-                  R$ {v}
-                </button>
-              ))}
+              <h1 id="doe-titulo">
+                Uma ideia ganha vida com{" "}
+                <span>gente que acredita.</span>
+              </h1>
+
+              <p className="doe-hero__descricao">
+                A R.O.P. nasceu no nosso TCC. Se você gostou
+                do projeto, pode contribuir voluntariamente
+                com os estudantes que estão por trás dele.
+              </p>
+
+              <a href="#contribuir" className="doe-btn doe-btn--principal">
+                Apoiar o projeto
+                <Icone tipo="seta" />
+              </a>
+
+              <div className="doe-hero__notas">
+                <span>
+                  <Icone tipo="check" />
+                  Contribuição opcional
+                </span>
+
+                <span>
+                  <Icone tipo="check" />
+                  Pagamento único
+                </span>
+              </div>
             </div>
 
-            <label className='doe-outro'>
-              <span>R$</span>
-              <input
-                type='number'
-                min='1'
-                placeholder='Outro valor'
-                aria-label='Outro valor'
-                value={outroValor}
-                onChange={digitarOutroValor}
+            <div className="doe-hero__visual">
+              <img
+                src="/assets/img/pages/inicio/apadrinhe/onca.png"
+                alt="Filhote de onça-pintada entre a vegetação"
               />
-            </label>
 
-            <label className='doe-confirma'>
-              <input
-                type='checkbox'
-                checked={entendeu}
-                onChange={(e) => setEntendeu(e.target.checked)}
-              />
-              <span>
-                Entendo que a R.O.P. é fictícia e que o valor vai para o grupo que desenvolveu
-                este site, não para animais.
-              </span>
-            </label>
+              <div className="doe-hero__sombra" />
 
-            <button type='button' className='doe-botao' onClick={doar}>
-              Doar R$ {valor}
-            </button>
-
-            {erro && (
-              <p className='doe-erro' role='alert'>
-                {erro}
-              </p>
-            )}
-
-            {mostrarPix && (
-              <div className='doe-pix' role='status'>
-                <p>
-                  Obrigado! Escaneie o QR Code ou copie o código no app do seu banco. Informe o
-                  valor de R$ {valor} na hora de pagar.
-                </p>
-                <div className='doe-qr'>
-                  <QRCodeSVG value={CODIGO_PIX} size={200} level='M' />
-                </div>
-                <button
-                  type='button'
-                  className='doe-copiar'
-                  onClick={() => copiar('codigo', CODIGO_PIX)}
-                >
-                  {copiado === 'codigo' ? 'Copiado!' : 'Copiar código Pix'}
-                </button>
-                <button
-                  type='button'
-                  className='doe-copiar contorno'
-                  onClick={() => copiar('chave', CHAVE_PIX)}
-                >
-                  {copiado === 'chave' ? 'Copiado!' : 'Copiar só a chave'}
-                </button>
+              <div className="doe-hero__legenda">
+                <span>R.O.P. — RESTAURANDO O PARAÍSO</span>
+                <p>Uma inspiração na natureza.</p>
+                <small>Um projeto criado por estudantes.</small>
               </div>
-            )}
+
+              <span className="doe-hero__selo">
+                <Icone tipo="folha" />
+                PROJETO ACADÊMICO
+              </span>
+            </div>
+          </div>
+        </section>
+
+        <div className="doe-container">
+          <aside className="doe-aviso" aria-labelledby="doe-aviso-titulo">
+            <span className="doe-aviso__icone" aria-hidden="true">
+              i
+            </span>
+
+            <div>
+              <h2 id="doe-aviso-titulo">
+                A organização é fictícia. A contribuição é real.
+              </h2>
+
+              <p>
+                O valor vai para o grupo de estudantes que
+                desenvolveu este site. Não é destinado a animais,
+                santuários ou organizações ambientais.
+              </p>
+            </div>
+          </aside>
+
+          <section
+            id="contribuir"
+            className="doe-contribuir"
+            aria-labelledby="doe-contribuir-titulo"
+          >
+            <div className="doe-secao-topo">
+              <p className="doe-eyebrow">FAÇA PARTE DO PROJETO</p>
+
+              <h2 id="doe-contribuir-titulo">
+                Seu apoio faz diferença para a equipe.
+              </h2>
+
+              <p>
+                Escolha um valor e confira os dados para contribuir
+                pelo Pix.
+              </p>
+            </div>
+
+            <div className="doe-grade">
+              <div className="doe-cartao doe-formulario">
+                <div className="doe-cartao__topo">
+                  <span className="doe-cartao__icone">
+                    <Icone tipo="coracao" />
+                  </span>
+
+                  <div>
+                    <h3>Escolha sua contribuição</h3>
+                    <p>Um gesto voluntário, sem cobrança recorrente.</p>
+                  </div>
+                </div>
+
+                <form onSubmit={continuar} noValidate>
+                  <fieldset className="doe-valores">
+                    <legend>Quanto você deseja contribuir?</legend>
+
+                    <div className="doe-valores__grade">
+                      {VALORES.map((valor) => (
+                        <button
+                          key={valor}
+                          type="button"
+                          aria-pressed={valorFixo === valor}
+                          onClick={() => escolherValor(valor)}
+                        >
+                          <span>R$</span>
+                          <strong>{valor}</strong>
+                          <small>
+                            {valorFixo === valor
+                              ? "Selecionado"
+                              : "Selecionar"}
+                          </small>
+                        </button>
+                      ))}
+                    </div>
+                  </fieldset>
+
+                  <label
+                    htmlFor="doe-outro-valor"
+                    className="doe-label"
+                  >
+                    Ou informe outro valor
+                  </label>
+
+                  <div className="doe-campo-valor">
+                    <span aria-hidden="true">R$</span>
+
+                    <input
+                      id="doe-outro-valor"
+                      ref={campoOutroRef}
+                      type="text"
+                      inputMode="decimal"
+                      autoComplete="off"
+                      placeholder="Ex.: 12,50"
+                      maxLength={12}
+                      value={outroValor}
+                      onChange={alterarOutroValor}
+                      aria-describedby="doe-valor-ajuda"
+                    />
+                  </div>
+
+                  <p id="doe-valor-ajuda" className="doe-ajuda">
+                    A partir de R$ 1,00. Você pode usar centavos.
+                  </p>
+
+                  <label className="doe-confirmacao">
+                    <input
+                      ref={confirmacaoRef}
+                      type="checkbox"
+                      checked={entendeu}
+                      onChange={alterarConfirmacao}
+                    />
+
+                    <span>
+                      Entendo que a R.O.P. é fictícia e que minha
+                      contribuição será destinada aos estudantes
+                      responsáveis pelo site, e não aos animais.
+                    </span>
+                  </label>
+
+                  {erro && (
+                    <p className="doe-erro" role="alert">
+                      {erro}
+                    </p>
+                  )}
+
+                  <button
+                    type="submit"
+                    className="doe-btn doe-btn--principal doe-btn--largo"
+                  >
+                    {valorValido
+                      ? `Continuar com ${valorFormatado}`
+                      : "Continuar para o Pix"}
+                    <Icone tipo="seta" />
+                  </button>
+
+                  <p className="doe-formulario__nota">
+                    Continuar apenas exibe os dados do Pix.
+                    Nenhuma cobrança é feita pelo site.
+                  </p>
+                </form>
+
+                {mostrarPix && (
+                  <section
+                    ref={painelPixRef}
+                    className="doe-pix"
+                    tabIndex={-1}
+                    aria-labelledby="doe-pix-titulo"
+                  >
+                    <p className="doe-eyebrow">DADOS PARA PAGAMENTO</p>
+
+                    <h3 id="doe-pix-titulo">
+                      Continue no aplicativo do seu banco
+                    </h3>
+
+                    <p className="doe-pix__descricao">
+                      Escaneie o QR Code ou copie o código Pix.
+                      No banco, informe o valor de{" "}
+                      <strong>{valorFormatado}</strong>.
+                    </p>
+
+                    <div className="doe-pix__valor">
+                      <span>Valor escolhido</span>
+                      <strong>{valorFormatado}</strong>
+                      <small>
+                        Preencha este valor no aplicativo do banco.
+                      </small>
+                    </div>
+
+                    <div
+                      className="doe-qr"
+                      role="img"
+                      aria-label="QR Code Pix para contribuir com a equipe"
+                    >
+                      <QRCodeSVG
+                        value={CODIGO_PIX}
+                        size={208}
+                        level="M"
+                      />
+                    </div>
+
+                    <ol className="doe-passos">
+                      <li>Abra a área Pix do seu banco.</li>
+                      <li>Escaneie ou cole o código abaixo.</li>
+                      <li>
+                        Informe {valorFormatado} e confira o
+                        destinatário antes de confirmar.
+                      </li>
+                    </ol>
+
+                    <button
+                      type="button"
+                      className="doe-btn doe-btn--principal doe-btn--largo"
+                      onClick={() => copiar("codigo", CODIGO_PIX)}
+                    >
+                      <Icone
+                        tipo={copiado === "codigo" ? "check" : "copiar"}
+                      />
+                      {copiado === "codigo"
+                        ? "Código copiado!"
+                        : "Copiar código Pix"}
+                    </button>
+
+                    <label
+                      className="doe-label"
+                      htmlFor="doe-codigo-pix"
+                    >
+                      Pix Copia e Cola
+                    </label>
+
+                    <textarea
+                      id="doe-codigo-pix"
+                      className="doe-codigo"
+                      value={CODIGO_PIX}
+                      readOnly
+                      rows={4}
+                      spellCheck={false}
+                      onFocus={(event) => event.target.select()}
+                    />
+
+                    <label
+                      className="doe-label"
+                      htmlFor="doe-chave-pix"
+                    >
+                      Chave Pix
+                    </label>
+
+                    <input
+                      id="doe-chave-pix"
+                      className="doe-chave"
+                      value={CHAVE_PIX}
+                      readOnly
+                      onFocus={(event) => event.target.select()}
+                    />
+
+                    <button
+                      type="button"
+                      className="doe-btn doe-btn--contorno doe-btn--largo"
+                      onClick={() => copiar("chave", CHAVE_PIX)}
+                    >
+                      <Icone
+                        tipo={copiado === "chave" ? "check" : "copiar"}
+                      />
+                      {copiado === "chave"
+                        ? "Chave copiada!"
+                        : "Copiar somente a chave"}
+                    </button>
+
+                    <p
+                      className="doe-copia-status"
+                      role="status"
+                      aria-live="polite"
+                    >
+                      {mensagemCopia}
+                    </p>
+
+                    <p className="doe-pix__nota">
+                      O site não acompanha nem confirma a
+                      transferência. Consulte o comprovante
+                      no seu banco.
+                    </p>
+                  </section>
+                )}
+              </div>
+
+              <aside
+                className="doe-transparencia"
+                aria-labelledby="doe-destino-titulo"
+              >
+                <div className="doe-cartao">
+                  <p className="doe-eyebrow">TRANSPARÊNCIA</p>
+
+                  <h3 id="doe-destino-titulo">
+                    Para onde vai o apoio?
+                  </h3>
+
+                  <p className="doe-texto">
+                    Esta é a divisão informada pela equipe
+                    para as contribuições recebidas.
+                  </p>
+
+                  <div className="doe-barra" aria-hidden="true">
+                    {DIVISAO.map((item) => (
+                      <span
+                        key={item.classe}
+                        className={item.classe}
+                        style={{ width: `${item.percentual}%` }}
+                      />
+                    ))}
+                  </div>
+
+                  <ul className="doe-divisao">
+                    {DIVISAO.map((item, indice) => (
+                      <li key={item.classe}>
+                        <span
+                          className={`doe-divisao__ponto ${item.classe}`}
+                          aria-hidden="true"
+                        />
+
+                        <div>
+                          <div className="doe-divisao__titulo">
+                            <h4>{item.titulo}</h4>
+                            <strong>{item.percentual}%</strong>
+                          </div>
+
+                          <p>{item.descricao}</p>
+
+                          {valorValido && (
+                            <span className="doe-divisao__valor">
+                              {formatarValor(
+                                indice === 0
+                                  ? valorEstudos
+                                  : valorEquipe
+                              )}{" "}
+                              do valor escolhido
+                            </span>
+                          )}
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
+
+                  <div className="doe-recebedor">
+                    <h4>Quem recebe?</h4>
+
+                    <p>
+                      Os estudantes que projetaram e programaram
+                      este site como Trabalho de Conclusão de
+                      Curso.
+                    </p>
+                  </div>
+                </div>
+
+                <div className="doe-apoio">
+                  <Icone tipo="folha" />
+
+                  <h3>Seu interesse também conta.</h3>
+
+                  <p>
+                    Explorar o site, conhecer a proposta e
+                    compartilhar o trabalho já são formas
+                    de apoiar nossa trajetória.
+                  </p>
+
+                  <Link to="/inicio">
+                    Conhecer o projeto
+                    <Icone tipo="seta" />
+                  </Link>
+                </div>
+              </aside>
+            </div>
           </section>
 
-          <aside className='doe-cartao doe-lateral' aria-labelledby='doe-titulo-divisao'>
-            <h3 id='doe-titulo-divisao'>Para onde vai o dinheiro</h3>
-            <div className='doe-barra' aria-hidden='true'>
-              {DIVISAO.map((item) => (
-                <i
-                  key={item.texto}
-                  className={item.cor}
-                  style={{ width: `${item.percentual}%` }}
-                />
+          <section className="doe-faq" aria-labelledby="doe-faq-titulo">
+            <div className="doe-faq__introducao">
+              <p className="doe-eyebrow">TUDO ÀS CLARAS</p>
+              <h2 id="doe-faq-titulo">Antes de contribuir.</h2>
+
+              <p>
+                Reunimos as principais respostas para você
+                decidir com tranquilidade.
+              </p>
+            </div>
+
+            <div className="doe-faq__lista">
+              {PERGUNTAS.map((item) => (
+                <details key={item.pergunta}>
+                  <summary>
+                    {item.pergunta}
+                    <span aria-hidden="true">+</span>
+                  </summary>
+
+                  <p>{item.resposta}</p>
+                </details>
               ))}
             </div>
-            <ul className='doe-legenda'>
-              {DIVISAO.map((item) => (
-                <li key={item.texto}>
-                  <span className={`doe-bolinha ${item.cor}`} />
-                  <em>{item.percentual}%</em>
-                  <span>{item.texto}</span>
-                </li>
-              ))}
-            </ul>
-            <h3>Quem recebe</h3>
-            <p className='doe-sub'>
-              Os estudantes que projetaram e programaram este site como trabalho de conclusão de
-              curso. Nenhum valor é repassado a organizações ambientais.
-            </p>
-          </aside>
+          </section>
+
+          <section className="doe-final">
+            <span className="doe-final__icone">
+              <Icone tipo="coracao" />
+            </span>
+
+            <div>
+              <h2>Obrigado por conhecer a nossa ideia.</h2>
+              <p>
+                Cada visita faz parte da história que estamos
+                construindo como estudantes.
+              </p>
+            </div>
+
+            <Link to="/inicio" className="doe-btn doe-btn--contorno">
+              Explorar a R.O.P.
+              <Icone tipo="seta" />
+            </Link>
+          </section>
         </div>
-
-        <section className='doe-sobre'>
-          <h2>Uma ONG inventada, uma doação real</h2>
-          <p>
-            A R.O.P. foi criada como cenário para o nosso TCC: onça, boto, arara e jacaré, que
-            aparecem na marca, representam a fauna que a história defende. Como a causa é
-            fictícia, preferimos deixar tudo claro antes de você doar. Se quiser ajudar a fauna
-            brasileira de verdade, procure ONGs reconhecidas como o Projeto Tamar.
-          </p>
-        </section>
-
-        <section className='doe-sobre doe-faq' aria-label='Perguntas frequentes'>
-          <h2>Perguntas frequentes</h2>
-          {PERGUNTAS.map((item) => (
-            <details key={item.pergunta}>
-              <summary>{item.pergunta}</summary>
-              <p>{item.resposta}</p>
-            </details>
-          ))}
-        </section>
-
-        <section className='doe-final'>
-          <h2>Quer apoiar o nosso TCC?</h2>
-          <p>
-            Mesmo uma doação pequena ajuda a manter o projeto no ar. Obrigado por visitar a
-            R.O.P.
-          </p>
-        </section>
       </main>
 
       <Rodape />
     </div>
-  )
+  );
 }
 
-export default Doe
+export default Doe;
