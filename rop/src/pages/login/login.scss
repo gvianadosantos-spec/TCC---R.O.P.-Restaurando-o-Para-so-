@@ -1,210 +1,141 @@
-@import url('https://fonts.googleapis.com/css2?family=Rye&family=Arbutus+Slab&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap');
 
-$verde-agua: #0b4552;
-$verde-agua-hover: #0e5766;
-$laranja: #e8a766;
-$bege: rgba(201, 160, 124, 0.85);
-$branco: #fff;
-
-.login-corpo {
-    position: relative;
+.rop-login {
+    --fundo: #06181d;
+    --texto: #fbf8f2;
+    --suave: #a4bbc0;
+    --laranja: #ef9700;
+    display: grid;
+    grid-template-columns: 1.05fr 1fr;
     min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 24px;
+    min-height: 100svh;
+    background: var(--fundo);
+    color: var(--texto);
+    font-family: 'Inter', sans-serif;
     box-sizing: border-box;
-    font-family: 'Arbutus Slab', Georgia, serif;
-    color: $branco;
-    background-color: #050a08;
-    background-position: center;
-    background-size: cover;
-    background-repeat: no-repeat;
+    -webkit-font-smoothing: antialiased;
 
-    *,
-    *::before,
-    *::after {
-        box-sizing: inherit;
+    *, *::before, *::after { box-sizing: inherit; }
+    a { color: inherit; text-decoration: none; }
+    button, input { font: inherit; }
+    button, a { -webkit-tap-highlight-color: transparent; }
+    svg { width: 21px; height: 21px; flex-shrink: 0; }
+    a:focus-visible, button:focus-visible { outline: 2px solid var(--laranja); outline-offset: 5px; }
+
+    &__visual {
+        position: relative;
+        min-height: 820px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        padding: 48px clamp(30px, 4.5vw, 76px) 32px;
+        isolation: isolate;
+        overflow: hidden;
+        background: #10251e;
+        &::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            z-index: -1;
+            background: linear-gradient(180deg, rgba(2,15,15,.58), rgba(2,15,15,.02) 27%, rgba(2,15,15,.3) 42%, #041518 96%);
+        }
     }
-
-    // escurece um pouco a foto
-    &::before {
-        content: '';
+    &__foto {
         position: absolute;
         inset: 0;
-        background: rgba(0, 0, 0, 0.35);
+        z-index: -2;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: 59% 32%;
+        animation: rop-login-foto 1.3s ease-out both;
     }
-
-    a:focus-visible,
-    input:focus-visible,
-    button:focus-visible {
-        outline: 2px solid $branco;
-        outline-offset: 2px;
-    }
-
-    .conteudo {
-        position: relative;
-        z-index: 1;
-        width: min(1000px, 100%);
-        display: grid;
-        grid-template-columns: 1fr 460px;
-        gap: 32px;
+    &__marca {
+        display: inline-flex;
         align-items: center;
+        gap: 12px;
+        align-self: flex-start;
+        img { width: 180px; height: auto; object-fit: contain; }
     }
-
-    // ---------- lado esquerdo ----------
-    .marca {
-        align-self: end;
-        padding-bottom: 12px;
-
-        .logo {
-            display: block;
-            width: min(240px, 70%);
-            height: auto;
-            margin-bottom: 18px;
-            filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.6));
-        }
-
-        .linha {
-            position: relative;
-            width: 230px;
-            height: 3px;
-            margin-bottom: 18px;
-            background: $verde-agua;
-
-            &::after {
-                content: '';
-                position: absolute;
-                right: -8px;
-                top: -6px;
-                width: 14px;
-                height: 14px;
-                background: $verde-agua;
-                transform: rotate(45deg);
-            }
-        }
-
-       p {
-    margin: 0;
-    font-size: 1.15rem;
-    line-height: 1.6;
-    text-shadow: 0 1px 6px #000;
-
-    span {
-        display: block; // cada frase em uma linha, sem precisar de <br />
-
-        // sublinha só a primeira letra de cada linha
-        &::first-letter {
-            text-decoration: underline;
-            text-decoration-thickness: 2px;
-            text-underline-offset: 5px;
-            text-decoration-color: rgba(255, 255, 255, 0.7);
-        }
+    &__mensagem {
+        margin-top: auto;
+        padding-top: 240px;
+        animation: rop-login-entrada .8s ease-out both;
+        h1 { margin: 24px 0 20px; font: 600 clamp(2.5rem, 3.7vw, 4rem)/1.08 'Fraunces', Georgia, serif; letter-spacing: -.04em; }
+        em { color: #ffb549; font-style: normal; }
+        > p { max-width: 365px; margin: 0; color: #c3d0ca; font-size: .94rem; line-height: 1.8; }
     }
+    &__etiqueta { display: inline-flex; align-items: center; gap: 9px; color: #f5c884; font-size: .62rem; font-weight: 600; letter-spacing: .18em; }
+    &__etiqueta > span { width: 6px; height: 6px; border-radius: 50%; background: #ef9700; box-shadow: 0 0 0 4px rgba(239,151,0,.14); }
+    &__assinatura { display: flex; align-items: center; gap: 10px; margin-top: 28px; color: #d2ded9; font-size: .72rem; svg { color: #f2b456; } }
+    &__legenda { display: flex; justify-content: space-between; gap: 16px; margin-top: 42px; padding-top: 20px; border-top: 1px solid #ffffff26; font-size: .56rem; letter-spacing: .17em; color: #a7bcb6; > span { color: #d4dfd8; } }
+
+    &__painel {
+        position: relative;
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 44px clamp(28px, 4vw, 70px) 30px;
+        background: radial-gradient(ellipse at 100% 0%, #12333a80, transparent 58%), var(--fundo);
+    }
+    &__voltar { align-self: flex-end; display: inline-flex; align-items: center; gap: 10px; font-size: .75rem; color: var(--suave) !important; transition: color .2s; &:hover { color: var(--texto) !important; } }
+    &__formulario { width: 100%; max-width: 380px; margin: auto 0; padding: 45px 0; animation: rop-login-entrada .8s .1s ease-out both; }
+    &__simbolo { display: flex; align-items: center; justify-content: center; width: 48px; height: 48px; margin-bottom: 27px; border: 1px solid #eaa03e40; border-radius: 15px; background: #ef97000d; color: #f2b456; svg { width: 25px; height: 25px; } }
+    &__sobretitulo { margin: 0 0 13px; color: #e9a94b; font-size: .63rem; font-weight: 600; letter-spacing: .18em; }
+    h2 { margin: 0; font: 600 clamp(2rem, 2.9vw, 2.8rem)/1.12 'Fraunces', Georgia, serif; letter-spacing: -.035em; }
+    &__introducao { margin: 17px 0 32px; max-width: 330px; font-size: .85rem; line-height: 1.75; color: var(--suave); }
+    form > label, &__linha-senha label { display: block; font-size: .76rem; font-weight: 500; }
+    &__campo {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        min-height: 54px;
+        margin-top: 10px;
+        padding: 0 16px;
+        border: 1px solid #a0c2cb33;
+        border-radius: 10px;
+        background: #ffffff04;
+        transition: border-color .2s, box-shadow .2s;
+        > svg { width: 18px; height: 18px; color: #86a6ae; }
+        &:focus-within { border-color: #edac48; box-shadow: 0 0 0 3px #ef970012; }
+        input { width: 100%; min-width: 0; min-height: 52px; padding: 0; border: 0; outline: 0; background: transparent; color: var(--texto); font-size: .84rem; caret-color: var(--laranja); }
+        input::placeholder { color: #86a1a9; opacity: 1; }
+        input:-webkit-autofill { -webkit-text-fill-color: #fbf8f2; box-shadow: 0 0 0 1000px #10262c inset; }
+        &:has(input[aria-invalid='true']) { border-color: #f4a29c; }
+    }
+    &__linha-senha { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 23px; a { padding: 4px 0; color: #dfb577; font-size: .69rem; &:hover { text-decoration: underline; } } }
+    &__ver-senha { display: flex; align-items: center; justify-content: center; flex-shrink: 0; width: 44px; height: 44px; margin-right: -10px; padding: 10px; border: 0; border-radius: 7px; background: transparent; color: #a4bbc0; cursor: pointer; &:hover { color: #f5ba60; background: #ffffff08; } }
+    &__entrar { display: flex; justify-content: space-between; align-items: center; width: 100%; min-height: 53px; margin-top: 27px; padding: 0 20px; border: 0; border-radius: 10px; background: var(--laranja); color: #13201b; font-weight: 700; font-size: .82rem; cursor: pointer; transition: background .2s, transform .2s, box-shadow .2s; &:hover { background: #ffae25; transform: translateY(-2px); box-shadow: 0 8px 24px #ef97001f; } &:active { transform: translateY(0); } }
+    &__demo { margin: 12px 0 0; text-align: center; font-size: .65rem; line-height: 1.5; color: #93aeb5; }
+    &__aviso, &__erro { margin: 10px 0 0; font-size: .75rem; line-height: 1.5; }
+    &__aviso { color: #f1c16e; }
+    &__erro { color: #ffb2a8; }
+    &__cadastro { margin: 30px 0 0; padding-top: 25px; border-top: 1px solid #a0c2cb26; text-align: center; font-size: .75rem; line-height: 1.8; color: var(--suave); a { display: inline-block; color: #f5bc68; font-weight: 600; &:hover { text-decoration: underline; } } }
+    &__explorar { display: flex; align-items: center; justify-content: center; gap: 9px; width: fit-content; min-height: 44px; margin: 12px auto 0; color: #b5c9ce !important; font-size: .7rem; svg { width: 15px; height: 15px; } &:hover { color: #ffb549 !important; } }
+    &__rodape { display: flex; align-items: center; justify-content: center; gap: 8px; color: #92abb1; font-size: .63rem; line-height: 1.6; svg { width: 15px; height: 15px; } }
+
+    @media (min-width: 1500px) { &__visual { min-height: 100svh; } }
+    @media (max-width: 1000px) { grid-template-columns: 1fr 1fr; &__visual { padding-left: 30px; padding-right: 30px; } &__painel { padding-left: 28px; padding-right: 28px; } &__mensagem h1 { font-size: 2.6rem; } }
+    @media (max-width: 760px) {
+        grid-template-columns: 1fr;
+        &__visual { min-height: 410px; padding: 25px 24px 24px; }
+        &__foto { object-position: 60% 31%; }
+        &__visual::after { background: linear-gradient(90deg, #041518b3, #04151826), linear-gradient(0deg, #041518, transparent 90%); }
+        &__marca img { width: 145px; height: auto; }
+        &__mensagem { padding-top: 70px; }
+        &__mensagem h1 { margin: 18px 0 12px; font-size: clamp(2.1rem, 7vw, 3rem); }
+        &__mensagem > p { max-width: 320px; font-size: .8rem; }
+        &__assinatura, &__legenda { display: none; }
+        &__painel { padding: 25px 24px; }
+        &__formulario { max-width: 430px; padding: 30px 0 32px; }
+        &__simbolo { display: none; }
+        h2 { font-size: 2.25rem; }
+        &__introducao { margin-bottom: 28px; }
+        &__rodape { font-size: .6rem; }
+    }
+    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }
 }
-    }
 
-    // ---------- card de login ----------
-    .cartao {
-        padding: 40px 44px;
-        border-radius: 6px;
-        border: 1px solid rgba(255, 255, 255, 0.18);
-        background: rgba(255, 255, 255, 0.14);
-        backdrop-filter: blur(14px);
-        -webkit-backdrop-filter: blur(14px);
-
-        h1 {
-            margin: 0 0 28px;
-            text-align: center;
-            font-family: 'Rye', serif;
-            font-weight: 400;
-            font-size: 2.1rem;
-            color: $laranja;
-        }
-
-        label {
-            display: block;
-            margin: 20px 0 8px;
-            font-size: 1.25rem;
-        }
-
-        input {
-            width: 100%;
-            padding: 14px;
-            border: 0;
-            border-radius: 4px;
-            background: $bege;
-            font: inherit;
-            font-size: 1.1rem;
-            color: #2a1a0c;
-        }
-
-        .esqueci {
-            display: inline-block;
-            margin-top: 7px;
-            font-size: 0.85rem;
-            color: $branco;
-            opacity: 0.85;
-        }
-
-        .entrar {
-            display: block;
-            width: 78%;
-            margin: 32px auto 0;
-            padding: 15px;
-            border: 0;
-            border-radius: 3px;
-            background: $verde-agua;
-            color: $branco;
-            font: inherit;
-            font-size: 1.3rem;
-            cursor: pointer;
-
-            &:hover {
-                background: $verde-agua-hover;
-            }
-        }
-
-        .rodape {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-top: 14px;
-
-            .criar {
-                color: $laranja;
-                text-decoration: none;
-                font-size: 1.05rem;
-            }
-
-            .social {
-                display: flex;
-                gap: 10px;
-                margin-left: auto;
-                margin-right: 22px;
-
-                svg {
-                    width: 26px;
-                    height: 26px;
-                    fill: $branco;
-                }
-            }
-        }
-    }
-
-    // ---------- celular / tela pequena ----------
-    @media (max-width: 820px) {
-        .conteudo {
-            grid-template-columns: 1fr;
-        }
-
-        .marca {
-            order: 2;
-            align-self: start;
-        }
-
-        .cartao {
-            padding: 28px 24px;
-        }
-    }
-}
+@keyframes rop-login-entrada { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes rop-login-foto { from { opacity: .5; transform: scale(1.035); } to { opacity: 1; transform: scale(1); } }
