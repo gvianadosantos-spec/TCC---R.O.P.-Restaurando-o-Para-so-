@@ -16,9 +16,8 @@ const ROTAS = {
 /* Links externos: deixe "" enquanto não tiver o endereço.
    Vazio = o clique não faz nada. Preenchido = abre o link. */
 const URLS = {
-  doar: "",
-  apadrinhar: "",
-  binoculos: "",
+  doar: "/doe",
+  apadrinhar: "/inicio#animais",
   instagram: "",
   facebook: "",
   youtube: "",
@@ -52,7 +51,7 @@ function LinkExterno({ url, className, ariaLabel, children }) {
 
 function SetaExterna() {
   return (
-    <svg className="external-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+    <svg className="icone-externo" viewBox="0 0 24 24" fill="none" stroke="currentColor">
       <line x1="7" y1="17" x2="17" y2="7"></line>
       <polyline points="7 7 17 7 17 17"></polyline>
     </svg>
@@ -65,38 +64,38 @@ export default function Rodape() {
   }, []);
 
   return (
-    <div className="rop">
-      <div className="main-container">
-        {/* Hero Box */}
-        <section className="hero">
-          <h1 className="hero-title">
+    <div className="rodape">
+      <div className="container-principal">
+        {/* Caixa de destaque */}
+        <section className="destaque">
+          <h1 className="destaque-titulo">
             Salve vidas. Restaure o paraíso.
             <span>Junte-se a nós pela</span>
             <span>biodiversidade.</span>
           </h1>
-          <div className="hero-buttons">
-            <Link to={ROTAS.doe} className="btn btn-primary" onClick={irParaTopo}>
+          <div className="destaque-botoes">
+            <Link to={ROTAS.doe} className="botao botao-primario" onClick={irParaTopo}>
               Doe agora
             </Link>
-            <Link to={ROTAS.apadrinhe} className="btn btn-secondary" onClick={irParaTopo}>
+            <Link to={ROTAS.apadrinhe} className="botao botao-segundario" onClick={irParaTopo}>
               Apadrinhe
             </Link>
           </div>
         </section>
 
-        {/* Footer Main */}
-        <footer className="footer-content">
-          <div className="footer-grid">
-            {/* Column 1: Brand Info */}
-            <div className="brand-col">
-              <div className="brand-header">
+        {/* Rodapé principal */}
+        <footer className="rodape-conteudo">
+          <div className="rodape-grade">
+            {/* Coluna 1: marca */}
+            <div className="marca-coluna">
+              <div className="marca-cabecalho">
                 <img
-                  className="brand-logo-img"
+                  className="marca-logo"
                   src="/assets/img/componentes/cabecalho/logo.png"
                   alt="R.O.P. — Restaurando o Paraíso"
                 />
               </div>
-              <p className="brand-description">
+              <p className="marca-descricao">
                 R.O.P. — Restaurando/Recuperando o Paraíso. Cuidamos de animais silvestres que
                 perderam seus habitats, recuperamos vidas e educamos para a fauna brasileira que
                 tanto amamos.
@@ -105,8 +104,8 @@ export default function Rodape() {
 
             {/* Column 2: Navegação */}
             <div>
-              <h2 className="col-title">Navegação</h2>
-              <ul className="nav-list">
+              <h2 className="coluna-titulo">Navegação</h2>
+              <ul className="lista-links">
                 <li>
                   <Link to={ROTAS.inicio} onClick={irParaTopo}>Início</Link>
                 </li>
@@ -127,8 +126,8 @@ export default function Rodape() {
 
             {/* Column 3: Como ajudar */}
             <div>
-              <h2 className="col-title">Como ajudar</h2>
-              <ul className="nav-list">
+              <h2 className="coluna-titulo">Como ajudar</h2>
+              <ul className="lista-links">
                 <li>
                   <LinkExterno url={URLS.doar}>
                     Doar
@@ -144,21 +143,15 @@ export default function Rodape() {
                 <li>
                   <Link to={ROTAS.loja} onClick={irParaTopo}>Loja</Link>
                 </li>
-                <li>
-                  <LinkExterno url={URLS.binoculos}>
-                    Binóculos da Liberdade
-                    <SetaExterna />
-                  </LinkExterno>
-                </li>
               </ul>
             </div>
 
             {/* Column 4: Conecte-se */}
             <div>
-              <h2 className="col-title">Conecte-se</h2>
-              <div className="social-icons">
+              <h2 className="coluna-titulo">Conecte-se</h2>
+              <div className="redes-sociais">
                 {/* Instagram */}
-                <LinkExterno url={URLS.instagram} className="social-btn" ariaLabel="Instagram">
+                <LinkExterno url={URLS.instagram} className="rede-social-botao" ariaLabel="Instagram">
                   <svg
                     viewBox="0 0 24 24"
                     fill="none"
@@ -173,7 +166,7 @@ export default function Rodape() {
                   </svg>
                 </LinkExterno>
                 {/* Facebook */}
-                <LinkExterno url={URLS.facebook} className="social-btn" ariaLabel="Facebook">
+                <LinkExterno url={URLS.facebook} className="rede-social-botao" ariaLabel="Facebook">
                   <svg
                     viewBox="0 0 24 24"
                     fill="none"
@@ -186,7 +179,7 @@ export default function Rodape() {
                   </svg>
                 </LinkExterno>
                 {/* YouTube */}
-                <LinkExterno url={URLS.youtube} className="social-btn" ariaLabel="YouTube">
+                <LinkExterno url={URLS.youtube} className="rede-social-botao" ariaLabel="YouTube">
                   <svg
                     viewBox="0 0 24 24"
                     fill="none"
@@ -200,7 +193,7 @@ export default function Rodape() {
                   </svg>
                 </LinkExterno>
                 {/* Email */}
-                <LinkExterno url={URLS.email} className="social-btn" ariaLabel="Email">
+                <LinkExterno url={URLS.email} className="rede-social-botao" ariaLabel="Email">
                   <svg
                     viewBox="0 0 24 24"
                     fill="none"
@@ -218,8 +211,8 @@ export default function Rodape() {
           </div>
         </footer>
 
-        {/* Bottom Copyright */}
-        <div className="footer-bottom">
+        {/* Direitos autorais */}
+        <div className="rodape-base">
           <div>© 2026 R.O.P. — Restaurando o Paraíso. Todos os direitos reservados.</div>
           <div>Reescrito com cuidado pela fauna brasileira.</div>
         </div>

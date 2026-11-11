@@ -1,11 +1,11 @@
-.rop,
-.rop * {
+.rodape,
+.rodape * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
 
-.rop {
+.rodape {
   background-color: #07090b;
   color: #8b97a2;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
@@ -14,7 +14,7 @@
   padding: 2rem 2rem 0 2rem;
   border-top: 1px solid #151d24; 
 
-  .main-container {
+  .container-principal {
     max-width: none;
     margin: 0 auto;
     width: 100%;
@@ -23,8 +23,8 @@
     flex-direction: column;
   }
 
-  /* Hero Section */
-  .hero {
+ /* Caixa de destaque */
+  .destaque {
     background-color: #071f26;
     border-radius: 28px;
     padding: 3rem 2rem 2.75rem 2rem;
@@ -32,7 +32,7 @@
     margin-bottom: 2.5rem;
   }
 
-  .hero-title {
+  .destaque-titulo {
     font-family: "Georgia", "Times New Roman", serif;
     font-size: 2.25rem;
     font-weight: 700;
@@ -47,14 +47,14 @@
     }
   }
 
-  .hero-buttons {
+  .destaque-botoes {
     display: flex;
     justify-content: center;
     align-items: center;
     gap: 1rem;
   }
 
-  .btn {
+  .botao {
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -67,7 +67,7 @@
     transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
   }
 
-  .btn-primary {
+  .botao-primario {
     background-color:  #e68e00;
     color: #000000;
     border: 1px solid  #e68e00;
@@ -78,7 +78,7 @@
     }
   }
 
-  .btn-secondary {
+  .botao-segundario {
     background-color: transparent;
     color: #e68e00;
     border: 1px solid  #e68e00;
@@ -91,72 +91,51 @@
   }
 
   /* Footer Navigation */
-  .footer-content {
+  .rodape-conteudo {
     padding-bottom: 2.5rem;
   }
 
-  .footer-grid {
+  .rodape-grade {
     display: grid;
     grid-template-columns: 1.6fr 1fr 1.2fr 1fr;
     gap: 2.5rem;
   }
 
-  /* Column 1: Brand */
-  .brand-col {
+  /* Coluna 1: marca */
+  .marca-coluna {
     display: flex;
     flex-direction: column;
     gap: 1.25rem;
   }
 
-  .brand-header {
+  .marca-cabecalho {
     display: flex;
     align-items: center;
     gap: 0.6rem;
   }
 
-  .brand-logo-img {
+  .marca-logo {
     width: 170px;
     height: auto;
     display: block;
   }
 
-  .brand-text-wrapper {
-    display: flex;
-    flex-direction: column;
-  }
-
-  .brand-name {
-    color: #ffffff;
-    font-weight: 800;
-    font-size: 1.15rem;
-    letter-spacing: 0.05em;
-    line-height: 1;
-  }
-
-  .brand-sub {
-    color: #f59e0b;
-    font-size: 0.6rem;
-    font-weight: 600;
-    letter-spacing: 0.02em;
-    margin-top: 2px;
-  }
-
-  .brand-description {
+  .marca-descricao {
     font-size: 0.825rem;
     line-height: 1.55;
     color: #8b97a2;
     max-width: 290px;
   }
 
-  /* Links Columns */
-  .col-title {
+  /* Colunas de links */
+  .coluna-titulo {
     color: #ffffff;
     font-size: 0.9rem;
     font-weight: 700;
     margin-bottom: 1.25rem;
   }
 
-  .nav-list {
+  .lista-links {
     list-style: none;
     display: flex;
     flex-direction: column;
@@ -177,19 +156,19 @@
     }
   }
 
-  .external-icon {
+  .icone-externo{
     width: 10px;
     height: 10px;
     stroke-width: 2.5;
   }
 
-  /* Column 4: Social Icons */
-  .social-icons {
+  /* Coluna 4: redes sociais */
+  .redes-sociais {
     display: flex;
     gap: 0.6rem;
   }
 
-  .social-btn {
+  .rede-social-botao {
     width: 34px;
     height: 34px;
     border-radius: 50%;
@@ -212,8 +191,8 @@
     }
   }
 
-  /* Bottom Copyright Bar */
-  .footer-bottom {
+  /* Direitos autorais */
+  .rodape-base {
     border-top: 1px solid #151d24;
     padding: 1.5rem 0;
     display: flex;
@@ -225,33 +204,33 @@
 
   /* Tablets */
   @media (max-width: 900px) {
-    .footer-grid {
+    .rodape-grade {
       grid-template-columns: 1fr 1fr;
       gap: 2rem;
     }
 
-    .hero-title {
+    .destaque-titulo {
       font-size: 2rem;
     }
   }
 
   /* Celulares */
   @media (max-width: 550px) {
-    .footer-grid {
+    .rodape-grade {
       grid-template-columns: 1fr;
     }
 
-    .footer-bottom {
+    .rodape-base {
       flex-direction: column;
       gap: 0.75rem;
       text-align: center;
     }
 
-    .hero {
+    .destaque {
       padding: 2.5rem 1.5rem;
     }
 
-    .hero-title {
+    .destaque-titulo {
       font-size: 1.6rem;
     }
   }
