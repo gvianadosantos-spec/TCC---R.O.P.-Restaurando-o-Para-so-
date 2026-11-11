@@ -245,7 +245,7 @@ function Especies() {
                     onFocus={() => setBuscaFocada(true)}
                     placeholder="Buscar — nome comum ou científico..."
                     aria-label="Buscar animais por nome popular ou científico"
-                    aria-expanded={sugestoesAbertas} />
+                    aria-haspopup="listbox" />
                   {busca && <button className="limpar-busca" type="button"
                     onClick={() => setBusca("")} aria-label="Limpar pesquisa">×</button>}
                 </div>
