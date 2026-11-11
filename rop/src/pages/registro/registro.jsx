@@ -1,8 +1,10 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import './registro.scss'
 
 const ASSETS = `${process.env.PUBLIC_URL || ''}/assets/img`
+const API_URL = (process.env.REACT_APP_API_URL || 'http://localhost:5050')
+    .replace(/\/+$/, '')
 
 function Icone({ tipo }) {
     const caminhos = {
@@ -38,18 +40,7 @@ function Icone({ tipo }) {
                 <path d="M10 10a3 3 0 0 0 4 4" />
             </>
         ),
-        folha: (
-            <path d="M20 4C9 2 3 8 5 15s15 5 15-11ZM5 20l10-10" />
-        ),
-        seta: (
-            <path d="M5 12h14M13 6l6 6-6 6" />
-        ),
-        check: (
-            <>
-                <circle cx="12" cy="12" r="9" />
-                <path d="m8 12 3 3 5-6" />
-            </>
-        ),
+        seta: <path d="M5 12h14M13 6l6 6-6 6" />,
     }
 
     return (
@@ -68,6 +59,8 @@ function Icone({ tipo }) {
 }
 
 export default function Registro() {
+    const navigate = useNavigate()
+
     const [dados, setDados] = useState({
         email: '',
         usuario: '',
@@ -78,35 +71,38 @@ export default function Registro() {
     const [mostrarSenha, setMostrarSenha] = useState(false)
     const [mostrarConfirmacao, setMostrarConfirmacao] = useState(false)
     const [erro, setErro] = useState(null)
-    const [sucesso, setSucesso] = useState(false)
+    const [enviando, setEnviando] = useState(false)
 
     function atualizar(event) {
         const { name, value } = event.target
-
-        setDados((anterior) => ({
-            ...anterior,
-            [name]: value,
-        }))
-
+        setDados((anterior) => ({ ...anterior, [name]: value }))
         setErro(null)
-        setSucesso(false)
     }
 
-    function cadastrar(event) {
+    async function cadastrar(event) {
         event.preventDefault()
+        if (enviando) return
 
         const formulario = event.currentTarget
+        const nomeUsuario = dados.usuario.trim()
 
         setErro(null)
-        setSucesso(false)
 
-        if (!dados.usuario.trim()) {
+        if (nomeUsuario.length < 3 || nomeUsuario.length > 100) {
             setErro({
                 campo: 'usuario',
-                mensagem: 'Informe seu nome de usuário.',
+                mensagem: 'O nome de usuário deve ter de 3 a 100 caracteres.',
             })
-
             formulario.elements.usuario.focus()
+            return
+        }
+
+        if (new TextEncoder().encode(dados.senha).length > 72) {
+            setErro({
+                campo: 'senha',
+                mensagem: 'A senha deve ter até 72 bytes. Use uma senha mais curta.',
+            })
+            formulario.elements.senha.focus()
             return
         }
 
@@ -115,24 +111,40 @@ export default function Registro() {
                 campo: 'confirmar',
                 mensagem: 'As senhas não são iguais. Confira e tente novamente.',
             })
-
             formulario.elements.confirmar.focus()
             return
         }
 
-        // Integre a API de cadastro aqui.
-        // A demonstração apenas valida os campos e não cria uma conta real.
-        // Não salve senhas no localStorage nem no console.
-        setSucesso(true)
+        setEnviando(true)
 
-        setDados((anterior) => ({
-            ...anterior,
-            senha: '',
-            confirmar: '',
-        }))
+        try {
+            const resposta = await fetch(`${API_URL}/cadastro`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    nome_usuario: nomeUsuario,
+                    email: dados.email.trim(),
+                    senha: dados.senha,
+                }),
+            })
 
-        setMostrarSenha(false)
-        setMostrarConfirmacao(false)
+            const resultado = await resposta.json().catch(() => null)
+
+            if (resposta.status !== 201 || !resultado?.id) {
+                setErro({
+                    mensagem: resultado?.erro || 'Não foi possível criar sua conta. Tente novamente.',
+                })
+                return
+            }
+
+            navigate('/', { replace: true })
+        } catch {
+            setErro({
+                mensagem: 'Não foi possível conectar à API. Confira se ela está rodando.',
+            })
+        } finally {
+            setEnviando(false)
+        }
     }
 
     return (
@@ -184,10 +196,7 @@ export default function Registro() {
                     </div>
 
                     <div className="rop-login__assinatura">
-                        <Icone tipo="folha" />
-                        <span>
-                            Mais pessoas conectadas. Mais vida protegida.
-                        </span>
+                        <span>Mais pessoas conectadas. Mais vida protegida.</span>
                     </div>
                 </div>
 
@@ -207,13 +216,7 @@ export default function Registro() {
                 </Link>
 
                 <div className="rop-login__formulario">
-                    <div className="rop-login__simbolo">
-                        <Icone tipo="folha" />
-                    </div>
-
-                    <p className="rop-login__sobretitulo">
-                        FAÇA PARTE DA R.O.P.
-                    </p>
+                    <p className="rop-login__sobretitulo">FAÇA PARTE DA R.O.P.</p>
 
                     <h2 id="registro-titulo">
                         Um novo começo.
@@ -226,15 +229,12 @@ export default function Registro() {
                         nessa conexão com a natureza.
                     </p>
 
-                    <form onSubmit={cadastrar}>
+                    <form onSubmit={cadastrar} aria-busy={enviando}>
                         <div className="rop-registro__grupo">
-                            <label htmlFor="registro-email">
-                                E-mail
-                            </label>
+                            <label htmlFor="registro-email">E-mail</label>
 
                             <div className="rop-login__campo">
                                 <Icone tipo="email" />
-
                                 <input
                                     id="registro-email"
                                     name="email"
@@ -243,21 +243,20 @@ export default function Registro() {
                                     autoComplete="email"
                                     autoCapitalize="none"
                                     spellCheck={false}
+                                    maxLength={255}
                                     value={dados.email}
                                     onChange={atualizar}
+                                    readOnly={enviando}
                                     required
                                 />
                             </div>
                         </div>
 
                         <div className="rop-registro__grupo">
-                            <label htmlFor="registro-usuario">
-                                Nome de usuário
-                            </label>
+                            <label htmlFor="registro-usuario">Nome de usuário</label>
 
                             <div className="rop-login__campo">
                                 <Icone tipo="usuario" />
-
                                 <input
                                     id="registro-usuario"
                                     name="usuario"
@@ -266,106 +265,78 @@ export default function Registro() {
                                     autoComplete="username"
                                     autoCapitalize="none"
                                     spellCheck={false}
+                                    maxLength={100}
                                     value={dados.usuario}
                                     onChange={atualizar}
-                                    aria-invalid={
-                                        erro?.campo === 'usuario'
-                                    }
+                                    aria-invalid={erro?.campo === 'usuario'}
                                     aria-describedby={
-                                        erro?.campo === 'usuario'
-                                            ? 'registro-erro'
-                                            : undefined
+                                        erro?.campo === 'usuario' ? 'registro-erro' : undefined
                                     }
+                                    readOnly={enviando}
                                     required
                                 />
                             </div>
                         </div>
 
                         <div className="rop-registro__grupo">
-                            <label htmlFor="registro-senha">
-                                Senha
-                            </label>
+                            <label htmlFor="registro-senha">Senha</label>
 
                             <div className="rop-login__campo">
                                 <Icone tipo="cadeado" />
-
                                 <input
                                     id="registro-senha"
                                     name="senha"
-                                    type={
-                                        mostrarSenha
-                                            ? 'text'
-                                            : 'password'
-                                    }
+                                    type={mostrarSenha ? 'text' : 'password'}
                                     placeholder="Crie sua senha"
                                     autoComplete="new-password"
-                                    minLength={6}
+                                    minLength={8}
                                     value={dados.senha}
                                     onChange={atualizar}
-                                    aria-describedby="registro-dica-senha"
+                                    aria-invalid={erro?.campo === 'senha'}
+                                    aria-describedby={
+                                        erro?.campo === 'senha'
+                                            ? 'registro-dica-senha registro-erro'
+                                            : 'registro-dica-senha'
+                                    }
+                                    readOnly={enviando}
                                     required
                                 />
 
                                 <button
                                     className="rop-login__ver-senha"
                                     type="button"
-                                    aria-label={
-                                        mostrarSenha
-                                            ? 'Ocultar senha'
-                                            : 'Mostrar senha'
-                                    }
+                                    aria-label={mostrarSenha ? 'Ocultar senha' : 'Mostrar senha'}
                                     aria-pressed={mostrarSenha}
-                                    onClick={() => {
-                                        setMostrarSenha(!mostrarSenha)
-                                    }}
+                                    onClick={() => setMostrarSenha((visivel) => !visivel)}
                                 >
-                                    <Icone
-                                        tipo={
-                                            mostrarSenha
-                                                ? 'oculto'
-                                                : 'olho'
-                                        }
-                                    />
+                                    <Icone tipo={mostrarSenha ? 'oculto' : 'olho'} />
                                 </button>
                             </div>
 
-                            <p
-                                id="registro-dica-senha"
-                                className="rop-registro__dica"
-                            >
-                                Use pelo menos 6 caracteres.
+                            <p id="registro-dica-senha" className="rop-registro__dica">
+                                Use pelo menos 8 caracteres.
                             </p>
                         </div>
 
                         <div className="rop-registro__grupo">
-                            <label htmlFor="registro-confirmar">
-                                Confirmar senha
-                            </label>
+                            <label htmlFor="registro-confirmar">Confirmar senha</label>
 
                             <div className="rop-login__campo">
                                 <Icone tipo="cadeado" />
-
                                 <input
                                     id="registro-confirmar"
                                     name="confirmar"
-                                    type={
-                                        mostrarConfirmacao
-                                            ? 'text'
-                                            : 'password'
-                                    }
+                                    type={mostrarConfirmacao ? 'text' : 'password'}
                                     placeholder="Digite a senha novamente"
                                     autoComplete="new-password"
-                                    minLength={6}
+                                    minLength={8}
                                     value={dados.confirmar}
                                     onChange={atualizar}
-                                    aria-invalid={
-                                        erro?.campo === 'confirmar'
-                                    }
+                                    aria-invalid={erro?.campo === 'confirmar'}
                                     aria-describedby={
-                                        erro?.campo === 'confirmar'
-                                            ? 'registro-erro'
-                                            : undefined
+                                        erro?.campo === 'confirmar' ? 'registro-erro' : undefined
                                     }
+                                    readOnly={enviando}
                                     required
                                 />
 
@@ -378,59 +349,27 @@ export default function Registro() {
                                             : 'Mostrar confirmação da senha'
                                     }
                                     aria-pressed={mostrarConfirmacao}
-                                    onClick={() => {
-                                        setMostrarConfirmacao(
-                                            !mostrarConfirmacao
-                                        )
-                                    }}
+                                    onClick={() => setMostrarConfirmacao((visivel) => !visivel)}
                                 >
-                                    <Icone
-                                        tipo={
-                                            mostrarConfirmacao
-                                                ? 'oculto'
-                                                : 'olho'
-                                        }
-                                    />
+                                    <Icone tipo={mostrarConfirmacao ? 'oculto' : 'olho'} />
                                 </button>
                             </div>
                         </div>
 
                         {erro && (
-                            <p
-                                id="registro-erro"
-                                className="rop-login__erro"
-                                role="alert"
-                            >
+                            <p id="registro-erro" className="rop-login__erro" role="alert">
                                 {erro.mensagem}
                             </p>
-                        )}
-
-                        {sucesso && (
-                            <div
-                                className="rop-registro__sucesso"
-                                role="status"
-                            >
-                                <Icone tipo="check" />
-
-                                <p>
-                                    <strong>Dados validados!</strong>
-                                    Esta demonstração ainda não cria uma
-                                    conta real.
-                                </p>
-                            </div>
                         )}
 
                         <button
                             className="rop-login__entrar"
                             type="submit"
+                            disabled={enviando}
                         >
-                            Criar minha conta
+                            {enviando ? 'Criando conta…' : 'Criar minha conta'}
                             <Icone tipo="seta" />
                         </button>
-
-                        <p className="rop-login__demo">
-                            Modo demonstração · cadastro sem integração.
-                        </p>
                     </form>
 
                     <p className="rop-login__cadastro">
@@ -441,17 +380,13 @@ export default function Registro() {
                         </Link>
                     </p>
 
-                    <Link
-                        className="rop-login__explorar"
-                        to="/inicio"
-                    >
+                    <Link className="rop-login__explorar" to="/inicio">
                         Conhecer o projeto primeiro
                         <Icone tipo="seta" />
                     </Link>
                 </div>
 
                 <footer className="rop-login__rodape">
-                    <Icone tipo="folha" />
                     Pequenas atitudes transformam o futuro.
                 </footer>
             </section>

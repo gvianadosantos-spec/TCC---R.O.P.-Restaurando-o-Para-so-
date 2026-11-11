@@ -3,12 +3,12 @@ import { Link, useNavigate } from 'react-router-dom'
 import './login.scss'
 
 const ASSETS = `${process.env.PUBLIC_URL || ''}/assets/img`
+const API_URL = (process.env.REACT_APP_API_URL || 'http://localhost:5050')
+    .replace(/\/+$/, '')
 
 function Icone({ tipo }) {
     const caminhos = {
-        seta: (
-            <path d="M5 12h14M13 6l6 6-6 6" />
-        ),
+        seta: <path d="M5 12h14M13 6l6 6-6 6" />,
         usuario: (
             <>
                 <circle cx="12" cy="8" r="4" />
@@ -35,9 +35,6 @@ function Icone({ tipo }) {
                 <path d="M10 10a3 3 0 0 0 4 4" />
             </>
         ),
-        folha: (
-            <path d="M20 4C9 2 3 8 5 15s15 5 15-11ZM5 20l10-10" />
-        ),
     }
 
     return (
@@ -58,26 +55,52 @@ function Icone({ tipo }) {
 export default function Login() {
     const navigate = useNavigate()
 
-    const [usuario, setUsuario] = useState('')
+    const [email, setEmail] = useState('')
     const [senha, setSenha] = useState('')
     const [mostrarSenha, setMostrarSenha] = useState(false)
     const [capsLock, setCapsLock] = useState(false)
     const [erro, setErro] = useState('')
+    const [enviando, setEnviando] = useState(false)
 
-    function entrar(event) {
+    async function entrar(event) {
         event.preventDefault()
-
-        if (!usuario.trim()) {
-            setErro('Informe seu nome de usuário.')
-            event.currentTarget.elements.usuario.focus()
-            return
-        }
+        if (enviando) return
 
         setErro('')
+        setEnviando(true)
 
-        // Fluxo demonstrativo.
-        // Quando a API estiver pronta, autentique antes de navegar.
-        navigate('/inicio')
+        try {
+            const resposta = await fetch(`${API_URL}/cadastro/login`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email: email.trim(), senha }),
+            })
+
+            const dados = await resposta.json().catch(() => null)
+
+            if (!resposta.ok) {
+                setErro(dados?.erro || 'Não foi possível entrar. Tente novamente.')
+                return
+            }
+
+            if (typeof dados?.token !== 'string' || !dados.token.trim()) {
+                setErro('A API não retornou o token de sessão.')
+                return
+            }
+
+            try {
+                sessionStorage.setItem('rop_token', dados.token)
+            } catch {
+                setErro('O navegador não conseguiu salvar a sessão.')
+                return
+            }
+
+            navigate('/inicio', { replace: true })
+        } catch {
+            setErro('Não foi possível conectar à API. Confira se ela está rodando.')
+        } finally {
+            setEnviando(false)
+        }
     }
 
     function verificarCapsLock(event) {
@@ -126,10 +149,7 @@ export default function Login() {
                     </p>
 
                     <div className="rop-login__assinatura">
-                        <Icone tipo="folha" />
-                        <span>
-                            Uma nova conexão. Um mesmo propósito.
-                        </span>
+                        <span>Uma nova conexão. Um mesmo propósito.</span>
                     </div>
                 </div>
 
@@ -149,13 +169,7 @@ export default function Login() {
                 </Link>
 
                 <div className="rop-login__formulario">
-                    <div className="rop-login__simbolo">
-                        <Icone tipo="folha" />
-                    </div>
-
-                    <p className="rop-login__sobretitulo">
-                        BEM-VINDO À R.O.P.
-                    </p>
+                    <p className="rop-login__sobretitulo">BEM-VINDO À R.O.P.</p>
 
                     <h2 id="login-titulo">
                         Bom ter você
@@ -164,45 +178,35 @@ export default function Login() {
                     </h2>
 
                     <p className="rop-login__introducao">
-                        Entre na sua conta e continue essa jornada
-                        com a gente.
+                        Entre na sua conta e continue essa jornada com a gente.
                     </p>
 
                     <form onSubmit={entrar}>
-                        <label htmlFor="usuario">
-                            Nome de usuário
-                        </label>
+                        <label htmlFor="email">E-mail</label>
 
                         <div className="rop-login__campo">
                             <Icone tipo="usuario" />
 
                             <input
-                                id="usuario"
-                                name="usuario"
-                                type="text"
-                                placeholder="Digite seu usuário"
+                                id="email"
+                                name="email"
+                                type="email"
+                                placeholder="Digite seu e-mail"
                                 autoComplete="username"
                                 autoCapitalize="none"
                                 spellCheck={false}
-                                value={usuario}
+                                value={email}
                                 onChange={(event) => {
-                                    setUsuario(event.target.value)
+                                    setEmail(event.target.value)
                                     setErro('')
                                 }}
-                                aria-invalid={Boolean(erro)}
-                                aria-describedby={
-                                    erro ? 'login-erro' : undefined
-                                }
                                 required
                             />
                         </div>
 
                         <div className="rop-login__linha-senha">
                             <label htmlFor="senha">Senha</label>
-
-                            <Link to="/esqueci-senha">
-                                Esqueceu a senha?
-                            </Link>
+                            <Link to="/esqueci-senha">Esqueceu a senha?</Link>
                         </div>
 
                         <div className="rop-login__campo">
@@ -217,51 +221,34 @@ export default function Login() {
                                 value={senha}
                                 onChange={(event) => {
                                     setSenha(event.target.value)
+                                    setErro('')
                                 }}
                                 onKeyDown={verificarCapsLock}
                                 onKeyUp={verificarCapsLock}
                                 onBlur={() => setCapsLock(false)}
-                                aria-describedby={
-                                    capsLock ? 'login-caps' : undefined
-                                }
+                                aria-describedby={capsLock ? 'login-caps' : undefined}
                                 required
                             />
 
                             <button
                                 className="rop-login__ver-senha"
                                 type="button"
-                                aria-label={
-                                    mostrarSenha
-                                        ? 'Ocultar senha'
-                                        : 'Mostrar senha'
-                                }
+                                aria-label={mostrarSenha ? 'Ocultar senha' : 'Mostrar senha'}
                                 aria-pressed={mostrarSenha}
-                                onClick={() => {
-                                    setMostrarSenha(!mostrarSenha)
-                                }}
+                                onClick={() => setMostrarSenha((visivel) => !visivel)}
                             >
-                                <Icone
-                                    tipo={mostrarSenha ? 'oculto' : 'olho'}
-                                />
+                                <Icone tipo={mostrarSenha ? 'oculto' : 'olho'} />
                             </button>
                         </div>
 
                         {capsLock && (
-                            <p
-                                id="login-caps"
-                                className="rop-login__aviso"
-                                role="status"
-                            >
+                            <p id="login-caps" className="rop-login__aviso" role="status">
                                 Caps Lock está ativado.
                             </p>
                         )}
 
                         {erro && (
-                            <p
-                                id="login-erro"
-                                className="rop-login__erro"
-                                role="alert"
-                            >
+                            <p id="login-erro" className="rop-login__erro" role="alert">
                                 {erro}
                             </p>
                         )}
@@ -269,14 +256,11 @@ export default function Login() {
                         <button
                             className="rop-login__entrar"
                             type="submit"
+                            disabled={enviando}
                         >
-                            Entrar na minha conta
+                            {enviando ? 'Entrando…' : 'Entrar na minha conta'}
                             <Icone tipo="seta" />
                         </button>
-
-                        <p className="rop-login__demo">
-                            Modo demonstração · acesso sem autenticação.
-                        </p>
                     </form>
 
                     <p className="rop-login__cadastro">
@@ -287,17 +271,13 @@ export default function Login() {
                         </Link>
                     </p>
 
-                    <Link
-                        className="rop-login__explorar"
-                        to="/inicio"
-                    >
+                    <Link className="rop-login__explorar" to="/inicio">
                         Prefiro explorar o projeto
                         <Icone tipo="seta" />
                     </Link>
                 </div>
 
                 <footer className="rop-login__rodape">
-                    <Icone tipo="folha" />
                     Cuidar da natureza é cuidar do nosso futuro.
                 </footer>
             </section>

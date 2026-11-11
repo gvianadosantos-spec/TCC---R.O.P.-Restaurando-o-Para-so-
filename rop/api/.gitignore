@@ -1,0 +1,7 @@
+/node_modules
+.env
+.env.*
+!.env.example
+src/repository/connection.js
+src/repository/connection.js
+src/utils/authSecret.local.js

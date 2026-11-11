@@ -1,0 +1,24 @@
+{
+  "name": "api-tcc",
+  "version": "1.0.0",
+  "description": "API do projeto R.O.P. - Restaurando o Paraíso",
+  "main": "src/api.js",
+  "scripts": {
+    "start": "node src/api.js",
+    "dev": "node --watch src/api.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "cors": "^2.8.6",
+    "dotenv": "^18.0.8",
+    "express": "^5.3.0",
+    "express-rate-limit": "^8.7.4",
+    "jsonwebtoken": "^9.0.2",
+    "mysql2": "^3.24.6",
+    "nodemailer": "^10.5.0"
+  }
+}
