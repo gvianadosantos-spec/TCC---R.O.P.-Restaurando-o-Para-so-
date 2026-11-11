@@ -1,0 +1,3 @@
+# A API Express sera hospedada separadamente.
+# Evita que arquivos internos sejam interpretados como funcoes serverless.
+api
