@@ -74,10 +74,10 @@ export default function Rodape() {
             <span>biodiversidade.</span>
           </h1>
           <div className="destaque-botoes">
-            <Link to={ROTAS.doe} className="botao-primario" onClick={irParaTopo}>
+            <Link to={ROTAS.doe} className="botao botao-primario" onClick={irParaTopo}>
               Doe agora
             </Link>
-            <Link to={ROTAS.apadrinhe} className="botao-segundario" onClick={irParaTopo}>
+            <Link to={ROTAS.apadrinhe} className="botao botao-segundario" onClick={irParaTopo}>
               Apadrinhe
             </Link>
           </div>
