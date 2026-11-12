@@ -1,73 +1,75 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import './noticias.scss';
 
 import Cabecalho from '../../componentes/cabecalho/cabecalho.jsx';
 import Rodape from '../../componentes/rodape/rodape.jsx';
 
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5050';
-
-const TEMPO_SLIDE = 6000;
+const API_URL = (process.env.REACT_APP_API_URL || 'http://localhost:5050').replace(/\/+$/, '');
 
 const banners = [
   {
     imagem: '/assets/img/pages/inicio/carrosel/imagem1.png',
-    eyebrow: 'NOTÍCIAS R.O.P.',
-    titulo: 'Informação que transforma',
-    texto: 'Acompanhe notícias e ações relacionadas à proteção da natureza.'
+    titulo: 'Informação que protege',
+    texto: 'Acompanhe notícias e conteúdos ligados à preservação, fauna e natureza.'
   },
   {
     imagem: '/assets/img/pages/inicio/carrosel/imagem2.png',
-    eyebrow: 'PRESERVAÇÃO E CONSCIÊNCIA',
-    titulo: 'Cuidar da natureza é cuidar do futuro',
-    texto: 'Conheça os acontecimentos que ajudam a construir um mundo melhor.'
+    titulo: 'Conhecimento também transforma',
+    texto: 'Entenda acontecimentos e iniciativas que ajudam a cuidar do meio ambiente.'
   },
   {
     imagem: '/assets/img/pages/inicio/carrosel/imagem3.png',
-    eyebrow: 'FAUNA E BIODIVERSIDADE',
-    titulo: 'A natureza precisa de todos nós',
-    texto: 'Informação e conscientização também são formas de proteção.'
+    titulo: 'Natureza em destaque',
+    texto: 'Notícias, conservação e conscientização em um só lugar.'
   },
   {
     imagem: '/assets/img/pages/inicio/carrosel/imagem4.png',
-    eyebrow: 'ACONTECE NA NATUREZA',
-    titulo: 'Fique por dentro',
-    texto: 'Leia, compartilhe conhecimento e participe dessa causa.'
+    titulo: 'R.O.P. em movimento',
+    texto: 'Informação para aproximar pessoas da causa ambiental.'
   }
 ];
 
-function formatarData(data) {
-  if (!data) return 'Data não informada';
+function formatarData(valor) {
+  if (!valor) return 'Data não informada';
 
-  const valor = String(data).slice(0, 10);
-  const partes = valor.split('-');
+  const texto = String(valor);
+  const data = /^\d{4}-\d{2}-\d{2}/.test(texto)
+    ? new Date(`${texto.slice(0, 10)}T12:00:00`)
+    : new Date(texto);
 
-  if (partes.length !== 3) return valor;
-  return `${partes[2]}/${partes[1]}/${partes[0]}`;
+  if (Number.isNaN(data.getTime())) return 'Data não informada';
+
+  return data.toLocaleDateString('pt-BR', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric'
+  });
 }
 
-function obterAno(data) {
-  return data ? String(data).slice(0, 4) : '';
+function obterAno(valor) {
+  return valor ? String(valor).slice(0, 4) : '';
 }
 
-function obterMes(data) {
-  return data ? String(data).slice(5, 7) : '';
+function obterMes(valor) {
+  return valor ? String(valor).slice(5, 7) : '';
 }
 
 export default function Noticias() {
   const [noticias, setNoticias] = useState([]);
   const [carregando, setCarregando] = useState(true);
   const [erro, setErro] = useState('');
+
   const [busca, setBusca] = useState('');
   const [ano, setAno] = useState('todos');
   const [mes, setMes] = useState('todos');
   const [ordem, setOrdem] = useState('recentes');
-  const [noticiaAberta, setNoticiaAberta] = useState(null);
+
   const [slideAtual, setSlideAtual] = useState(0);
   const [carrosselPausado, setCarrosselPausado] = useState(false);
-  const [progresso, setProgresso] = useState(0);
-  const tempoDecorrido = useRef(0);
 
   useEffect(() => {
+    let ativo = true;
+
     async function carregarNoticias() {
       try {
         setCarregando(true);
@@ -76,7 +78,11 @@ export default function Noticias() {
         const resposta = await fetch(`${API_URL}/noticias`);
 
         if (!resposta.ok) {
-          throw new Error('Não foi possível carregar as notícias.');
+          const corpo = await resposta.json().catch(() => ({}));
+          throw new Error(
+            corpo.erro ||
+            `Erro ${resposta.status}: não foi possível carregar as notícias.`
+          );
         }
 
         const dados = await resposta.json();
@@ -85,56 +91,43 @@ export default function Noticias() {
           throw new Error('A API não retornou uma lista válida de notícias.');
         }
 
-        setNoticias(dados);
-      } catch (error) {
-        setErro(error.message || 'Ocorreu um erro ao buscar as notícias.');
+        if (ativo) setNoticias(dados);
+      } catch (e) {
+        if (ativo) {
+          if (e instanceof TypeError) {
+            setErro(`Não foi possível conectar com a API em ${API_URL}.`);
+          } else {
+            setErro(e.message || 'Ocorreu um erro ao buscar as notícias.');
+          }
+        }
       } finally {
-        setCarregando(false);
+        if (ativo) setCarregando(false);
       }
     }
 
     carregarNoticias();
+
+    return () => {
+      ativo = false;
+    };
   }, []);
-
-  function irParaSlide(indice) {
-    tempoDecorrido.current = 0;
-    setProgresso(0);
-    setSlideAtual((indice + banners.length) % banners.length);
-  }
-
-  function proximoSlide() {
-    irParaSlide(slideAtual + 1);
-  }
-
-  function slideAnterior() {
-    irParaSlide(slideAtual - 1);
-  }
 
   useEffect(() => {
     if (carrosselPausado) return;
 
-    let ultimaAtualizacao = Date.now();
-    const intervalo = window.setInterval(() => {
-      const agora = Date.now();
-      tempoDecorrido.current += agora - ultimaAtualizacao;
-      ultimaAtualizacao = agora;
+    const timer = window.setInterval(() => {
+      setSlideAtual((atual) => (atual + 1) % banners.length);
+    }, 6000);
 
-      if (tempoDecorrido.current >= TEMPO_SLIDE) {
-        tempoDecorrido.current = 0;
-        setProgresso(0);
-        setSlideAtual((indice) => (indice + 1) % banners.length);
-        return;
-      }
-
-      setProgresso((tempoDecorrido.current / TEMPO_SLIDE) * 100);
-    }, 50);
-
-    return () => window.clearInterval(intervalo);
+    return () => window.clearInterval(timer);
   }, [carrosselPausado]);
 
   const anosDisponiveis = useMemo(() => {
-    return [...new Set(noticias.map((noticia) => obterAno(noticia.data_noticia)).filter(Boolean))]
-      .sort((a, b) => b.localeCompare(a));
+    return [...new Set(
+      noticias
+        .map((noticia) => obterAno(noticia.publicado_em))
+        .filter(Boolean)
+    )].sort((a, b) => b.localeCompare(a));
   }, [noticias]);
 
   const noticiasFiltradas = useMemo(() => {
@@ -143,31 +136,41 @@ export default function Noticias() {
     const resultado = noticias.filter((noticia) => {
       const correspondeBusca = [
         noticia.titulo,
-        noticia.local,
-        noticia.acontecimento,
-        noticia.causas,
-        noticia.objetivo,
-        noticia.impactos,
-        noticia.curiosidade,
-        noticia.fonte
-      ].some((campo) => String(campo || '').toLocaleLowerCase('pt-BR').includes(termo));
+        noticia.descricao
+      ].some((campo) =>
+        String(campo || '')
+          .toLocaleLowerCase('pt-BR')
+          .includes(termo)
+      );
 
-      const correspondeAno = ano === 'todos' || obterAno(noticia.data_noticia) === ano;
-      const correspondeMes = mes === 'todos' || obterMes(noticia.data_noticia) === mes;
+      const correspondeAno =
+        ano === 'todos' || obterAno(noticia.publicado_em) === ano;
+
+      const correspondeMes =
+        mes === 'todos' || obterMes(noticia.publicado_em) === mes;
 
       return correspondeBusca && correspondeAno && correspondeMes;
     });
 
     resultado.sort((a, b) => {
-      const dataA = String(a.data_noticia || '');
-      const dataB = String(b.data_noticia || '');
+      const dataA = new Date(a.publicado_em || 0).getTime();
+      const dataB = new Date(b.publicado_em || 0).getTime();
+
       return ordem === 'recentes'
-        ? dataB.localeCompare(dataA)
-        : dataA.localeCompare(dataB);
+        ? dataB - dataA
+        : dataA - dataB;
     });
 
     return resultado;
   }, [noticias, busca, ano, mes, ordem]);
+
+  function anterior() {
+    setSlideAtual((atual) => (atual - 1 + banners.length) % banners.length);
+  }
+
+  function proximo() {
+    setSlideAtual((atual) => (atual + 1) % banners.length);
+  }
 
   function limparFiltros() {
     setBusca('');
@@ -183,107 +186,112 @@ export default function Noticias() {
       <main>
         <section
           className="noticias-carrossel"
-          aria-label="Destaques das notícias R.O.P."
-          aria-roledescription="carrossel"
           onMouseEnter={() => setCarrosselPausado(true)}
           onMouseLeave={() => setCarrosselPausado(false)}
           onFocusCapture={() => setCarrosselPausado(true)}
-          onBlurCapture={(evento) => {
-            if (!evento.currentTarget.contains(evento.relatedTarget)) {
-              setCarrosselPausado(false);
-            }
-          }}
+          onBlurCapture={() => setCarrosselPausado(false)}
         >
-          {banners.map((banner, indice) => (
-            <div
-              key={banner.imagem}
-              className={`noticias-carrossel__slide ${indice === slideAtual ? 'is-active' : ''}`}
-              aria-hidden={indice !== slideAtual}
-              role="group"
-              aria-roledescription="slide"
-              aria-label={`${indice + 1} de ${banners.length}`}
-            >
-              <img
-                src={banner.imagem}
-                alt=""
-                className="noticias-carrossel__image-bg"
-                aria-hidden="true"
-              />
-              <img
-                src={banner.imagem}
-                alt=""
-                className="noticias-carrossel__image"
-                draggable="false"
-              />
-              <div className="noticias-carrossel__shade" aria-hidden="true" />
+          <div className="noticias-carrossel-fundo">
+            <img
+              key={`fundo-${slideAtual}`}
+              src={banners[slideAtual].imagem}
+              alt=""
+              aria-hidden="true"
+            />
+          </div>
 
-              <div className="noticias-carrossel__content">
-                <p className="noticias-carrossel__eyebrow">{banner.eyebrow}</p>
-                <h1 className="noticias-carrossel__title">{banner.titulo}</h1>
-                <p className="noticias-carrossel__text">{banner.texto}</p>
-                <a
-                  href="#lista-noticias"
-                  className="noticias-carrossel__button"
-                  tabIndex={indice === slideAtual ? 0 : -1}
-                >
-                  Ver notícias <span aria-hidden="true">→</span>
-                </a>
-              </div>
-            </div>
-          ))}
+          <div className="noticias-carrossel-slides">
+            {banners.map((banner, indice) => (
+              <article
+                key={banner.imagem}
+                className={`noticias-slide ${indice === slideAtual ? 'ativo' : ''}`}
+                aria-hidden={indice !== slideAtual}
+              >
+                <img
+                  className="noticias-slide-imagem"
+                  src={banner.imagem}
+                  alt=""
+                />
 
-          <div className="noticias-carrossel__controls">
-            <div className="noticias-carrossel__dots">
+                <div className="noticias-slide-sombra" />
+
+                <div className="noticias-slide-conteudo">
+                  <span>R.O.P. • RESTAURANDO O PARAÍSO</span>
+                  <h1>{banner.titulo}</h1>
+                  <p>{banner.texto}</p>
+
+                  <a href="#noticias-lista">
+                    Ver notícias
+                  </a>
+                </div>
+              </article>
+            ))}
+          </div>
+
+          <div className="noticias-carrossel-controles">
+            <div className="noticias-carrossel-indicadores">
               {banners.map((banner, indice) => (
                 <button
-                  key={banner.imagem}
+                  key={`indicador-${banner.imagem}`}
                   type="button"
-                  className={`noticias-carrossel__dot ${indice === slideAtual ? 'is-active' : ''}`}
-                  aria-label={`Ir para slide ${indice + 1}`}
-                  aria-current={indice === slideAtual ? 'true' : undefined}
-                  onClick={() => irParaSlide(indice)}
+                  className={indice === slideAtual ? 'ativo' : ''}
+                  onClick={() => setSlideAtual(indice)}
+                  aria-label={`Ir para o banner ${indice + 1}`}
                 >
-                  {indice === slideAtual && (
-                    <span
-                      className="noticias-carrossel__progress"
-                      style={{ width: `${progresso}%` }}
-                    />
-                  )}
+                  <span />
                 </button>
               ))}
             </div>
 
-            <div className="noticias-carrossel__arrows">
-              <button type="button" onClick={slideAnterior} aria-label="Slide anterior">‹</button>
-              <button type="button" onClick={proximoSlide} aria-label="Próximo slide">›</button>
+            <div className="noticias-carrossel-setas">
+              <button
+                type="button"
+                onClick={anterior}
+                aria-label="Banner anterior"
+              >
+                ←
+              </button>
+
+              <button
+                type="button"
+                onClick={proximo}
+                aria-label="Próximo banner"
+              >
+                →
+              </button>
             </div>
           </div>
         </section>
 
-        <section className="noticias-introducao">
+        <section className="noticias-apresentacao animar-entrada">
           <span className="noticias-sobretitulo">FIQUE INFORMADO</span>
           <h2>Notícias e atualizações</h2>
           <p>
-            Acompanhe informações sobre acontecimentos, iniciativas e temas ligados
-            à preservação ambiental e à proteção dos animais.
+            Acompanhe conteúdos ligados à natureza, conservação e proteção da fauna.
           </p>
         </section>
 
-        <section className="noticias-conteudo" id="lista-noticias">
+        <section
+          className="noticias-area animar-entrada animar-atraso-1"
+          id="noticias-lista"
+        >
           <div className="noticias-filtros">
-            <label className="noticias-busca">
-              <span>Buscar notícia</span>
-              <input
-                type="search"
-                placeholder="Digite uma palavra..."
-                value={busca}
-                onChange={(evento) => setBusca(evento.target.value)}
-              />
+            <label className="noticias-campo noticias-campo-busca">
+              <span>Pesquisar</span>
+              <div className="noticias-input-wrapper">
+                <span className="noticias-lupa" aria-hidden="true">⌕</span>
+                <input
+                  type="search"
+                  placeholder="Pesquise pelo título ou descrição..."
+                  value={busca}
+                  onChange={(e) => setBusca(e.target.value)}
+                />
+              </div>
             </label>
 
-            <label>
+            <label className="noticias-campo">
               <span>Ano</span>
-              <select value={ano} onChange={(evento) => setAno(evento.target.value)}>
+              <select value={ano} onChange={(e) => setAno(e.target.value)}>
                 <option value="todos">Todos</option>
                 {anosDisponiveis.map((item) => (
                   <option key={item} value={item}>{item}</option>
@@ -291,9 +299,9 @@ export default function Noticias() {
               </select>
             </label>
 
-            <label>
+            <label className="noticias-campo">
               <span>Mês</span>
-              <select value={mes} onChange={(evento) => setMes(evento.target.value)}>
+              <select value={mes} onChange={(e) => setMes(e.target.value)}>
                 <option value="todos">Todos</option>
                 <option value="01">Janeiro</option>
                 <option value="02">Fevereiro</option>
@@ -310,105 +318,107 @@ export default function Noticias() {
               </select>
             </label>
 
-            <label>
-              <span>Ordenar por</span>
-              <select value={ordem} onChange={(evento) => setOrdem(evento.target.value)}>
+            <label className="noticias-campo">
+              <span>Ordem</span>
+              <select value={ordem} onChange={(e) => setOrdem(e.target.value)}>
                 <option value="recentes">Mais recentes</option>
                 <option value="antigas">Mais antigas</option>
               </select>
             </label>
 
-            <button type="button" className="noticias-limpar" onClick={limparFiltros}>
-              Limpar filtros
+            <button
+              type="button"
+              className="noticias-botao-limpar"
+              onClick={limparFiltros}
+            >
+              Limpar
             </button>
           </div>
 
+          {!carregando && !erro && (
+            <div className="noticias-resultado-resumo">
+              <strong>{noticiasFiltradas.length}</strong>
+              <span>
+                {noticiasFiltradas.length === 1
+                  ? ' notícia encontrada'
+                  : ' notícias encontradas'}
+              </span>
+            </div>
+          )}
+
           {carregando && (
-            <p className="noticias-mensagem">Carregando notícias...</p>
+            <div className="noticias-mensagem">
+              <span className="noticias-loader" />
+              <p>Carregando notícias...</p>
+            </div>
           )}
 
           {!carregando && erro && (
             <div className="noticias-mensagem noticias-erro">
+              <strong>Não foi possível carregar as notícias.</strong>
               <p>{erro}</p>
-              <span>Confira se a API está ligada e se o endereço configurado está correto.</span>
+              <small>
+                Confira se a API está ligada e se o banco configurado é o mesmo do SQL.
+              </small>
             </div>
           )}
 
           {!carregando && !erro && noticiasFiltradas.length === 0 && (
-            <p className="noticias-mensagem">
-              Nenhuma notícia encontrada. Tente alterar a busca ou os filtros.
-            </p>
+            <div className="noticias-mensagem">
+              <strong>Nenhuma notícia encontrada.</strong>
+              <p>
+                Tente outra palavra ou limpe os filtros.
+              </p>
+            </div>
           )}
 
           {!carregando && !erro && noticiasFiltradas.length > 0 && (
             <div className="noticias-grade">
-              {noticiasFiltradas.map((noticia) => {
-                const aberta = noticiaAberta === noticia.id_noticia;
+              {noticiasFiltradas.map((noticia, indice) => (
+                <article
+                  className="noticia-card"
+                  key={noticia.id_noticia}
+                  style={{ animationDelay: `${Math.min(indice, 8) * 70}ms` }}
+                >
+                  {noticia.imagem_url ? (
+                    <div className="noticia-imagem">
+                      <img
+                        src={noticia.imagem_url}
+                        alt=""
+                      />
+                    </div>
+                  ) : (
+                    <div className="noticia-imagem noticia-imagem-vazia">
+                      <span>R.O.P.</span>
+                    </div>
+                  )}
 
-                return (
-                  <article className="noticia-card" key={noticia.id_noticia}>
-                    <div className="noticia-card-topo">
-                      <span className="noticia-categoria">NOTÍCIA</span>
-                      <time>{formatarData(noticia.data_noticia)}</time>
+                  <div className="noticia-corpo">
+                    <div className="noticia-meta">
+                      <span>NOTÍCIA</span>
+                      <time dateTime={String(noticia.publicado_em || '')}>
+                        {formatarData(noticia.publicado_em)}
+                      </time>
                     </div>
 
-                    <h3>{noticia.titulo || 'Notícia sem título'}</h3>
+                    <h3>{noticia.titulo}</h3>
 
-                    {noticia.local && (
-                      <p className="noticia-local">📍 {noticia.local}</p>
+                    <p>{noticia.descricao}</p>
+
+                    {noticia.fonte_url && (
+                      <a
+                        href={noticia.fonte_url}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="noticia-fonte"
+                      >
+                        Ver fonte
+                        <span aria-hidden="true">→</span>
+                      </a>
                     )}
-
-                    <div className="noticia-resumo">
-                      <h4>O que aconteceu?</h4>
-                      <p>{noticia.acontecimento || 'Informação não disponível.'}</p>
-                    </div>
-
-                    {aberta && (
-                      <div className="noticia-detalhes">
-                        {noticia.causas && (
-                          <div>
-                            <h4>Causas</h4>
-                            <p>{noticia.causas}</p>
-                          </div>
-                        )}
-                        {noticia.objetivo && (
-                          <div>
-                            <h4>Objetivo</h4>
-                            <p>{noticia.objetivo}</p>
-                          </div>
-                        )}
-                        {noticia.impactos && (
-                          <div>
-                            <h4>Impactos</h4>
-                            <p>{noticia.impactos}</p>
-                          </div>
-                        )}
-                        {noticia.curiosidade && (
-                          <div>
-                            <h4>Curiosidade</h4>
-                            <p>{noticia.curiosidade}</p>
-                          </div>
-                        )}
-                        {noticia.fonte && (
-                          <div>
-                            <h4>Fonte</h4>
-                            <p>{noticia.fonte}</p>
-                          </div>
-                        )}
-                      </div>
-                    )}
-
-                    <button
-                      type="button"
-                      className="noticia-ler-mais"
-                      onClick={() => setNoticiaAberta(aberta ? null : noticia.id_noticia)}
-                    >
-                      {aberta ? 'Mostrar menos' : 'Ler notícia completa'}
-                      <span>{aberta ? '−' : '+'}</span>
-                    </button>
-                  </article>
-                );
-              })}
+                  </div>
+                </article>
+              ))}
             </div>
           )}
         </section>
