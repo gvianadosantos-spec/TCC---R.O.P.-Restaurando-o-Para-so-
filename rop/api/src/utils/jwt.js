@@ -1,6 +1,7 @@
 
 import jwt from 'jsonwebtoken';
-import { JWT_SECRET } from './authSecret.local.js';
+import 'dotenv/config';
+const JWT_SECRET = process.env.JWT_SECRET;
 
 if (
   typeof JWT_SECRET !== 'string' ||
@@ -8,7 +9,7 @@ if (
   JWT_SECRET.includes('COLE_AQUI')
 ) {
   throw new Error(
-    'Configure JWT_SECRET em src/utils/authSecret.local.js.'
+    'Configure a variavel de ambiente JWT_SECRET (minimo 32 caracteres).'
   );
 }
 
