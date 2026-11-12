@@ -181,7 +181,18 @@ $fonte-titulo: "Georgia", "Times New Roman", serif;
     padding: 0.7rem 1.25rem;
     border-radius: 999px;
     font-size: 0.9rem;
+     display: inline-block;      /* novo */
+    line-height: normal;        /* novo: mantém a altura de antes */
+    text-decoration: none;      /* novo: tira o sublinhado */
+    cursor: pointer;            /* novo */
+    transition: border-color 0.2s ease, color 0.2s ease;   /* novo */
+
+    &:hover {                   /* novo, opcional */
+      border-color: #e68e00;
+      color: #e68e00;
+    }
   }
+  
 
   /* Celulares */
   @media (max-width: 600px) {

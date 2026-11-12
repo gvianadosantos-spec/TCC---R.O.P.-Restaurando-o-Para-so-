@@ -1,7 +1,10 @@
 import { useEffect } from "react";
+import { HashLink as Link } from "react-router-hash-link";
 import Cabecalho from "../../componentes/cabecalho/cabecalho";
 import Rodape from "../../componentes/rodape/rodape";
 import "./loja.scss";
+
+const irParaTopo = () => window.scrollTo(0, 0);
 
 const PASTA_IMAGENS = `${process.env.PUBLIC_URL}/assets/img/pages/loja`;
 
@@ -125,9 +128,9 @@ export default function Loja() {
               </div>
               <div className="produto-rodape">
                 <span className="preco">{produto.preco}</span>
-                <button type="button" className="botao-pequeno" disabled>
+               <Link to="/doe" type="button" className="botao-pequeno" onClick={irParaTopo}>
                   Em breve
-                </button>
+                </Link>
               </div>
             </article>
           ))}
