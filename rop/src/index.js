@@ -1,6 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter, Route } from "react-router-dom";
+import { SpeedInsights } from '@vercel/speed-insights/react';
 
 import Transicoes from "./componentes/transicoes/Transicoes.jsx";
 
@@ -34,5 +35,6 @@ root.render(
         element={<EsqueciSenha />}
       />
     </Transicoes>
+    <SpeedInsights />
   </BrowserRouter>
 );
