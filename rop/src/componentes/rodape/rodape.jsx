@@ -21,7 +21,7 @@ const URLS = {
   instagram: "",
   facebook: "",
   youtube: "",
-  email: "", // exemplo: "mailto:contato@seudominio.com"
+  email: "https://mail.google.com/mail/?view=cm&to=rop.ong.br@gmail.com&su=D%C3%BAvida%20sobre%20o%20R.O.P.", // abre o Gmail com a mensagem pronta para o e-mail de contato
 };
 
 const irParaTopo = () => window.scrollTo(0, 0);
@@ -74,10 +74,10 @@ export default function Rodape() {
             <span>biodiversidade.</span>
           </h1>
           <div className="destaque-botoes">
-            <Link to={ROTAS.doe} className="botao botao-primario" onClick={irParaTopo}>
+            <Link to={ROTAS.doe} className="botao-primario" onClick={irParaTopo}>
               Doe agora
             </Link>
-            <Link to={ROTAS.apadrinhe} className="botao botao-segundario" onClick={irParaTopo}>
+            <Link to={ROTAS.apadrinhe} className="botao-segundario" onClick={irParaTopo}>
               Apadrinhe
             </Link>
           </div>
