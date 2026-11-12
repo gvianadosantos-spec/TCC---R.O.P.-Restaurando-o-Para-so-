@@ -435,3 +435,83 @@ $fonte-titulo: "Georgia", "Times New Roman", serif;
     .especie-card, .especie-modal, .especie-modal-fundo { animation: none; transition: none; }
   }
 }
+
+
+/* Entrada do guia ambiental, integrada à página Espécies. */
+.especies-corpo .especie-guia {
+  box-sizing: border-box;
+  margin: 42px 0 28px;
+  padding: clamp(20px, 3vw, 28px);
+  border: 1px solid #24434b;
+  border-radius: 18px;
+  background: linear-gradient(130deg, #07141a 0%, #07191d 100%);
+  color: #f4f6f5;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.especies-corpo .especie-guia-etiqueta {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  color: #ef9700;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+}
+
+.especies-corpo .especie-guia-etiqueta svg {
+  width: 18px;
+  height: 18px;
+  flex: 0 0 18px;
+}
+
+.especies-corpo .especie-guia h2 {
+  margin: 18px 0 12px;
+  color: #fff;
+  font-family: 'Montserrat', sans-serif;
+  font-size: clamp(1.25rem, 2.3vw, 1.6rem);
+  font-weight: 700;
+  line-height: 1.35;
+}
+
+.especies-corpo .especie-guia p {
+  max-width: 760px;
+  margin: 0 0 22px;
+  color: #b3c6c9;
+  font-size: 0.9rem;
+  line-height: 1.7;
+}
+
+.especies-corpo .especie-guia-botao {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  min-height: 45px;
+  padding: 12px 20px;
+  border-radius: 999px;
+  background: #ef9700;
+  color: #101816;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.88rem;
+  font-weight: 700;
+  text-align: center;
+  text-decoration: none;
+  transition: background .25s ease, transform .25s ease;
+}
+
+.especies-corpo .especie-guia-botao:hover {
+  background: #ffaf24;
+  transform: translateY(-2px);
+}
+
+.especies-corpo .especie-guia-botao:focus-visible {
+  outline: 2px solid #ffb843;
+  outline-offset: 4px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .especies-corpo .especie-guia-botao { transition: none; }
+  .especies-corpo .especie-guia-botao:hover { transform: none; }
+}

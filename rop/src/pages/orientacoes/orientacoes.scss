@@ -1,0 +1,144 @@
+@import url("https://fonts.googleapis.com/css2?family=Fraunces:wght@600;700&family=Inter:wght@400;500;600;700&display=swap");
+
+.orientacoes-pagina {
+  min-height: 100vh;
+  background: #050d0f;
+  color: #f6f7f3;
+  font-family: "Inter", sans-serif;
+}
+
+.orientacoes-pagina,
+.orientacoes-pagina * {
+  box-sizing: border-box;
+}
+
+.orientacoes-main {
+  min-height: 65vh;
+  padding: clamp(70px, 9vw, 120px) 24px 100px;
+  background: radial-gradient(ellipse at 70% 0%, rgba(10, 74, 69, .24), transparent 55%), #050d0f;
+}
+
+.orientacoes-container {
+  width: min(100%, 990px);
+  margin: 0 auto;
+}
+
+.orientacoes-etiqueta {
+  margin: 0 0 16px;
+  color: #ef9700;
+  font-size: .78rem;
+  font-weight: 700;
+  letter-spacing: .18em;
+}
+
+.orientacoes-container h1 {
+  margin: 0 0 21px;
+  color: #fff;
+  font-family: "Fraunces", Georgia, serif;
+  font-size: clamp(2.3rem, 5vw, 3.8rem);
+  line-height: 1.14;
+}
+
+.orientacoes-introducao {
+  max-width: 700px;
+  margin: 0 0 42px;
+  color: #a0bdc0;
+  font-size: 1.04rem;
+  line-height: 1.8;
+}
+
+.orientacoes-painel {
+  padding: clamp(24px, 5vw, 44px);
+  border: 1px solid #24434b;
+  border-radius: 24px;
+  background: linear-gradient(135deg, #08242a, #06161a);
+  box-shadow: 0 20px 55px rgba(0, 0, 0, .15);
+}
+
+.orientacoes-selo {
+  display: inline-block;
+  padding: 7px 13px;
+  border: 1px solid rgba(239, 151, 0, .45);
+  border-radius: 999px;
+  color: #ef9700;
+  font-size: .73rem;
+  font-weight: 700;
+  letter-spacing: .07em;
+}
+
+.orientacoes-painel h2 {
+  margin: 24px 0 14px;
+  color: #fff;
+  font-family: "Fraunces", Georgia, serif;
+  font-size: clamp(1.6rem, 3.5vw, 2.3rem);
+}
+
+.orientacoes-painel > p {
+  max-width: 720px;
+  margin: 0 0 24px;
+  color: #b9cbce;
+  line-height: 1.8;
+}
+
+.orientacoes-aviso {
+  margin: 22px 0 30px;
+  padding: 22px;
+  border-left: 3px solid #ef9700;
+  border-radius: 0 12px 12px 0;
+  background: rgba(1, 12, 15, .46);
+}
+
+.orientacoes-aviso strong {
+  color: #fff;
+}
+
+.orientacoes-aviso p {
+  margin: 8px 0 0;
+  color: #b7cacb;
+  font-size: .92rem;
+  line-height: 1.75;
+}
+
+.orientacoes-voltar {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  min-height: 47px;
+  padding: 12px 27px;
+  border-radius: 999px;
+  background: #ef9700;
+  color: #0e1715;
+  font-weight: 700;
+  text-decoration: none;
+  transition: background .2s ease, transform .2s ease;
+}
+
+.orientacoes-voltar:hover {
+  background: #ffaf24;
+  transform: translateY(-2px);
+}
+
+.orientacoes-voltar:focus-visible {
+  outline: 2px solid #ffb843;
+  outline-offset: 4px;
+}
+
+.orientacoes-nota {
+  margin: 24px 0 0;
+  color: #78979d;
+  font-size: .8rem;
+  line-height: 1.6;
+}
+
+@media (max-width: 600px) {
+  .orientacoes-main { padding: 66px 18px 76px; }
+  .orientacoes-introducao { font-size: .95rem; }
+  .orientacoes-voltar { width: 100%; }
+  .orientacoes-aviso { padding: 16px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .orientacoes-voltar { transition: none; }
+  .orientacoes-voltar:hover { transform: none; }
+}

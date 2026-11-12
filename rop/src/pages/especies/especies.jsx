@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import "./especies.scss";
+import { Link } from "react-router-dom";
 import GraficosEspecies from "./GraficosEspecies";
 import Rodape from "../../componentes/rodape/rodape";
 import Cabecalho from "../../componentes/cabecalho/cabecalho.jsx";
@@ -217,6 +218,27 @@ function Especies() {
 
           {!USAR_API && <p className="especie-aviso-demo">Demonstração: registros e números ilustrativos para testar o sistema.</p>}
           <GraficosEspecies animais={animaisFiltrados} />
+
+          <section className="especie-guia" aria-labelledby="especie-guia-titulo">
+            <span className="especie-guia-etiqueta">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"
+                aria-hidden="true">
+                <path d="M12 6.5c-2.5-1.8-5.6-2-9-1v13c3.4-1 6.5-.8 9 1 2.5-1.8 5.6-2 9-1v-13c-3.4-1-6.5-.8-9 1Z" />
+                <path d="M12 6.5v13" />
+              </svg>
+              EDUCAÇÃO AMBIENTAL
+            </span>
+            <h2 id="especie-guia-titulo">Conhecer também é proteger.</h2>
+            <p>
+              Encontrou um animal silvestre e não sabe como agir? Consulte nossos
+              guias educativos e descubra como procurar ajuda especializada.
+            </p>
+            <Link to="/orientacoes" className="especie-guia-botao">
+              Conhecer orientações <span aria-hidden="true">↗</span>
+            </Link>
+          </section>
+
 
           <section className="card-pesquisa" aria-label="Filtros de espécies">
             <div className="opt">

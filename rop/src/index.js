@@ -7,6 +7,7 @@ import Transicoes from "./componentes/transicoes/Transicoes.jsx";
 import App from "./pages/APP/app.jsx";
 import Doe from "./pages/doe/doe.jsx";
 import Especies from "./pages/especies/especies.jsx";
+import Orientacoes from "./pages/orientacoes/orientacoes.jsx";
 import Inicio from "./pages/inicio/inicio.jsx";
 import Login from "./pages/login/login.jsx";
 import Loja from "./pages/loja/loja.jsx";
@@ -26,6 +27,7 @@ root.render(
       <Route path="/registro" element={<Registro />} />
       <Route path="/inicio" element={<Inicio />} />
       <Route path="/especies" element={<Especies />} />
+      <Route path="/orientacoes" element={<Orientacoes />} />
       <Route path="/noticias" element={<Noticias />} />
       <Route path="/loja" element={<Loja />} />
       <Route path="/doe" element={<Doe />} />
