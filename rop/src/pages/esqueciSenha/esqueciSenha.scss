@@ -196,3 +196,27 @@
         transform: rotate(360deg);
     }
 }
+
+
+.rop-recuperacao__mostrar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 14px;
+  color: #c7e8d4;
+  font-size: 0.85rem;
+  cursor: pointer;
+
+  input {
+    width: 16px;
+    height: 16px;
+    accent-color: #8bd6aa;
+  }
+}
+
+.rop-recuperacao {
+  .rop-login__campo + label {
+    display: block;
+    margin-top: 20px;
+  }
+}
