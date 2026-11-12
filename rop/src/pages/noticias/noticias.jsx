@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import './noticias.scss';
 
 import Cabecalho from '../../componentes/cabecalho/cabecalho.jsx';
@@ -6,24 +6,30 @@ import Rodape from '../../componentes/rodape/rodape.jsx';
 
 const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5050';
 
+const TEMPO_SLIDE = 6000;
+
 const banners = [
   {
     imagem: '/assets/img/pages/inicio/carrosel/imagem1.png',
+    eyebrow: 'NOTÍCIAS R.O.P.',
     titulo: 'Informação que transforma',
     texto: 'Acompanhe notícias e ações relacionadas à proteção da natureza.'
   },
   {
     imagem: '/assets/img/pages/inicio/carrosel/imagem2.png',
+    eyebrow: 'PRESERVAÇÃO E CONSCIÊNCIA',
     titulo: 'Cuidar da natureza é cuidar do futuro',
     texto: 'Conheça os acontecimentos que ajudam a construir um mundo melhor.'
   },
   {
     imagem: '/assets/img/pages/inicio/carrosel/imagem3.png',
+    eyebrow: 'FAUNA E BIODIVERSIDADE',
     titulo: 'A natureza precisa de todos nós',
     texto: 'Informação e conscientização também são formas de proteção.'
   },
   {
     imagem: '/assets/img/pages/inicio/carrosel/imagem4.png',
+    eyebrow: 'ACONTECE NA NATUREZA',
     titulo: 'Fique por dentro',
     texto: 'Leia, compartilhe conhecimento e participe dessa causa.'
   }
@@ -57,6 +63,9 @@ export default function Noticias() {
   const [ordem, setOrdem] = useState('recentes');
   const [noticiaAberta, setNoticiaAberta] = useState(null);
   const [slideAtual, setSlideAtual] = useState(0);
+  const [carrosselPausado, setCarrosselPausado] = useState(false);
+  const [progresso, setProgresso] = useState(0);
+  const tempoDecorrido = useRef(0);
 
   useEffect(() => {
     async function carregarNoticias() {
@@ -87,13 +96,41 @@ export default function Noticias() {
     carregarNoticias();
   }, []);
 
-  useEffect(() => {
-    const temporizador = setInterval(() => {
-      setSlideAtual((atual) => (atual + 1) % banners.length);
-    }, 6000);
+  function irParaSlide(indice) {
+    tempoDecorrido.current = 0;
+    setProgresso(0);
+    setSlideAtual((indice + banners.length) % banners.length);
+  }
 
-    return () => clearInterval(temporizador);
-  }, []);
+  function proximoSlide() {
+    irParaSlide(slideAtual + 1);
+  }
+
+  function slideAnterior() {
+    irParaSlide(slideAtual - 1);
+  }
+
+  useEffect(() => {
+    if (carrosselPausado) return;
+
+    let ultimaAtualizacao = Date.now();
+    const intervalo = window.setInterval(() => {
+      const agora = Date.now();
+      tempoDecorrido.current += agora - ultimaAtualizacao;
+      ultimaAtualizacao = agora;
+
+      if (tempoDecorrido.current >= TEMPO_SLIDE) {
+        tempoDecorrido.current = 0;
+        setProgresso(0);
+        setSlideAtual((indice) => (indice + 1) % banners.length);
+        return;
+      }
+
+      setProgresso((tempoDecorrido.current / TEMPO_SLIDE) * 100);
+    }, 50);
+
+    return () => window.clearInterval(intervalo);
+  }, [carrosselPausado]);
 
   const anosDisponiveis = useMemo(() => {
     return [...new Set(noticias.map((noticia) => obterAno(noticia.data_noticia)).filter(Boolean))]
@@ -144,49 +181,82 @@ export default function Noticias() {
       <Cabecalho />
 
       <main>
-        <section className="noticias-hero">
-          <img
-            className="noticias-hero-imagem"
-            src={banners[slideAtual].imagem}
-            alt="Imagem de destaque sobre natureza"
-          />
-          <div className="noticias-hero-sombra" />
-
-          <button
-            className="noticias-seta noticias-seta-esquerda"
-            type="button"
-            aria-label="Banner anterior"
-            onClick={() => setSlideAtual((slideAtual - 1 + banners.length) % banners.length)}
-          >
-            ‹
-          </button>
-
-          <div className="noticias-hero-conteudo">
-            <span className="noticias-etiqueta">R.O.P. • RESTAURANDO O PARAÍSO</span>
-            <h1>{banners[slideAtual].titulo}</h1>
-            <p>{banners[slideAtual].texto}</p>
-            <a href="#lista-noticias" className="noticias-hero-botao">Ver notícias</a>
-          </div>
-
-          <button
-            className="noticias-seta noticias-seta-direita"
-            type="button"
-            aria-label="Próximo banner"
-            onClick={() => setSlideAtual((slideAtual + 1) % banners.length)}
-          >
-            ›
-          </button>
-
-          <div className="noticias-pontos">
-            {banners.map((banner, indice) => (
-              <button
-                key={banner.imagem}
-                type="button"
-                aria-label={`Ir para o banner ${indice + 1}`}
-                className={slideAtual === indice ? 'ativo' : ''}
-                onClick={() => setSlideAtual(indice)}
+        <section
+          className="noticias-carrossel"
+          aria-label="Destaques das notícias R.O.P."
+          aria-roledescription="carrossel"
+          onMouseEnter={() => setCarrosselPausado(true)}
+          onMouseLeave={() => setCarrosselPausado(false)}
+          onFocusCapture={() => setCarrosselPausado(true)}
+          onBlurCapture={(evento) => {
+            if (!evento.currentTarget.contains(evento.relatedTarget)) {
+              setCarrosselPausado(false);
+            }
+          }}
+        >
+          {banners.map((banner, indice) => (
+            <div
+              key={banner.imagem}
+              className={`noticias-carrossel__slide ${indice === slideAtual ? 'is-active' : ''}`}
+              aria-hidden={indice !== slideAtual}
+              role="group"
+              aria-roledescription="slide"
+              aria-label={`${indice + 1} de ${banners.length}`}
+            >
+              <img
+                src={banner.imagem}
+                alt=""
+                className="noticias-carrossel__image-bg"
+                aria-hidden="true"
               />
-            ))}
+              <img
+                src={banner.imagem}
+                alt=""
+                className="noticias-carrossel__image"
+                draggable="false"
+              />
+              <div className="noticias-carrossel__shade" aria-hidden="true" />
+
+              <div className="noticias-carrossel__content">
+                <p className="noticias-carrossel__eyebrow">{banner.eyebrow}</p>
+                <h1 className="noticias-carrossel__title">{banner.titulo}</h1>
+                <p className="noticias-carrossel__text">{banner.texto}</p>
+                <a
+                  href="#lista-noticias"
+                  className="noticias-carrossel__button"
+                  tabIndex={indice === slideAtual ? 0 : -1}
+                >
+                  Ver notícias <span aria-hidden="true">→</span>
+                </a>
+              </div>
+            </div>
+          ))}
+
+          <div className="noticias-carrossel__controls">
+            <div className="noticias-carrossel__dots">
+              {banners.map((banner, indice) => (
+                <button
+                  key={banner.imagem}
+                  type="button"
+                  className={`noticias-carrossel__dot ${indice === slideAtual ? 'is-active' : ''}`}
+                  aria-label={`Ir para slide ${indice + 1}`}
+                  aria-current={indice === slideAtual ? 'true' : undefined}
+                  onClick={() => irParaSlide(indice)}
+                >
+                  {indice === slideAtual && (
+                    <span
+                      className="noticias-carrossel__progress"
+                      style={{ width: `${progresso}%` }}
+                    />
+                  )}
+                </button>
+              ))}
+            </div>
+
+            <div className="noticias-carrossel__arrows">
+              <button type="button" onClick={slideAnterior} aria-label="Slide anterior">‹</button>
+              <button type="button" onClick={proximoSlide} aria-label="Próximo slide">›</button>
+            </div>
           </div>
         </section>
 
