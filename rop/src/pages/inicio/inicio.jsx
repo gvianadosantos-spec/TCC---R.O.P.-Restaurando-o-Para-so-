@@ -4,7 +4,6 @@ import Cabecalho from "../../componentes/cabecalho/cabecalho.jsx";
 import { HashLink } from "react-router-hash-link";
 import { Link } from "react-router-dom";
 import Rodape from "../../componentes/rodape/rodape.jsx";
-
 const slides = [
   {
     image: "/assets/img/pages/inicio/carrosel/imagem1.png",
@@ -37,7 +36,6 @@ const slides = [
     href: "/loja",
   },
 ];
-
 const impactos = [
   {
     numero: "+1.400",
@@ -58,7 +56,6 @@ const impactos = [
     descricao: "ODS da ONU contempladas em nossas ações",
   },
 ];
-
 const projetos = [
   {
     imagem: "/assets/img/pages/inicio/projetos/image1.png",
@@ -109,7 +106,6 @@ const projetos = [
     alt: "Pássaro sobre um galho com uma cidade ao fundo",
   },
 ];
-
 const animaisApadrinhamento = [
   {
     id: 1,
@@ -220,15 +216,14 @@ const animaisApadrinhamento = [
     posicao: "49% 50%",
   },
 ];
-
 const santuarios = [
   {
     id: "eden-das-asas",
     nome: "Éden das Asas",
     grupo: "AVES",
-    descricao: "Reabilitação e soltura de aves silvestres.",
+    descricao: "Um projeto de acolhimento, proteção e reabilitação de aves brasileiras.",
     detalhe:
-      "Neste santuário fictício, aves que necessitam de acolhimento passariam por avaliação veterinária, cuidados específicos e reabilitação. Quando possível e seguro, a proposta prevê o retorno à natureza.",
+      "O Santuário Éden das Asas é um projeto dedicado ao acolhimento, à proteção e à recuperação de aves brasileiras em situações de risco. Sua proposta é oferecer um ambiente seguro, acompanhamento veterinário e cuidados adequados às necessidades de cada ave. O projeto também busca conscientizar sobre a preservação da fauna e o combate ao tráfico de animais silvestres. Quando possível e seguro, a reabilitação tem como objetivo o retorno das aves à natureza. Porque toda ave merece cuidado, respeito e a oportunidade de voar livremente.",
     logo: "/assets/img/pages/inicio/santuarios/logo1.png",
   },
   {
@@ -277,7 +272,6 @@ const santuarios = [
     logo: "/assets/img/pages/inicio/santuarios/logo6.png",
   },
 ];
-
 const parceiros = [
   {
     id: "cetas",
@@ -336,24 +330,18 @@ const parceiros = [
     logo: "/assets/img/pages/inicio/parceiros/com-vida.webp",
   },
 ];
-
 const TEMPO_SLIDE = 6000;
-
 // Mantém as animações de entrada de cada seção.
 function useEntrada() {
   const ref = useRef(null);
   const [visivel, setVisivel] = useState(false);
-
   useEffect(() => {
     const elemento = ref.current;
-
     if (!elemento) return;
-
     if (!("IntersectionObserver" in window)) {
       setVisivel(true);
       return;
     }
-
     const observer = new IntersectionObserver(
       ([entrada]) => {
         if (entrada.isIntersecting) {
@@ -366,139 +354,104 @@ function useEntrada() {
         rootMargin: "0px 0px -40px 0px",
       }
     );
-
     observer.observe(elemento);
-
     return () => observer.disconnect();
   }, []);
-
   return [ref, visivel];
 }
-
 function Inicio() {
   const [atual, setAtual] = useState(0);
   const [pausado, setPausado] = useState(false);
   const [progresso, setProgresso] = useState(0);
-
   const tempoDecorrido = useRef(0);
-
   const [impactosRef, impactosVisiveis] = useEntrada();
   const [apresentacaoRef, apresentacaoVisivel] = useEntrada();
   const [projetosRef, projetosVisiveis] = useEntrada();
   const [apadrinheRef, apadrinheVisivel] = useEntrada();
   const [animaisRef, animaisVisiveis] = useEntrada();
   const [santuariosRef, santuariosVisiveis] = useEntrada();
+  const [edenRef, edenVisivel] = useEntrada();
   const [parceirosRef, parceirosVisiveis] = useEntrada();
-
   const [animalSelecionado, setAnimalSelecionado] = useState(null);
   const [santuarioSelecionado, setSantuarioSelecionado] = useState(null);
-
   const modalRef = useRef(null);
   const botaoFecharRef = useRef(null);
   const focoAnteriorRef = useRef(null);
-
   const modalAberto = Boolean(
     animalSelecionado || santuarioSelecionado
   );
-
   function abrirAnimal(animal) {
     focoAnteriorRef.current = document.activeElement;
     setAnimalSelecionado(animal);
   }
-
   function abrirSantuario(santuario) {
     focoAnteriorRef.current = document.activeElement;
     setSantuarioSelecionado(santuario);
   }
-
   function fecharModal() {
     setAnimalSelecionado(null);
     setSantuarioSelecionado(null);
-
     window.requestAnimationFrame(() => {
       focoAnteriorRef.current?.focus?.();
     });
   }
-
   function irPara(indice) {
     tempoDecorrido.current = 0;
     setProgresso(0);
     setAtual((indice + slides.length) % slides.length);
   }
-
   function proximo() {
     irPara(atual + 1);
   }
-
   function anterior() {
     irPara(atual - 1);
   }
-
   useEffect(() => {
     if (pausado) return;
-
     let ultimaAtualizacao = Date.now();
-
     const intervalo = window.setInterval(() => {
       const agora = Date.now();
-
       tempoDecorrido.current += agora - ultimaAtualizacao;
       ultimaAtualizacao = agora;
-
       if (tempoDecorrido.current >= TEMPO_SLIDE) {
         tempoDecorrido.current = 0;
         setProgresso(0);
         setAtual((indice) => (indice + 1) % slides.length);
         return;
       }
-
       setProgresso(
         (tempoDecorrido.current / TEMPO_SLIDE) * 100
       );
     }, 50);
-
     return () => window.clearInterval(intervalo);
   }, [pausado]);
-
   useEffect(() => {
     if (!modalAberto) return;
-
     const overflowAnterior = document.body.style.overflow;
-
     document.body.style.overflow = "hidden";
-
     const frame = window.requestAnimationFrame(() => {
       botaoFecharRef.current?.focus();
     });
-
     function aoPressionarTecla(event) {
       if (event.key === "Escape") {
         setAnimalSelecionado(null);
         setSantuarioSelecionado(null);
-
         window.requestAnimationFrame(() => {
           focoAnteriorRef.current?.focus?.();
         });
-
         return;
       }
-
       if (event.key !== "Tab") return;
-
       const painel = modalRef.current;
       if (!painel) return;
-
       const focaveis = Array.from(
         painel.querySelectorAll(
           'button:not([disabled]), a[href], [tabindex]:not([tabindex="-1"])'
         )
       );
-
       if (!focaveis.length) return;
-
       const primeiro = focaveis[0];
       const ultimo = focaveis[focaveis.length - 1];
-
       if (
         event.shiftKey &&
         document.activeElement === primeiro
@@ -513,9 +466,7 @@ function Inicio() {
         primeiro.focus();
       }
     }
-
     document.addEventListener("keydown", aoPressionarTecla);
-
     return () => {
       document.body.style.overflow = overflowAnterior;
       window.cancelAnimationFrame(frame);
@@ -525,11 +476,9 @@ function Inicio() {
       );
     };
   }, [modalAberto]);
-
   return (
     <div className="corpo-inicio">
       <Cabecalho />
-
       <main className="topo">
         <section
           className="inicio"
@@ -565,28 +514,23 @@ function Inicio() {
                 className="inicio__image-bg"
                 aria-hidden="true"
               />
-
               <img
                 src={slide.image}
                 alt=""
                 className="inicio__image"
                 draggable="false"
               />
-
               <div
                 className="inicio__shade"
                 aria-hidden="true"
               />
-
               <div className="inicio__content">
                 <p className="inicio__eyebrow">
                   {slide.eyebrow}
                 </p>
-
                 <h1 className="inicio__title">
                   {slide.title}
                 </h1>
-
                 <HashLink
                   smooth
                   to={slide.href}
@@ -599,7 +543,6 @@ function Inicio() {
               </div>
             </div>
           ))}
-
           <div className="inicio__controls">
             <div className="inicio__dots">
               {slides.map((slide, indice) => (
@@ -624,7 +567,6 @@ function Inicio() {
                 </button>
               ))}
             </div>
-
             <div className="inicio__arrows">
               <button
                 type="button"
@@ -633,7 +575,6 @@ function Inicio() {
               >
                 ‹
               </button>
-
               <button
                 type="button"
                 onClick={proximo}
@@ -644,7 +585,6 @@ function Inicio() {
             </div>
           </div>
         </section>
-
         <section
           id="impactos"
           ref={impactosRef}
@@ -658,7 +598,6 @@ function Inicio() {
               <p className="impactos__subtitulo">
                 NOSSOS IMPACTOS
               </p>
-
               <h2
                 id="impactos-titulo"
                 className="impactos__titulo"
@@ -666,7 +605,6 @@ function Inicio() {
                 Cada número é uma vida, uma consciência desperta.
               </h2>
             </div>
-
             <div className="impactos__painel">
               {impactos.map((item, indice) => (
                 <div
@@ -679,7 +617,6 @@ function Inicio() {
                   <strong className="impactos__numero">
                     {item.numero}
                   </strong>
-
                   <p className="impactos__descricao">
                     {item.descricao}
                   </p>
@@ -688,7 +625,6 @@ function Inicio() {
             </div>
           </div>
         </section>
-
         <section
           id="apresentacao"
           ref={apresentacaoRef}
@@ -706,19 +642,16 @@ function Inicio() {
                   loading="lazy"
                 />
               </div>
-
               <div className="apresentacao__selo">
                 <strong>R.O.P.</strong>
                 <span>RESTAURANDO O PARAÍSO</span>
               </div>
             </div>
-
             <div className="apresentacao__conteudo">
               <div className="apresentacao__cabecalho">
                 <p className="apresentacao__subtitulo">
                   APRESENTAÇÃO
                 </p>
-
                 <h2
                   id="apresentacao-titulo"
                   className="apresentacao__titulo"
@@ -727,7 +660,6 @@ function Inicio() {
                   devolvemos o paraíso.
                 </h2>
               </div>
-
               <div className="apresentacao__textos">
                 <p>
                   Nossa proposta é cuidar de animais silvestres
@@ -738,7 +670,6 @@ function Inicio() {
                   a recuperar esses animais e, quando estão
                   prontos, os devolvemos à natureza.
                 </p>
-
                 <p>
                   Quando o habitat não é adequado, eles seguem
                   para santuários, onde vivem tranquilamente;
@@ -749,7 +680,6 @@ function Inicio() {
                   aos pacientes, com o auxílio de animais e
                   profissionais aptos ao trabalho conjunto.
                 </p>
-
                 <p>
                   Oferecemos também aulas voltadas ao cuidado
                   com a vida e a natureza, com nossos parceiros{" "}
@@ -760,7 +690,6 @@ function Inicio() {
                   tanto amamos.
                 </p>
               </div>
-
               <div className="apresentacao__cards">
                 <div className="apresentacao__card">
                   <svg
@@ -777,11 +706,9 @@ function Inicio() {
                     <path d="M17 5a3 3 0 0 1 0 6" />
                     <path d="M19 20v-2a6 6 0 0 0-2-4.5" />
                   </svg>
-
                   <span>IDADE</span>
                   <strong>14+ anos</strong>
                 </div>
-
                 <div className="apresentacao__card">
                   <svg
                     viewBox="0 0 24 24"
@@ -794,11 +721,9 @@ function Inicio() {
                   >
                     <path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8Z" />
                   </svg>
-
                   <span>GÊNERO</span>
                   <strong>Todos</strong>
                 </div>
-
                 <div className="apresentacao__card">
                   <svg
                     viewBox="0 0 24 24"
@@ -812,11 +737,9 @@ function Inicio() {
                     <path d="m12 2 2.2 6.8L21 11l-6.8 2.2L12 20l-2.2-6.8L3 11l6.8-2.2L12 2Z" />
                     <path d="m19 17 .8 2.2L22 20l-2.2.8L19 23l-.8-2.2L16 20l2.2-.8L19 17Z" />
                   </svg>
-
                   <span>CLASSE SOCIAL</span>
                   <strong>Todas as classes</strong>
                 </div>
-
                 <div className="apresentacao__card">
                   <svg
                     viewBox="0 0 24 24"
@@ -832,12 +755,10 @@ function Inicio() {
                     <path d="M12 3a15 15 0 0 1 0 18" />
                     <path d="M12 3a15 15 0 0 0 0 18" />
                   </svg>
-
                   <span>REGIÃO</span>
                   <strong>Brasil / Sul-Americana</strong>
                 </div>
               </div>
-
               <HashLink
                 smooth
                 to="/inicio#parceiros"
@@ -849,7 +770,6 @@ function Inicio() {
             </div>
           </div>
         </section>
-
         <section
           id="projetos"
           ref={projetosRef}
@@ -864,7 +784,6 @@ function Inicio() {
                 <p className="projetos__subtitulo">
                   NOSSA ATUAÇÃO
                 </p>
-
                 <h2
                   id="projetos-titulo"
                   className="projetos__titulo"
@@ -872,7 +791,6 @@ function Inicio() {
                   Projetos
                 </h2>
               </div>
-
               <p className="projetos__aviso">
                 Os projetos apresentados são fictícios e foram
                 criados exclusivamente para ilustrar as propostas
@@ -880,7 +798,6 @@ function Inicio() {
                 (TCC). Não representam iniciativas reais.
               </p>
             </div>
-
             <div className="projetos__grade">
               {projetos.map((projeto, indice) => (
                 <article
@@ -896,12 +813,10 @@ function Inicio() {
                       alt={projeto.alt}
                       loading="lazy"
                     />
-
                     <span className="projetos__categoria">
                       {projeto.categoria}
                     </span>
                   </div>
-
                   <div className="projetos__informacoes">
                     <h3>{projeto.titulo}</h3>
                     <p>{projeto.descricao}</p>
@@ -911,7 +826,6 @@ function Inicio() {
             </div>
           </div>
         </section>
-
         <section
           id="apadrinhe"
           ref={apadrinheRef}
@@ -928,19 +842,16 @@ function Inicio() {
                 loading="lazy"
               />
             </div>
-
             <div className="apadrinhe__conteudo">
               <p className="apadrinhe__subtitulo">
                 APADRINHAMENTO
               </p>
-
               <h2
                 id="apadrinhe-titulo"
                 className="apadrinhe__titulo"
               >
                 Por que ser um padrinho?
               </h2>
-
               <div className="apadrinhe__textos">
                 <p>
                   Os animais sob os nossos cuidados são{" "}
@@ -952,7 +863,6 @@ function Inicio() {
                   vida digna, o mais próximo da realidade
                   natural desses animais!
                 </p>
-
                 <p>
                   Ao apadrinhar, você estará auxiliando nos{" "}
                   <strong>
@@ -963,7 +873,6 @@ function Inicio() {
                   o mais próximo da natureza!
                 </p>
               </div>
-
               <HashLink
                 smooth
                 to="/inicio#animais"
@@ -980,14 +889,12 @@ function Inicio() {
                 >
                   <path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8Z" />
                 </svg>
-
                 Apadrinhar
                 <span aria-hidden="true">→</span>
               </HashLink>
             </div>
           </div>
         </section>
-
         <section
           id="animais"
           ref={animaisRef}
@@ -1001,26 +908,22 @@ function Inicio() {
               <p className="animais__subtitulo">
                 CONHEÇA NOSSOS ANIMAIS
               </p>
-
               <h2
                 id="animais-titulo"
                 className="animais__titulo"
               >
                 Apadrinhe um Animal
               </h2>
-
               <p className="animais__descricao">
                 Cada um tem uma história de superação.
                 Conheça os animais e descubra como o cuidado
                 com a fauna pode transformar vidas.
               </p>
-
               <p className="animais__nota">
                 Personagens, histórias e apadrinhamentos
                 fictícios, apresentados para fins de TCC.
               </p>
             </div>
-
             <div className="animais__grade">
               {animaisApadrinhamento.map((animal, indice) => (
                 <button
@@ -1043,24 +946,20 @@ function Inicio() {
                       objectPosition: animal.posicao,
                     }}
                   />
-
                   <span
                     className="animais__sombra"
                     aria-hidden="true"
                   />
-
                   <span
                     className="animais__seta"
                     aria-hidden="true"
                   >
                     ↗
                   </span>
-
                   <span className="animais__info">
                     <span className="animais__especie">
                       {animal.especie}
                     </span>
-
                     <span className="animais__nome">
                       {animal.nome}
                     </span>
@@ -1070,7 +969,6 @@ function Inicio() {
             </div>
           </div>
         </section>
-
         <section
           id="santuarios"
           ref={santuariosRef}
@@ -1084,14 +982,12 @@ function Inicio() {
               <p className="santuarios__subtitulo">
                 SANTUÁRIOS
               </p>
-
               <h2
                 id="santuarios-titulo"
                 className="santuarios__titulo"
               >
                 Uma casa para cada espécie
               </h2>
-
               <p className="santuarios__descricao">
                 Conheça os santuários dedicados ao cuidado de
                 cada grupo de animais silvestres. As unidades
@@ -1099,7 +995,6 @@ function Inicio() {
                 criados para este TCC.
               </p>
             </div>
-
             <div className="santuarios__grade">
               {santuarios.map((santuario, indice) => (
                 <article
@@ -1116,16 +1011,13 @@ function Inicio() {
                       loading="lazy"
                     />
                   </div>
-
                   <div className="santuarios__corpo">
                     <p className="santuarios__grupo">
                       {santuario.grupo}
                     </p>
-
                     <p className="santuarios__texto">
                       {santuario.descricao}
                     </p>
-
                     <button
                       type="button"
                       className="santuarios__link"
@@ -1143,6 +1035,65 @@ function Inicio() {
             </div>
           </div>
         </section>
+        <section
+          id="eden-das-asas"
+          ref={edenRef}
+          className={`eden-das-asas ${edenVisivel ? "visivel" : ""}`}
+          aria-labelledby="eden-das-asas-titulo"
+        >
+          <div className="eden-das-asas__container">
+            <div className="eden-das-asas__abertura">
+              <div className="eden-das-asas__texto">
+                <p className="eden-das-asas__etiqueta">PARCEIRO EM DESTAQUE</p>
+                <h2 id="eden-das-asas-titulo">Éden das Asas</h2>
+                <p className="eden-das-asas__frase">Onde cada asa encontra esperança.</p>
+                <p className="eden-das-asas__descricao">
+                  O Santuário Éden das Asas é um projeto dedicado à proteção,
+                  ao acolhimento e à recuperação de aves brasileiras. Sua proposta
+                  é oferecer cuidados adequados aos animais em situação de risco,
+                  valorizando a preservação da fauna e a liberdade das aves.
+                </p>
+                <button
+                  type="button"
+                  className="eden-das-asas__botao"
+                  onClick={() => abrirSantuario(santuarios[0])}
+                >
+                  Conheça o projeto <span aria-hidden="true">↗</span>
+                </button>
+              </div>
+              <div className="eden-das-asas__visual">
+                <img
+                  src="/assets/img/pages/inicio/projetos/image.png"
+                  alt="Arara entre a vegetação, imagem ilustrativa"
+                  loading="lazy"
+                />
+              </div>
+            </div>
+            <div className="eden-das-asas__galeria" aria-label="Aves brasileiras em destaque">
+              {[
+                { nome: "Arara", imagem: "/assets/img/pages/inicio/projetos/image5.png", alt: "Arara voando sobre a floresta" },
+                { nome: "Ema", imagem: "/assets/img/pages/inicio/animais/animal11.webp", alt: "Ema em seu ambiente" },
+                { nome: "Seriema", imagem: "/assets/img/pages/inicio/animais/animal12.webp", alt: "Seriema em seu ambiente" },
+              ].map((ave, indice) => (
+                <figure
+                  className="eden-das-asas__ave"
+                  key={ave.nome}
+                  style={{ "--eden-atraso": `${indice * 110}ms` }}
+                >
+                  <img src={ave.imagem} alt={ave.alt} loading="lazy" />
+                  <figcaption>{ave.nome}</figcaption>
+                </figure>
+              ))}
+            </div>
+            <p className="eden-das-asas__frase-final">
+              “Cuidar de uma ave é também preservar a liberdade que ela representa.”
+            </p>
+            <p className="eden-das-asas__nota">
+              Fotos ilustrativas de aves brasileiras; não representam necessariamente
+              animais atendidos pelo Éden das Asas.
+            </p>
+          </div>
+        </section>
 
         <section
           id="parceiros"
@@ -1157,14 +1108,12 @@ function Inicio() {
               <p className="parceiros__subtitulo">
                 PARCEIROS
               </p>
-
               <h2
                 id="parceiros-titulo"
                 className="parceiros__titulo"
               >
                 Juntos pelo paraíso da fauna
               </h2>
-
               <p className="parceiros__descricao">
                 Estas organizações e iniciativas são
                 apresentadas como referências educativas para
@@ -1172,7 +1121,6 @@ function Inicio() {
                 possui parcerias oficiais com elas.
               </p>
             </div>
-
             <div className="parceiros__grade">
               {parceiros.map((parceiro, indice) => (
                 <article
@@ -1190,18 +1138,15 @@ function Inicio() {
                         loading="lazy"
                       />
                     </div>
-
                     <div className="parceiros__nome-bloco">
                       <h3 className="parceiros__nome">
                         {parceiro.nome}
                       </h3>
-
                       <p className="parceiros__categoria">
                         {parceiro.categoria}
                       </p>
                     </div>
                   </div>
-
                   <p className="parceiros__texto">
                     {parceiro.descricao}
                   </p>
@@ -1211,7 +1156,6 @@ function Inicio() {
           </div>
         </section>
       </main>
-
       {animalSelecionado && (
         <div
           className="animais__modal-fundo"
@@ -1238,7 +1182,6 @@ function Inicio() {
                 }}
               />
             </div>
-
             <div className="animais__modal-conteudo">
               <button
                 type="button"
@@ -1249,30 +1192,25 @@ function Inicio() {
               >
                 ×
               </button>
-
               <p className="animais__modal-especie">
                 {animalSelecionado.especie}
               </p>
-
               <h2
                 id={`animal-titulo-${animalSelecionado.id}`}
                 className="animais__modal-titulo"
               >
                 {animalSelecionado.nome}
               </h2>
-
               <p
                 id={`animal-descricao-${animalSelecionado.id}`}
                 className="animais__modal-texto"
               >
                 {animalSelecionado.descricao}
               </p>
-
               <p className="animais__modal-nota">
                 História ilustrativa do projeto fictício
                 R.O.P.
               </p>
-
               <Link
                 to="/doe"
                 className="animais__modal-botao"
@@ -1284,7 +1222,6 @@ function Inicio() {
           </div>
         </div>
       )}
-
       {santuarioSelecionado && (
         <div
           className="santuarios__modal-fundo"
@@ -1302,42 +1239,29 @@ function Inicio() {
             aria-labelledby="santuario-modal-titulo"
             aria-describedby="santuario-modal-descricao"
           >
-            <button
-              type="button"
-              ref={botaoFecharRef}
-              className="santuarios__modal-fechar"
-              onClick={fecharModal}
-              aria-label="Fechar informações do santuário"
-            >
-              ×
-            </button>
-
             <img
               src={santuarioSelecionado.logo}
               className="santuarios__modal-logo"
               alt={`Logo do Santuário ${santuarioSelecionado.nome}`}
             />
-
             <p className="santuarios__modal-grupo">
               {santuarioSelecionado.grupo}
             </p>
-
             <h2 id="santuario-modal-titulo">
               {santuarioSelecionado.nome}
             </h2>
-
             <p id="santuario-modal-descricao">
               {santuarioSelecionado.detalhe}
             </p>
-
             <p className="santuarios__modal-aviso">
-              Conteúdo demonstrativo: os santuários e os
-              atendimentos apresentados são fictícios.
+              {santuarioSelecionado.id === "eden-das-asas"
+                ? "Projeto acadêmico parceiro da R.O.P.; as atividades descritas são propostas do grupo Éden das Asas."
+                : "Conteúdo demonstrativo: o santuário e seus atendimentos são fictícios."}
             </p>
-
             <button
               type="button"
               onClick={fecharModal}
+              ref={botaoFecharRef}
               className="santuarios__modal-voltar"
             >
               Voltar aos santuários
@@ -1345,10 +1269,8 @@ function Inicio() {
           </div>
         </div>
       )}
-
       <Rodape/>
     </div>
   );
 }
-
 export default Inicio;

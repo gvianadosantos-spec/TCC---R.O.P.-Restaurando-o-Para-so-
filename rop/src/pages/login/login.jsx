@@ -90,6 +90,8 @@ export default function Login() {
 
             try {
                 sessionStorage.setItem('rop_token', dados.token)
+                window.dispatchEvent(new Event('rop:login'))
+
             } catch {
                 setErro('O navegador não conseguiu salvar a sessão.')
                 return

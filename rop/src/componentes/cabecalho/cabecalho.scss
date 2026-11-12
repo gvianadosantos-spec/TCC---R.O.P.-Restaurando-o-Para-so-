@@ -397,3 +397,12 @@ body {
     }
   }
 }
+
+
+/* CORREÇÃO: mantém o painel de perfil inteiro ao rolar a página */
+
+.comp-cabecalho.rolou .comp-corpo {
+  background: rgba(11, 28, 36, 0.97);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}

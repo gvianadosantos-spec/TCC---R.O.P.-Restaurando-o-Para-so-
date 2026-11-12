@@ -2249,3 +2249,255 @@
     transition: none;
   }
 }
+
+/* ===========================================================
+   AJUSTES DA PÁGINA INÍCIO: topo, modal e Éden das Asas
+   =========================================================== */
+
+/* A compensação do cabeçalho continua intacta nas outras páginas. */
+.corpo-inicio .comp-espaco {
+  height: 0;
+  min-height: 0;
+  margin: 0;
+  padding: 0;
+}
+
+/* Animação do modal de santuários. */
+@keyframes rop-modal-fundo-entrar {
+  from { opacity: 0; backdrop-filter: blur(0); }
+  to { opacity: 1; backdrop-filter: blur(8px); }
+}
+@keyframes rop-modal-painel-entrar {
+  from { opacity: 0; transform: translateY(30px) scale(0.97); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes rop-modal-texto-entrar {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.corpo-inicio .santuarios__modal {
+  padding-top: 34px;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .corpo-inicio .santuarios__modal-fundo {
+    animation: rop-modal-fundo-entrar 0.34s ease-out both;
+  }
+  .corpo-inicio .santuarios__modal {
+    animation: rop-modal-painel-entrar 0.48s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+  .corpo-inicio .santuarios__modal > img,
+  .corpo-inicio .santuarios__modal > h2,
+  .corpo-inicio .santuarios__modal > p,
+  .corpo-inicio .santuarios__modal > button {
+    animation: rop-modal-texto-entrar 0.45s ease both;
+    animation-delay: 0.12s;
+  }
+}
+
+/* Seção especial dedicada ao Éden das Asas. */
+.corpo-inicio .eden-das-asas {
+  width: 100%;
+  padding: 112px 32px 115px;
+  background: linear-gradient(160deg, #071b1c 0%, #09272a 58%, #071719 100%);
+  color: #fff;
+  font-family: "Inter", sans-serif;
+  overflow: hidden;
+  scroll-margin-top: 90px;
+
+  &__container {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  &__abertura {
+    display: grid;
+    grid-template-columns: 1fr 0.95fr;
+    gap: clamp(36px, 5vw, 75px);
+    align-items: center;
+    margin-bottom: 42px;
+  }
+  &__texto, &__visual, &__ave, &__frase-final {
+    opacity: 0;
+    transform: translateY(35px);
+    transition: opacity .85s ease, transform .85s cubic-bezier(.2,.8,.2,1);
+  }
+  &__visual { transition-delay: .15s; }
+  &__etiqueta {
+    margin: 0 0 15px;
+    color: #f2a322;
+    font-size: .8rem;
+    font-weight: 700;
+    letter-spacing: .22em;
+  }
+  h2 {
+    margin: 0 0 16px;
+    font-family: "Fraunces", Georgia, serif;
+    font-size: clamp(2.7rem, 4.5vw, 4rem);
+    line-height: 1.07;
+  }
+  &__frase {
+    margin: 0 0 24px;
+    color: #f4b85c;
+    font-family: "Fraunces", Georgia, serif;
+    font-style: italic;
+    font-size: clamp(1.25rem, 2.1vw, 1.65rem);
+  }
+  &__descricao {
+    max-width: 560px;
+    margin: 0;
+    color: #b5ced0;
+    font-size: 1rem;
+    line-height: 1.8;
+  }
+  &__botao {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 29px;
+    padding: 14px 25px;
+    min-height: 48px;
+    border: 0;
+    border-radius: 999px;
+    background: #ef9700;
+    color: #101912;
+    font: inherit;
+    font-size: .9rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background .25s ease, transform .25s ease;
+    &:hover { background: #ffad1c; transform: translateY(-2px); }
+    &:focus-visible { outline: 2px solid #ffad1c; outline-offset: 4px; }
+  }
+  &__visual {
+    position: relative;
+    height: min(39vw, 465px);
+    min-height: 325px;
+    border-radius: 25px;
+    overflow: hidden;
+    background: #102d2f;
+    > img:first-child {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform .7s ease;
+    }
+    &:hover > img:first-child { transform: scale(1.035); }
+    &::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background: linear-gradient(to top, rgba(3,16,16,.5), transparent 55%);
+    }
+  }
+  &__logo {
+    position: absolute;
+    z-index: 2;
+    right: 18px;
+    bottom: 18px;
+    width: 100px;
+    height: 76px;
+    padding: 4px;
+    border-radius: 11px;
+    background: #051014;
+    object-fit: contain;
+    box-shadow: 0 7px 22px #0008;
+  }
+  &__galeria {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 20px;
+  }
+  &__ave {
+    position: relative;
+    min-width: 0;
+    height: 275px;
+    margin: 0;
+    border-radius: 18px;
+    background: #0c3233;
+    overflow: hidden;
+    transition-delay: var(--eden-atraso, 0ms);
+    img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform .55s ease;
+    }
+    &::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background: linear-gradient(to top, rgba(1, 12, 13, .84), transparent 54%);
+    }
+    figcaption {
+      position: absolute;
+      z-index: 1;
+      bottom: 19px;
+      left: 22px;
+      font-family: "Fraunces", Georgia, serif;
+      font-size: 1.55rem;
+      font-weight: 700;
+    }
+    &:hover img { transform: scale(1.055); }
+  }
+  &__frase-final {
+    max-width: 850px;
+    margin: 53px auto 0;
+    text-align: center;
+    font-family: "Fraunces", Georgia, serif;
+    font-style: italic;
+    font-size: clamp(1.3rem, 2.6vw, 2rem);
+    color: #f5b64e;
+    transition-delay: .15s;
+  }
+  &__nota {
+    margin: 17px auto 0;
+    text-align: center;
+    color: #86aaa9;
+    font-size: .78rem;
+    line-height: 1.55;
+  }
+  &.visivel {
+    .eden-das-asas__texto,
+    .eden-das-asas__visual,
+    .eden-das-asas__ave,
+    .eden-das-asas__frase-final {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  @media (max-width: 950px) {
+    padding: 85px 24px;
+    &__abertura { gap: 30px; }
+    &__visual { min-height: 280px; }
+    &__ave { height: 230px; }
+  }
+  @media (max-width: 720px) {
+    padding: 75px 20px 85px;
+    &__abertura { grid-template-columns: 1fr; gap: 32px; }
+    &__visual { height: 340px; min-height: 0; }
+    &__galeria { gap: 11px; }
+    &__ave {
+      height: 165px;
+      border-radius: 11px;
+      figcaption { left: 10px; bottom: 12px; font-size: 1rem; }
+    }
+    &__frase-final { margin-top: 36px; }
+  }
+  @media (max-width: 420px) {
+    &__galeria { grid-template-columns: 1fr; }
+    &__ave { height: 205px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    &__texto, &__visual, &__ave, &__frase-final {
+      opacity: 1; transform: none; transition: none;
+    }
+    &__ave img, &__visual > img:first-child { transition: none; }
+  }
+}
+
