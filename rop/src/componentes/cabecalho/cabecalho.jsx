@@ -53,6 +53,10 @@ function Cabecalho() {
               Espécies
             </Link>
 
+            <Link to="/orientacoes" className="comp-link">
+              Orientações
+            </Link>
+
             <Link to="/noticias" className="comp-link">
               Notícias
             </Link>

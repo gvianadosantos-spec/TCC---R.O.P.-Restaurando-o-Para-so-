@@ -406,3 +406,20 @@ body {
   backdrop-filter: none;
   -webkit-backdrop-filter: none;
 }
+
+
+/* Ajusta o espaçamento do menu com o novo link Orientações. */
+@media (min-width: 1101px) and (max-width: 1400px) {
+  .comp-cabecalho .comp-corpo {
+    gap: 12px;
+    padding-inline: 18px;
+  }
+
+  .comp-cabecalho .comp-botoes {
+    gap: clamp(8px, 1.1vw, 16px);
+  }
+
+  .comp-cabecalho .comp-link {
+    font-size: 0.77rem;
+  }
+}
