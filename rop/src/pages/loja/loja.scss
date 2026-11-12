@@ -17,11 +17,11 @@ $fonte-titulo: "Georgia", "Times New Roman", serif;
   padding: calc(5.5rem + 2rem) 2rem 6rem 2rem;
   line-height: 1.5;
 
-  .header {
+  .loja-topo {
     margin-bottom: 40px;
   }
 
-  .pre-title {
+  .pre-titulo {
     color: var(--primary-orange);
     font-size: 0.8rem;
     font-weight: 600;
@@ -39,14 +39,14 @@ $fonte-titulo: "Georgia", "Times New Roman", serif;
     letter-spacing: -0.01em;
   }
 
-  .description {
+  .descricao {
     color: var(--text-muted);
     max-width: 680px;
     margin: 0 0 25px 0;
     line-height: 1.6;
   }
 
-  .status-pill {
+  .etiqueta-status {
     display: inline-flex;
     align-items: center;
     gap: 8px;
@@ -64,7 +64,7 @@ $fonte-titulo: "Georgia", "Times New Roman", serif;
     }
   }
 
-  .impact-banner {
+  .faixa-impacto {
     background-color: var(--bg-card);
     padding: 3rem 2rem;
     border-radius: 28px;
@@ -73,7 +73,7 @@ $fonte-titulo: "Georgia", "Times New Roman", serif;
     border: 1px solid var(--border-card);
   }
 
-  .impact-icon {
+  .icone-impacto {
     display: block;
     width: 28px;
     height: 28px;
@@ -81,14 +81,14 @@ $fonte-titulo: "Georgia", "Times New Roman", serif;
     color: var(--primary-orange);
   }
 
-  .impact-banner h2 {
+  .faixa-impacto h2 {
     font-family: $fonte-titulo;
     font-size: 1.75rem;
     line-height: 1.2;
     margin: 15px 0;
   }
 
-  .impact-banner p {
+  .faixa-impacto p {
     color: var(--text-muted);
     font-size: 0.9rem;
     line-height: 1.6;
@@ -96,13 +96,13 @@ $fonte-titulo: "Georgia", "Times New Roman", serif;
     margin: 0 auto;
   }
 
-  .product-grid {
+  .grade-produtos {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(min(350px, 100%), 1fr));
     gap: 1.3rem;
   }
 
-  .product-card {
+  .cartao-produto {
     background-color: var(--bg-card);
     border: 1px solid var(--border-card);
     border-radius: 16px;
@@ -111,7 +111,7 @@ $fonte-titulo: "Georgia", "Times New Roman", serif;
     flex-direction: column;
   }
 
-  .product-image {
+  .produto-imagem {
     height: 18rem;
     background-color: var(--accent-blue);
     display: flex;
@@ -128,7 +128,7 @@ $fonte-titulo: "Georgia", "Times New Roman", serif;
     }
   }
 
-  .badge {
+  .selo {
     position: absolute;
     top: 12px;
     left: 12px;
@@ -140,40 +140,40 @@ $fonte-titulo: "Georgia", "Times New Roman", serif;
     font-weight: bold;
   }
 
-  .product-info {
+  .produto-info {
     padding: 1.25rem 1.25rem 0 1.25rem;
     flex-grow: 1;
   }
 
-  .product-info h3 {
+  .produto-info h3 {
     font-family: $fonte-titulo;
     font-size: 1.15rem;
     line-height: 1.3;
     margin: 0 0 10px 0;
   }
 
-  .product-info p {
+  .produto-info p {
     color: var(--text-muted);
     font-size: 0.9rem;
     line-height: 1.6;
     margin: 0 0 1.25rem 0;
   }
 
-  .product-footer {
+  .produto-rodape {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 0 1.25rem 1.25rem 1.25rem;
   }
 
-  .price {
+  .preco {
     font-family: $fonte-titulo;
     font-size: 1.25rem;
     font-weight: bold;
     color: var(--primary-orange);
   }
 
-  .btn-small {
+  .botao-pequeno {
     font-family: inherit;
     background: transparent;
     border: 1px solid #2d3e45;
@@ -191,7 +191,7 @@ $fonte-titulo: "Georgia", "Times New Roman", serif;
       font-size: 2.25rem;
     }
 
-    .impact-banner {
+    .faixa-impacto {
       padding: 2rem 1.25rem;
     }
   }

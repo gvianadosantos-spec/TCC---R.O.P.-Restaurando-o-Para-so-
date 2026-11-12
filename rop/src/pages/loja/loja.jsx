@@ -61,14 +61,14 @@ export default function Loja() {
       <Cabecalho />
 
       <div className="loja">
-        <header className="header">
-          <div className="pre-title">Loja R.O.P.</div>
+        <header className="loja-topo">
+          <div className="pre-titulo">Loja R.O.P.</div>
           <h1>Produtos com propósito</h1>
-          <p className="description">
+          <p className="descricao">
             Cada compra na Loja R.O.P. transforma-se em cuidado. Toda a renda é revertida para o
             resgate, a reabilitação e a educação pela fauna brasileira.
           </p>
-          <div className="status-pill">
+          <div className="etiqueta-status">
             <svg
               viewBox="0 0 24 24"
               fill="none"
@@ -88,9 +88,9 @@ export default function Loja() {
           </div>
         </header>
 
-        <section className="impact-banner">
+        <section className="faixa-impacto">
           <svg
-            className="impact-icon"
+            className="icone-impacto"
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
@@ -108,24 +108,24 @@ export default function Loja() {
           </p>
         </section>
 
-        <main className="product-grid">
+        <main className="grade-produtos">
           {PRODUTOS.map((produto) => (
-            <article className="product-card" key={produto.titulo}>
-              <div className="product-image">
+            <article className="cartao-produto" key={produto.titulo}>
+              <div className="produto-imagem">
                 <img
                   src={`${PASTA_IMAGENS}/${produto.imagem}`}
                   alt={produto.titulo}
                   onError={esconderImagem}
                 />
-                <span className="badge">EM BREVE</span>
+                <span className="selo">EM BREVE</span>
               </div>
-              <div className="product-info">
+              <div className="produto-info">
                 <h3>{produto.titulo}</h3>
                 <p>{produto.descricao}</p>
               </div>
-              <div className="product-footer">
-                <span className="price">{produto.preco}</span>
-                <button type="button" className="btn-small">
+              <div className="produto-rodape">
+                <span className="preco">{produto.preco}</span>
+                <button type="button" className="botao-pequeno" disabled>
                   Em breve
                 </button>
               </div>
