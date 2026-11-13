@@ -4,6 +4,7 @@ import { Router } from 'express'
 import { rateLimit } from 'express-rate-limit'
 import bcrypt from 'bcryptjs'
 import { con } from '../repository/connection.js'
+import { enviarLinkRecuperacao } from '../service/emailService.js'
 
 const router = Router()
 
@@ -33,56 +34,6 @@ const mensagemSolicitacao = {
 // Gerar hash do token
 const hashToken = (token) =>
     createHash('sha256').update(token).digest()
-
-// =====================================================
-// ENVIAR E-MAIL PELO RESEND
-// =====================================================
-
-async function enviarLink(email, token) {
-    const link = new URL(
-        '/esqueci-senha',
-        process.env.FRONTEND_URL
-    )
-
-    link.hash = new URLSearchParams({ token }).toString()
-
-    const resposta = await fetch(
-        'https://api.resend.com/emails',
-        {
-            method: 'POST',
-            headers: {
-                Authorization: `Bearer ${process.env.RESEND_API_KEY}`,
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                from: process.env.RESEND_FROM,
-                to: [email],
-                subject: 'Recuperação de senha — R.O.P.',
-                text: `Olá!
-
-Recebemos uma solicitação para redefinir sua senha na R.O.P.
-
-Clique no link abaixo para criar uma nova senha:
-
-${link.toString()}
-
-Este link expira em 30 minutos.
-
-Se você não solicitou a alteração, ignore este e-mail.
-
-R.O.P. — Restaurando o Paraíso`
-            })
-        }
-    )
-
-    if (!resposta.ok) {
-        throw new Error(
-            `Resend recusou o envio (HTTP ${resposta.status})`
-        )
-    }
-
-    console.log('Solicitação de envio aceita pelo Resend.')
-}
 
 // =====================================================
 // SOLICITAR RECUPERAÇÃO DE SENHA
@@ -143,7 +94,7 @@ router.post(
 
             if (resultado.affectedRows > 0) {
                 try {
-                    await enviarLink(email, token)
+                    await enviarLinkRecuperacao(email, token)
                 } catch (erroEnvio) {
                     console.error(
                         'Falha no envio da recuperação:',
