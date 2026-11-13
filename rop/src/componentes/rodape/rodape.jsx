@@ -6,6 +6,7 @@ import "./rodape.scss";
 const ROTAS = {
   inicio: "/inicio",
   impactos: "/inicio#impactos",
+  orientacoes: "/orientacoes",
   projetos: "/inicio#projetos",
   publicacoes: "/noticias",
   apadrinhe: "/inicio#apadrinhe",
@@ -18,9 +19,9 @@ const ROTAS = {
 const URLS = {
   doar: "/doe",
   apadrinhar: "/inicio#animais",
-  instagram: "",
-  facebook: "",
-  youtube: "",
+  instagram: "https://www.instagram.com/r.o.p.ong",
+  facebook: "https://www.facebook.com/share/1bxrnGaVcy/",
+  youtube: "https://www.youtube.com/@r.o.p-w5b",
   email: "https://mail.google.com/mail/?view=cm&to=rop.ong.br@gmail.com&su=D%C3%BAvida%20sobre%20o%20R.O.P.", // abre o Gmail com a mensagem pronta para o e-mail de contato
 };
 
@@ -110,7 +111,7 @@ export default function Rodape() {
                   <Link to={ROTAS.inicio} onClick={irParaTopo}>Início</Link>
                 </li>
                 <li>
-                  <Link to={ROTAS.impactos} onClick={irParaTopo}>Impactos</Link>
+                  <Link to={ROTAS.orientacoes} onClick={irParaTopo}>Orientações</Link>
                 </li>
                 <li>
                   <Link to={ROTAS.projetos} onClick={irParaTopo}>Projetos</Link>
