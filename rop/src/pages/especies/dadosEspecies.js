@@ -1,9 +1,4 @@
-// R.O.P. — Catálogo local de 60 animais com fotos.
-// Conteúdo extraído do SQL do próprio TCC e das imagens fornecidas pelo grupo.
-// Não depende de .env, login ou API para exibir a página Espécies.
-// O nome ANIMAIS_TESTE é mantido para compatibilidade com especies.jsx.
-// Status "Não informado" significa que o status científico ainda não foi verificado.
-// Atenção: revisem fontes, direitos e créditos das imagens antes da publicação definitiva.
+
 
 export const GRUPOS = [
   "Todos", "Mamíferos", "Aves", "Répteis", "Anfíbios", "Peixes", "Invertebrados"
