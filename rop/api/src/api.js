@@ -4,6 +4,7 @@ import cors from 'cors'
 import { addRoutes } from './routes.js'
 import { con } from './repository/connection.js'
 import { prepararNoticias } from './repository/noticiasRepository.js'
+import { prepararFavoritos } from './repository/favoritosRepository.js'
 
 const api = express()
 
@@ -45,6 +46,13 @@ async function iniciar() {
     console.log('Módulo de notícias conectado ao banco e preparado.')
   } catch (erro) {
     console.error('Aviso: não foi possível preparar notícias no banco:', erro.message)
+  }
+
+  try {
+    await prepararFavoritos()
+    console.log('Tabela de favoritos verificada com sucesso.')
+  } catch (erro) {
+    console.error('Aviso: não foi possível preparar favoritos no banco:', erro)
   }
 
   api.listen(PORT, () => {
