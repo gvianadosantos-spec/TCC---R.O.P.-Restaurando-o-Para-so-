@@ -151,6 +151,7 @@ export default function PerfilUsuario() {
   useEffect(() => {
     if (!aberto) return;
 
+    const botaoPerfil = botaoPerfilRef.current;
     const overflowAnterior = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
     const frame = window.requestAnimationFrame(() => fecharRef.current?.focus());
@@ -183,7 +184,7 @@ export default function PerfilUsuario() {
       document.body.style.overflow = overflowAnterior;
       window.cancelAnimationFrame(frame);
       window.removeEventListener('keydown', aoPressionarTecla);
-      window.requestAnimationFrame(() => botaoPerfilRef.current?.focus());
+      window.requestAnimationFrame(() => botaoPerfil?.focus());
     };
   }, [aberto]);
 
