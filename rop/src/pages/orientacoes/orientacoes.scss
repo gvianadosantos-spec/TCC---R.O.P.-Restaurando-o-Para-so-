@@ -80,6 +80,154 @@
   line-height: 1.8;
 }
 
+/* ===================================================
+   NOVO: GRADE DE REVISTAS E CAPAS PARA DOWNLOAD
+   =================================================== */
+
+.orientacoes-revistas {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+  margin: 28px 0 34px;
+}
+
+.orientacoes-revista {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  overflow: hidden;
+  border: 1px solid #28434a;
+  border-radius: 15px;
+  background: #09181d;
+  transition: transform .2s ease, border-color .2s ease;
+}
+
+.orientacoes-revista:hover {
+  transform: translateY(-4px);
+  border-color: rgba(230, 142, 0, .7);
+}
+
+.orientacoes-revista-capa {
+  display: block;
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  overflow: hidden;
+  background: #060c0e;
+  border-bottom: 1px solid #28434a;
+  color: inherit;
+  text-decoration: none;
+}
+
+.orientacoes-revista-capa:focus-visible {
+  outline: 2px solid #ffb843;
+  outline-offset: -3px;
+}
+
+.orientacoes-revista-capa img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+/* Aparece quando a propriedade capa está vazia no JSX. */
+.orientacoes-revista-sem-capa {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  width: 100%;
+  height: 100%;
+  padding: 20px;
+  background: radial-gradient(circle at 50% 25%, #19404b 0%, #081a20 50%, #060c0e 100%);
+  text-align: center;
+}
+
+.orientacoes-revista-sem-capa span {
+  color: #92aaaa;
+  font-size: .62rem;
+  font-weight: 700;
+  letter-spacing: .12em;
+}
+
+.orientacoes-revista-sem-capa strong {
+  color: #e68e00;
+  font-family: "Fraunces", Georgia, serif;
+  font-size: clamp(1.15rem, 2vw, 1.65rem);
+}
+
+.orientacoes-revista-sem-capa small {
+  color: #acc3c7;
+  font-size: .66rem;
+  letter-spacing: .1em;
+}
+
+.orientacoes-revista-conteudo {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 20px 18px 18px;
+}
+
+.orientacoes-revista-numero {
+  color: #e68e00;
+  font-size: .69rem;
+  font-weight: 700;
+  letter-spacing: .13em;
+}
+
+.orientacoes-revista-conteudo h3 {
+  margin: 0;
+  color: #fff;
+  font-family: "Fraunces", Georgia, serif;
+  font-size: 1.24rem;
+  line-height: 1.28;
+}
+
+.orientacoes-revista-conteudo > p {
+  margin: 0 0 10px;
+  color: #b5c8ca;
+  font-size: .86rem;
+  line-height: 1.65;
+}
+
+.orientacoes-revista-download {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  min-height: 43px;
+  margin-top: auto;
+  padding: 10px 15px;
+  border: 1px solid #e68e00;
+  border-radius: 999px;
+  background: #e68e00;
+  color: #060c0e;
+  font-size: .88rem;
+  font-weight: 700;
+  text-decoration: none;
+  transition: background .2s ease, border-color .2s ease;
+}
+
+.orientacoes-revista-download:hover {
+  background: #ffad2f;
+  border-color: #ffad2f;
+}
+
+.orientacoes-revista-download:focus-visible {
+  outline: 2px solid #ffb843;
+  outline-offset: 4px;
+}
+
+/* ===================================================
+   CONTEÚDO ORIGINAL DA PÁGINA
+   =================================================== */
+
 .orientacoes-aviso {
   margin: 22px 0 30px;
   padding: 22px;
@@ -131,14 +279,36 @@
   line-height: 1.6;
 }
 
+@media (max-width: 850px) {
+  .orientacoes-revistas {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
 @media (max-width: 600px) {
   .orientacoes-main { padding: 66px 18px 76px; }
   .orientacoes-introducao { font-size: .95rem; }
   .orientacoes-voltar { width: 100%; }
   .orientacoes-aviso { padding: 16px; }
+  .orientacoes-revistas {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+  .orientacoes-revista {
+    max-width: 420px;
+    width: 100%;
+    margin: 0 auto;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .orientacoes-voltar { transition: none; }
-  .orientacoes-voltar:hover { transform: none; }
+  .orientacoes-voltar,
+  .orientacoes-revista,
+  .orientacoes-revista-download {
+    transition: none;
+  }
+  .orientacoes-voltar:hover,
+  .orientacoes-revista:hover {
+    transform: none;
+  }
 }
