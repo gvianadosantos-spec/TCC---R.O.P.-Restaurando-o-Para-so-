@@ -649,3 +649,41 @@
     transition: none !important;
   }
 }
+
+
+/* Coleção de animais favoritos no painel */
+.perfil-favoritos-descricao { margin: -7px 0 0; color: #a7c5bb; font-size: 12px; line-height: 1.65; }
+.perfil-favoritos-status, .perfil-favoritos-vazio, .perfil-favoritos-erro {
+  margin: 0; padding: 15px; border: 1px solid #315a4f;
+  border-radius: 13px; background: #0e2928; color: #c0d9d0;
+  font-size: 12px; line-height: 1.6;
+}
+.perfil-favoritos-erro { color: #ffc1b0; border-color: #884c43; }
+.perfil-favoritos-lista { display: flex; flex-direction: column; gap: 9px; margin: 0; padding: 0; list-style: none; }
+.perfil-favoritos-item {
+  display: flex; align-items: center; gap: 11px; padding: 10px;
+  min-width: 0; border: 1px solid #275148; border-radius: 14px; background: #0e292b;
+}
+.perfil-favoritos-foto {
+  flex: 0 0 62px; width: 62px; height: 62px;
+  border-radius: 10px; object-fit: cover; background: #183c38;
+}
+.perfil-favoritos-foto-vazia { display: grid; place-items: center; font-size: 23px; }
+.perfil-favoritos-info { display: flex; flex: 1; flex-direction: column; min-width: 0; gap: 5px; }
+.perfil-favoritos-info strong { color: #f6faf6; font-size: 12px; overflow-wrap: anywhere; }
+.perfil-favoritos-info small { color: #98c3b4; font-size: 10px; }
+.perfil-favoritos-remover {
+  flex-shrink: 0; padding: 9px 8px; border: 1px solid #bd904c;
+  border-radius: 9px; background: #30291d; color: #ffd28a; font-size: 11px; font-weight: 650;
+}
+.perfil-favoritos-remover:hover { background: #4a351e; }
+.perfil-favoritos-explorar {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 12px 15px; border: 1px solid #c18b31; border-radius: 12px;
+  background: #342816; color: #ffd28b; text-decoration: none; font-size: 12px; font-weight: 700;
+}
+.perfil-favoritos-explorar:hover { background: #4b331a; }
+@media (max-width: 380px) {
+  .perfil-favoritos-item { flex-wrap: wrap; }
+  .perfil-favoritos-remover { margin-left: 73px; }
+}

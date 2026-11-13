@@ -520,3 +520,68 @@ $fonte-titulo: "Georgia", "Times New Roman", serif;
 @media (prefers-reduced-motion: reduce) {
   .especies-corpo .especie-guia-botao { transition: none; }
 }
+
+
+/* Coração e cartão independentes: clicar no coração não abre a ficha. */
+.especies-corpo .especie-card { position: relative; cursor: default; }
+
+.especies-corpo .especie-card-abrir {
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  text-align: left;
+}
+.especies-corpo .especie-card-abrir:focus-visible {
+  outline: 3px solid #ef9700;
+  outline-offset: -3px;
+  border-radius: 16px;
+}
+.especies-corpo .especie-foto > .especie-badge { max-width: calc(100% - 79px); }
+.especies-corpo .especie-favoritar {
+  position: absolute;
+  z-index: 2;
+  top: 10px;
+  right: 10px;
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  padding: 9px;
+  border: 1px solid #ffffff66;
+  border-radius: 50%;
+  background: #081c20ed;
+  color: white;
+  cursor: pointer;
+  transition: transform .2s, background .2s;
+}
+.especies-corpo .especie-favoritar svg { width: 22px; height: 22px; }
+.especies-corpo .especie-favoritar:hover { transform: scale(1.08); background: #245048; }
+.especies-corpo .especie-favoritar.ativo {
+  color: #f4ac37; border-color: #ef9700; background: #1c3534;
+}
+.especies-corpo .especie-favoritar:focus-visible {
+  outline: 2px solid #ef9700; outline-offset: 3px;
+}
+.especies-corpo .especie-favoritar:disabled { opacity: .55; cursor: wait; }
+.especies-corpo .especie-favoritos-aviso {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 22px 0 0;
+  padding: 13px 17px;
+  border: 1px solid #315f51;
+  border-radius: 13px;
+  background: #0c2926;
+  color: #d5e9e0;
+  font: 500 13px/1.6 'Montserrat', sans-serif;
+}
+.especies-corpo .especie-favoritos-aviso a { color: #f4ad45; font-weight: 700; }
+@media (prefers-reduced-motion: reduce) {
+  .especies-corpo .especie-favoritar { transition: none; }
+  .especies-corpo .especie-favoritar:hover { transform: none; }
+}

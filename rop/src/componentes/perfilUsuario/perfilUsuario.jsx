@@ -2,6 +2,10 @@ import { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { Link } from 'react-router-dom';
 import './perfilUsuario.scss';
+import { ANIMAIS_TESTE } from '../../pages/especies/dadosEspecies.js';
+import { consultarFavoritos, definirFavorito, identificarFavorito } from '../../utils/favoritos.js';
+
+const FOTOS_POR_NOME = new Map(ANIMAIS_TESTE.map((a) => [a.nome_cientifico, a.imagem]));
 
 const API_URL = (process.env.REACT_APP_API_URL || 'http://localhost:5050').replace(/\/+$/, '');
 
@@ -92,6 +96,10 @@ export default function PerfilUsuario() {
   const [editarAniversario, setEditarAniversario] = useState(false);
   const [nome, setNome] = useState('');
   const [aniversario, setAniversario] = useState('');
+  const [favoritos, setFavoritos] = useState([]);
+  const [carregandoFavoritos, setCarregandoFavoritos] = useState(false);
+  const [erroFavoritos, setErroFavoritos] = useState('');
+  const [removendoFavorito, setRemovendoFavorito] = useState('');
 
   const arquivoRef = useRef(null);
   const fecharRef = useRef(null);
@@ -188,6 +196,29 @@ export default function PerfilUsuario() {
     };
   }, [aberto]);
 
+  useEffect(() => {
+    if (!aberto || !usuario) return;
+    const controlador = new AbortController();
+    async function carregar() {
+      setCarregandoFavoritos(true);
+      setErroFavoritos('');
+      try {
+        const lista = await consultarFavoritos(controlador.signal);
+        if (!controlador.signal.aborted) setFavoritos(Array.isArray(lista) ? lista : []);
+      } catch (erro) {
+        if (!controlador.signal.aborted) setErroFavoritos(erro.message);
+      } finally {
+        if (!controlador.signal.aborted) setCarregandoFavoritos(false);
+      }
+    }
+    carregar();
+    window.addEventListener('rop:favoritos', carregar);
+    return () => {
+      controlador.abort();
+      window.removeEventListener('rop:favoritos', carregar);
+    };
+  }, [aberto, usuario]);
+
   function fecharPerfil() {
     setAberto(false);
     setEditarNome(false);
@@ -259,9 +290,27 @@ export default function PerfilUsuario() {
     await atualizarPerfil({ foto_perfil: null }, 'Foto removida.');
   }
 
+  async function removerFavorito(animal) {
+    const id = identificarFavorito(animal);
+    if (!id) return;
+    setRemovendoFavorito(id.chave);
+    setErroFavoritos('');
+    try {
+      await definirFavorito(id, false);
+      setFavoritos((atual) => atual.filter((outro) =>
+        identificarFavorito(outro)?.chave !== id.chave));
+      window.dispatchEvent(new Event('rop:favoritos'));
+    } catch (erro) {
+      setErroFavoritos(erro.message);
+    } finally {
+      setRemovendoFavorito('');
+    }
+  }
+
   function sair() {
     sessionStorage.removeItem('rop_token');
     setUsuario(null);
+    setFavoritos([]);
     setAberto(false);
     window.dispatchEvent(new Event('rop:login'));
     window.location.assign('/inicio');
@@ -445,9 +494,55 @@ export default function PerfilUsuario() {
                 </div>
               </section>
 
-              <section className="perfil-secao perfil-secao-seguranca" aria-label="Segurança da conta">
+
+              <section className="perfil-secao perfil-favoritos" aria-label="Meus animais favoritos">
                 <div className="perfil-secao-titulo">
                   <span aria-hidden="true">02</span>
+                  <h3>Meus animais favoritos</h3>
+                </div>
+                <p className="perfil-favoritos-descricao">
+                  Sua coleção de animais, salva na sua conta R.O.P.
+                </p>
+                {carregandoFavoritos && <p className="perfil-favoritos-status" role="status">Carregando favoritos…</p>}
+                {erroFavoritos && <p className="perfil-favoritos-erro" role="alert">{erroFavoritos}</p>}
+                {!carregandoFavoritos && !erroFavoritos && favoritos.length === 0 && (
+                  <p className="perfil-favoritos-vazio">
+                    Nenhum animal favorito ainda. Toque no coração de uma espécie para salvá-la.
+                  </p>
+                )}
+                {favoritos.length > 0 && (
+                  <ul className="perfil-favoritos-lista">
+                    {favoritos.map((animal) => {
+                      const id = identificarFavorito(animal);
+                      const foto = FOTOS_POR_NOME.get(animal.nome_cientifico) || animal.imagem_url;
+                      return (
+                        <li className="perfil-favoritos-item" key={id?.chave || animal.nome_cientifico}>
+                          {foto
+                            ? <img className="perfil-favoritos-foto" src={foto} alt={animal.nome_popular} loading="lazy" />
+                            : <span className="perfil-favoritos-foto perfil-favoritos-foto-vazia" aria-hidden="true">🐾</span>}
+                          <div className="perfil-favoritos-info">
+                            <strong>{animal.nome_popular}</strong>
+                            <small>{animal.classe_especie}</small>
+                          </div>
+                          <button type="button" className="perfil-favoritos-remover"
+                            onClick={() => removerFavorito(animal)}
+                            disabled={!id || removendoFavorito === id.chave}
+                            aria-label={`Remover ${animal.nome_popular} dos favoritos`}>
+                            Remover
+                          </button>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                )}
+                <Link to="/especies" className="perfil-favoritos-explorar" onClick={fecharPerfil}>
+                  Explorar espécies <span aria-hidden="true">→</span>
+                </Link>
+              </section>
+
+              <section className="perfil-secao perfil-secao-seguranca" aria-label="Segurança da conta">
+                <div className="perfil-secao-titulo">
+                  <span aria-hidden="true">03</span>
                   <h3>Segurança da conta</h3>
                 </div>
                 <Link className="perfil-seguranca" to="/esqueci-senha" onClick={fecharPerfil}>

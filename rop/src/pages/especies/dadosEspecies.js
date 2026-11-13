@@ -894,6 +894,8 @@ export function adaptarAnimaisDaAPI(lista) {
     const nome = a.nome_popular ?? a.nome ?? "Espécie sem nome";
     return {
       id: String(a.id_catalogo ?? a.id ?? `${grupo}-${a.id_animal ?? indice}`),
+      id_especie: a.id_especie,
+      id_animal: a.id_animal,
       nome_popular: nome,
       nome_cientifico: a.nome_cientifico ?? "Não informado",
       grupo,

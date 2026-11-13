@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import "./especies.scss";
 import { Link } from "react-router-dom";
+import { consultarFavoritos, definirFavorito, identificarFavorito, chaveFavorito } from "../../utils/favoritos.js";
 import GraficosEspecies from "./GraficosEspecies";
 import Rodape from "../../componentes/rodape/rodape";
 import Cabecalho from "../../componentes/cabecalho/cabecalho.jsx";
@@ -69,20 +70,37 @@ function FotoAnimal({ animal, grande = false }) {
   );
 }
 
-function CartaoAnimal({ animal, abrir }) {
+function CartaoAnimal({ animal, abrir, favorito, processando, alternarFavorito }) {
   return (
-    <button type="button" className="especie-card"
-      onClick={() => abrir(animal)} aria-label={`Abrir ficha de ${animal.nome_popular}`}>
-      <FotoAnimal animal={animal} />
-      <div className="especie-card-texto">
-        <span className="especie-grupo">{animal.grupo} · BRASIL</span>
-        <strong className="especie-nome">{animal.nome_popular}</strong>
-        <em className="especie-cientifico">{animal.nome_cientifico}</em>
-        <span className={`especie-situacao ${statusClasse(animal.status_conservacao)}`}>
-          ◉ {animal.status_conservacao}
-        </span>
-      </div>
-    </button>
+    <article className="especie-card">
+      <button type="button" className="especie-card-abrir"
+        onClick={() => abrir(animal)} aria-label={`Abrir ficha de ${animal.nome_popular}`}>
+        <FotoAnimal animal={animal} />
+        <div className="especie-card-texto">
+          <span className="especie-grupo">{animal.grupo} · BRASIL</span>
+          <strong className="especie-nome">{animal.nome_popular}</strong>
+          <em className="especie-cientifico">{animal.nome_cientifico}</em>
+          <span className={`especie-situacao ${statusClasse(animal.status_conservacao)}`}>
+            ◉ {animal.status_conservacao}
+          </span>
+        </div>
+      </button>
+      {identificarFavorito(animal) && (
+        <button type="button" className={`especie-favoritar ${favorito ? 'ativo' : ''}`}
+          onClick={() => alternarFavorito(animal)} disabled={processando}
+          aria-pressed={favorito}
+          aria-label={favorito
+            ? `Remover ${animal.nome_popular} dos favoritos`
+            : `Adicionar ${animal.nome_popular} aos favoritos`}
+          title={favorito ? 'Remover dos favoritos' : 'Adicionar aos favoritos'}>
+          <svg viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.9"
+            strokeLinecap="round" strokeLinejoin="round"
+            fill={favorito ? 'currentColor' : 'none'} aria-hidden="true">
+            <path d="M20.8 4.7a5.5 5.5 0 0 0-7.8 0l-1 1-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.5 1-1a5.5 5.5 0 0 0 0-7.8Z" />
+          </svg>
+        </button>
+      )}
+    </article>
   );
 }
 
@@ -137,7 +155,7 @@ function FichaAnimal({ animal, fechar }) {
   );
 }
 
-function SecaoAnimais({ titulo, animais, abrir }) {
+function SecaoAnimais({ titulo, animais, abrir, favoritos, processando, alternarFavorito }) {
   if (animais.length === 0) return null;
   return (
     <section className="especie-secao">
@@ -148,9 +166,13 @@ function SecaoAnimais({ titulo, animais, abrir }) {
         </span>
       </div>
       <div className="especie-grid">
-        {animais.map((animal) => (
-          <CartaoAnimal key={animal.id} animal={animal} abrir={abrir} />
-        ))}
+        {animais.map((animal) => {
+          const chave = chaveFavorito(animal);
+          return <CartaoAnimal key={animal.id} animal={animal} abrir={abrir}
+            favorito={Boolean(chave && favoritos.has(chave))}
+            processando={Boolean(chave && processando.has(chave))}
+            alternarFavorito={alternarFavorito} />;
+        })}
       </div>
     </section>
   );
@@ -164,6 +186,68 @@ function Especies() {
   const [animalAberto, setAnimalAberto] = useState(null);
   const [carregando, setCarregando] = useState(USAR_API);
   const [erro, setErro] = useState("");
+  const [favoritos, setFavoritos] = useState(new Set());
+  const [favoritosOcupados, setFavoritosOcupados] = useState(new Set());
+  const [avisoFavoritos, setAvisoFavoritos] = useState('');
+
+  useEffect(() => {
+    let ativo = true;
+    async function carregarFavoritos() {
+      if (!sessionStorage.getItem('rop_token')) {
+        if (ativo) setFavoritos(new Set());
+        return;
+      }
+      try {
+        const lista = await consultarFavoritos();
+        if (ativo && Array.isArray(lista)) {
+          setFavoritos(new Set(lista.map(chaveFavorito).filter(Boolean)));
+        }
+      } catch (erroFavoritos) {
+        if (ativo) setAvisoFavoritos(erroFavoritos.message);
+      }
+    }
+    carregarFavoritos();
+    window.addEventListener('rop:login', carregarFavoritos);
+    window.addEventListener('rop:favoritos', carregarFavoritos);
+    return () => {
+      ativo = false;
+      window.removeEventListener('rop:login', carregarFavoritos);
+      window.removeEventListener('rop:favoritos', carregarFavoritos);
+    };
+  }, []);
+
+  async function alternarFavorito(animal) {
+    const id = identificarFavorito(animal);
+    if (!id) return;
+    if (!sessionStorage.getItem('rop_token')) {
+      setAvisoFavoritos('Entre na sua conta para salvar animais favoritos.');
+      return;
+    }
+    if (favoritosOcupados.has(id.chave)) return;
+    const salvar = !favoritos.has(id.chave);
+    setFavoritosOcupados((atual) => new Set([...atual, id.chave]));
+    setAvisoFavoritos('');
+    try {
+      await definirFavorito(id, salvar);
+      setFavoritos((atual) => {
+        const novo = new Set(atual);
+        if (salvar) novo.add(id.chave); else novo.delete(id.chave);
+        return novo;
+      });
+      setAvisoFavoritos(salvar
+        ? `${animal.nome_popular} adicionado aos favoritos.`
+        : `${animal.nome_popular} removido dos favoritos.`);
+      window.dispatchEvent(new Event('rop:favoritos'));
+    } catch (erroFavoritos) {
+      setAvisoFavoritos(erroFavoritos.message);
+    } finally {
+      setFavoritosOcupados((atual) => {
+        const novo = new Set(atual);
+        novo.delete(id.chave);
+        return novo;
+      });
+    }
+  }
 
   useEffect(() => {
     if (!USAR_API) return;
@@ -240,6 +324,13 @@ function Especies() {
           </section>
 
 
+          {avisoFavoritos && (
+            <div className="especie-favoritos-aviso" role="status">
+              <span>{avisoFavoritos}</span>
+              {!sessionStorage.getItem('rop_token') && <Link to="/">Fazer login</Link>}
+            </div>
+          )}
+
           <section className="card-pesquisa" aria-label="Filtros de espécies">
             <div className="opt">
               <span className="icone-filtros"><IconeFiltro /></span>
@@ -301,7 +392,13 @@ function Especies() {
                     <span className="especie-contagem">{extintos.length} {extintos.length === 1 ? "espécie" : "espécies"}</span>
                   </div>
                   <div className="especie-grid">
-                    {extintos.map((animal) => <CartaoAnimal key={animal.id} animal={animal} abrir={abrirFicha} />)}
+                    {extintos.map((animal) => {
+                      const chave = chaveFavorito(animal);
+                      return <CartaoAnimal key={animal.id} animal={animal} abrir={abrirFicha}
+                        favorito={Boolean(chave && favoritos.has(chave))}
+                        processando={Boolean(chave && favoritosOcupados.has(chave))}
+                        alternarFavorito={alternarFavorito} />;
+                    })}
                   </div>
                 </section>
               )}
@@ -309,12 +406,14 @@ function Especies() {
               {gruposExibidos.map((grupo) => (
                 <SecaoAnimais key={grupo} titulo={grupo}
                   animais={animaisFiltrados.filter((a) => a.grupo === grupo && !ehExtinto(a))}
-                  abrir={abrirFicha} />
+                  abrir={abrirFicha} favoritos={favoritos}
+                  processando={favoritosOcupados} alternarFavorito={alternarFavorito} />
               ))}
               {grupoAtivo === "Todos" && (
                 <SecaoAnimais titulo="Não classificados"
                   animais={animaisFiltrados.filter((a) => a.grupo === "Não classificado" && !ehExtinto(a))}
-                  abrir={abrirFicha} />
+                  abrir={abrirFicha} favoritos={favoritos}
+                  processando={favoritosOcupados} alternarFavorito={alternarFavorito} />
               )}
 
               {animaisFiltrados.length === 0 && (
