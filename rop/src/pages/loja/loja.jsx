@@ -68,8 +68,7 @@ export default function Loja() {
           <div className="pre-titulo">Loja R.O.P.</div>
           <h1>Produtos com propósito</h1>
           <p className="descricao">
-            Cada compra na Loja R.O.P. transforma-se em cuidado. Toda a renda é revertida para o
-            resgate, a reabilitação e a educação pela fauna brasileira.
+            Uma vitrine de produtos pensados para a R.O.P. Eles ainda não estão à venda, mas ilustram como o projeto poderia ganhar vida.
           </p>
           <div className="etiqueta-status">
             <svg
@@ -87,7 +86,7 @@ export default function Loja() {
               <path d="M4 17v2" />
               <path d="M5 18H3" />
             </svg>
-            Em breve — loja em construção
+            Conceito de loja
           </div>
         </header>
 
@@ -104,10 +103,9 @@ export default function Loja() {
           >
             <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" />
           </svg>
-          <h2>100% da renda para a fauna</h2>
+          <h2>Gostou do nosso trabalho?</h2>
           <p>
-            Tudo o que você adquire aqui financia nossos projetos de resgate, santuários, terapias
-            assistidas e educação ambiental. Consumir com propósito é restaurar o paraíso.
+            Os produtos são ilustrativos, mas você pode apoiar voluntariamente os estudantes que criaram a R.O.P.
           </p>
         </section>
 
@@ -120,7 +118,7 @@ export default function Loja() {
                   alt={produto.titulo}
                   onError={esconderImagem}
                 />
-                <span className="selo">EM BREVE</span>
+                <span className="selo">Conceito</span>
               </div>
               <div className="produto-info">
                 <h3>{produto.titulo}</h3>
@@ -128,8 +126,8 @@ export default function Loja() {
               </div>
               <div className="produto-rodape">
                 <span className="preco">{produto.preco}</span>
-               <Link to="/doe" type="button" className="botao-pequeno" onClick={irParaTopo}>
-                  Em breve
+                <Link to="/doe" className="botao-pequeno" onClick={irParaTopo}>
+                  Quero apoiar
                 </Link>
               </div>
             </article>
