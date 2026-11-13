@@ -2,6 +2,8 @@ import 'dotenv/config'
 import express from 'express'
 import cors from 'cors'
 import { addRoutes } from './routes.js'
+import { con } from './repository/connection.js'
+import { prepararNoticias } from './repository/noticiasRepository.js'
 
 const api = express()
 
@@ -13,9 +15,41 @@ api.get('/health', (req, res) => {
   res.status(200).json({ status: 'ok', mensagem: 'API R.O.P. funcionando' })
 })
 
+// Mantém /health/banco da rota de animais; diagnóstico de notícias em rota própria.
+api.get('/health/noticias', async (req, res) => {
+  try {
+    const [bancoRows] = await con.query('SELECT DATABASE() AS banco')
+    const [noticiasRows] = await con.query('SELECT COUNT(*) AS noticias FROM noticias_natureza')
+
+    res.status(200).json({
+      status: 'ok',
+      banco: bancoRows[0]?.banco || null,
+      noticias: Number(noticiasRows[0]?.noticias ?? 0)
+    })
+  } catch (erro) {
+    console.error('Erro no teste do banco:', erro)
+    res.status(503).json({
+      status: 'erro',
+      mensagem: 'A API iniciou, mas não conseguiu acessar o banco de dados.'
+    })
+  }
+})
+
 addRoutes(api)
 
 const PORT = Number(process.env.PORT) || 5050
-api.listen(PORT, () => {
-  console.log(`API R.O.P. iniciada em http://localhost:${PORT}`)
-})
+
+async function iniciar() {
+  try {
+    await prepararNoticias()
+    console.log('Módulo de notícias conectado ao banco e preparado.')
+  } catch (erro) {
+    console.error('Aviso: não foi possível preparar notícias no banco:', erro.message)
+  }
+
+  api.listen(PORT, () => {
+    console.log(`API R.O.P. iniciada em http://localhost:${PORT}`)
+  })
+}
+
+iniciar()
