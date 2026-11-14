@@ -213,15 +213,22 @@ export default function Carrossel({ slides }) {
             slides.length
           }`}
         >
+           {/* Cópia desfocada que preenche as sobras (a foto principal não é cortada) */}
           <img
-            className="rop-carrossel__imagem"
+            className="rop-carrossel__fundo"
             src={slide.image}
             alt=""
+            aria-hidden="true"
             draggable={false}
-            fetchPriority={
-              indice === 0 ? "high" : "auto"
-            }
           />
+          <img
+  className="rop-carrossel__imagem"
+  src={slide.image}
+  alt=""
+  draggable={false}
+  style={{ objectFit: "contain", top: 56, height: "calc(100% - 56px)" }}
+  fetchPriority={indice === 0 ? "high" : "auto"}
+/>
 
           <div className="rop-carrossel__sombra" />
 

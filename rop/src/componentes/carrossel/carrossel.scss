@@ -7,6 +7,10 @@
   min-height: 620px;
   overflow: hidden;
 
+  // O cabeçalho fixo (92px) é maior que o espaçador (36px):
+  // 56px do topo do carrossel ficam escondidos atrás dele.
+  --cab-sobra: 56px;
+
   background: #050b0a;
   color: #fbf8f2;
   font-family: 'Inter', sans-serif;
@@ -42,7 +46,8 @@
     }
   }
 
-  &__imagem {
+    // Cópia da foto, desfocada, que preenche as sobras laterais/verticais
+  &__fundo {
     position: absolute;
     inset: 0;
 
@@ -52,9 +57,22 @@
     object-fit: cover;
     object-position: center;
 
-    transform: scale(1.025);
-    transition: transform 7s linear;
+    filter: blur(28px) brightness(0.55);
+    transform: scale(1.12); // esconde as bordas do blur
   }
+
+&__imagem {
+  position: absolute;
+  inset: var(--cab-sobra) 0 0 0;
+  width: 100%;
+  height: calc(100% - var(--cab-sobra));
+
+  object-fit: cover;
+  object-position: center 25%; // 0% = topo da foto, 100% = base
+
+  transform: scale(1.01);
+  transition: transform 7s linear;
+}
 
   &__slide.is-active &__imagem {
     transform: scale(1);
